@@ -3,12 +3,12 @@ GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.'
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
 you can make presets of your favorite text styles. Futures plans are going to
-include an image file overla, and btw you can do a multistroke if sacrifice
+include an image file overlay, and btw you can do a multistroke if sacrifice
 a shadow/glow.
 
 
 Instructions -
-You must manually compile mcol, mbd, stroke, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations and have fun BTFOing Adobe Photoshop users
+You must manually compile mcol, mbd, stroke, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations and select GEGL Effects.
 
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
