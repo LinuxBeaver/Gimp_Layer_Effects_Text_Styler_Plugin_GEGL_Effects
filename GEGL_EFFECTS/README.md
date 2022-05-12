@@ -13,6 +13,7 @@ You must manually compile mcol, mbd, stroke, and bevel and put the .so files in 
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
 
+![image](https://user-images.githubusercontent.com/78667207/168001013-2fa4984b-1ef5-46c8-948f-065d0ebac13d.png)
 
 
 ## Compiling and Installing
