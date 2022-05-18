@@ -67,8 +67,8 @@ property_double (grow_radiusstroke, _("Outline's 'Grow radius"), 12.0)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the stroke before blurring; a negative value will contract the stroke instead"))
 
-property_double (opacitystroke, _("Outline's 'Opacity"), 1.5)
-  value_range   (0.0, 2.0)
+property_double (opacitystroke, _("Outline's 'Opacity"), 1.0)
+  value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.10)
 
 
@@ -110,7 +110,7 @@ property_color  (color, _("Shadow/Glow Color"), "black")
  * for example)
  */
 property_double (opacity, _("Shadow/Glow Opacity"), 0.5)
-  value_range   (0.0, 2.0)
+  value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.10)
 
 property_double (grow_radius, _("Shadow/Glow Grow radius"), 0.0)
@@ -141,7 +141,7 @@ property_double (radius, _("Shadow/Glow Blur radius"), 10.0)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *bc, *image, *mbd, *mcol, *multiply, *stroke, *stroke2, *ds;
+  GeglNode *input, *output, *bc, *image, *mbd, *mcol, *stroke, *stroke2, *ds;
 
 
 
@@ -164,10 +164,6 @@ static void attach (GeglOperation *operation)
 
 
 
-  multiply = gegl_node_new_child (gegl,
-                                  "operation", "gegl:multiply",
-                                  NULL);
-
 
   mbd = gegl_node_new_child (gegl,
                                   "operation", "gegl:mbd",
@@ -183,7 +179,7 @@ static void attach (GeglOperation *operation)
 
 
 
-  gegl_node_link_many (input, image, multiply, mbd, mcol, stroke, ds, output, NULL);
+  gegl_node_link_many (input, image, mbd, mcol, stroke, ds, output, NULL);
 
 gegl_operation_meta_redirect (operation, "aux", image, "aux");
 
