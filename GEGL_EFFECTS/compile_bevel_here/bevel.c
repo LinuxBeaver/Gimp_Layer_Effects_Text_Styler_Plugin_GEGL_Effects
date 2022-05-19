@@ -24,13 +24,13 @@
 
 
 property_double (radius1, _("Radius"), 7.0)
-  value_range (1.0, 12.0)
+  value_range (1.0, 40.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
 
 
 
-property_double (bevel1, _("Rotate Lighting"), 90.0)
+property_double (bevel1, _("Depth Angle"), 90.0)
     description (_("Elevation angle (degrees)"))
     value_range (0, 180)
     ui_meta ("unit", "degree")
@@ -43,6 +43,13 @@ property_int (bevel2, _("Depth"), 40)
 property_double (th, _("Threshold of the Bevel's Transparency'"), 0.25)
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
+
+property_double (azimuth, _("Rotate Lighting"), 40.0)
+    description (_("Light angle (degrees)"))
+    value_range (0, 350)
+    ui_meta ("unit", "degree")
+    ui_meta ("direction", "ccw")
+
 
 #else
 
@@ -85,6 +92,8 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "bevel1", emb, "elevation");
 
   gegl_operation_meta_redirect (operation, "bevel2", emb, "depth");
+
+  gegl_operation_meta_redirect (operation, "azimuth", emb, "azimuth");
 
 
   gegl_operation_meta_redirect (operation, "th", th, "value");
