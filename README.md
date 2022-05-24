@@ -2,7 +2,7 @@ GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.
 =========
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
-you can make presets of your favorite text styles. May 21st 2022 update includes the ability to add image file overlays.
+you can make presets of your favorite text styles. May 21st 2022 update includes the ability to add image file overlays. May 24 update features a bug fix. 
 
 Pro tip you can do a multistroke if sacrifice a shadow/glow.
 
