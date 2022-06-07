@@ -1,4 +1,8 @@
 GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.
+
+![image preview](preview_4.png )
+![image preview](image_file_overlay_preview.png  )
+
 =========
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
