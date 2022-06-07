@@ -1,6 +1,6 @@
 GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.
 
-![image preview](preview_4.png )
+![image preview](preview_1.png )
 
 =========
 
