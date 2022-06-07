@@ -1,7 +1,6 @@
 GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.
 
 ![image preview](preview_4.png )
-![image preview](image_file_overlay_preview.png  )
 
 =========
 
@@ -17,8 +16,6 @@ You must manually compile mcol, imagefile, mbd, stroke, and bevel and put the .s
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
 
-
-![image preview](preview_4.png )
 ## Compiling and Installing
 
 ### Linux
