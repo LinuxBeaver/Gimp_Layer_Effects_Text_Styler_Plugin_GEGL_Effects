@@ -8,7 +8,7 @@ a shadow/glow.
 
 
 Instructions -
-You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations and have fun BTFOing Adobe Photoshop users
+You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
 
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
@@ -53,5 +53,5 @@ meson setup --buildtype=release build
 ninja -C build
 ```
 
-
+Have fun BTFOing photoshop users.
 
