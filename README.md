@@ -1,20 +1,19 @@
-GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.
-
-![image preview](preview_1.png )
-
+GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for!
 =========
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
-you can make presets of your favorite text styles. May 21st 2022 update includes the ability to add image file overlays. May 24 update features a bug fix. 
+you can make presets of your favorite text styles.
 
-Pro tip you can do a multistroke if sacrifice a shadow/glow.
 
+![image preview](preview_1.png )
 
 Instructions -
-You must manually compile mcol, imagefile, mbd, stroke, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations and select GEGL Effects.
+You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
 
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
+
+
 
 ## Compiling and Installing
 
@@ -27,7 +26,7 @@ most distributions).
 ```bash
 meson setup --buildtype=release build
 ninja -C build
-cp build/high-pass-box.so ~/.local/share/gegl-0.4/plug-ins
+
 ```
 
 If you have an older version of gegl you may need to copy to `~/.local/share/gegl-0.3/plug-ins`
@@ -53,6 +52,9 @@ Then build the same way you would on Linux:
 meson setup --buildtype=release build
 ninja -C build
 ```
+
+Have fun BTFOing photoshop users.
+
 
 
 
