@@ -5,7 +5,7 @@ A custom GEGL filter that does layer effects. It may not be non-destructive but
 you can make presets of your favorite text styles.
 
 
-![image preview](preview_1.png )
+![image preview](GE.png )
 
 Instructions -
 You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
