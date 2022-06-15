@@ -156,7 +156,7 @@ property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 6.0)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
 
-property_double (innergopacity, _("Inner Glow's opacity"), 0.9)
+property_double (innergopacity, _("Inner Glow's opacity"), 0.0)
   value_range   (0.0, 2.0)
   ui_steps      (0.01, 0.10)
 
