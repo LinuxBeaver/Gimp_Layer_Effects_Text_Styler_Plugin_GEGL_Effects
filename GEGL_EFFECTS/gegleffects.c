@@ -139,6 +139,32 @@ property_double (radius, _("Shadow/Glow Blur radius"), 10.0)
   ui_meta       ("unit", "pixel-distance")
 
 
+property_double (innergradius, _("Inner Glow's 'Blur radius"), 3.2)
+  value_range   (0.0, 30.0)
+  ui_range      (0.0, 30.0)
+  ui_steps      (1, 5)
+  ui_gamma      (1.5)
+  ui_meta       ("unit", "pixel-distance")
+
+
+property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 6.0)
+  value_range   (4, 30.0)
+  ui_range      (4, 30.0)
+  ui_digits     (0)
+  ui_steps      (1, 5)
+  ui_gamma      (1.5)
+  ui_meta       ("unit", "pixel-distance")
+  description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
+
+property_double (innergopacity, _("Inner Glow's opacity"), 0.9)
+  value_range   (0.0, 2.0)
+  ui_steps      (0.01, 0.10)
+
+
+property_color (innergvalue, _("Inner Glow's Color"), "#797979")
+    description (_("The color to paint over the input"))
+ 
+
 #else
 
 #define GEGL_OP_META
@@ -150,7 +176,7 @@ property_double (radius, _("Shadow/Glow Blur radius"), 10.0)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *bc, *image, *atop, *mbd, *mcol, *stroke, *stroke2, *ds;
+  GeglNode *input, *output, *bc, *image, *atop, *mbd, *mcol, *stroke, *stroke2, *innerglow, *ds;
 
 
 
@@ -170,6 +196,10 @@ static void attach (GeglOperation *operation)
 
   ds = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
+                                  NULL);
+
+  innerglow = gegl_node_new_child (gegl,
+                                  "operation", "gegl:inner-glow",
                                   NULL);
 
 
@@ -192,7 +222,7 @@ static void attach (GeglOperation *operation)
 
 
 
-  gegl_node_link_many (input, atop, mbd, mcol, stroke, ds, output, NULL);
+  gegl_node_link_many (input, atop, mbd, mcol, innerglow, stroke, ds, output, NULL);
   gegl_node_link (input, image);
   gegl_node_connect_from (atop, "aux", image, "output");
 
@@ -235,6 +265,15 @@ gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "radius");
 
 
 
+
+gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
+
+gegl_operation_meta_redirect (operation, "innergradius", innerglow, "radius");
+
+  gegl_operation_meta_redirect (operation, "innergopacity", innerglow, "opacity");
+
+
+  gegl_operation_meta_redirect (operation, "innergvalue", innerglow, "value");
 
 
 
