@@ -1,10 +1,8 @@
-GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for.'
+GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for!
 =========
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
-you can make presets of your favorite text styles. Futures plans are going to
-include an image file overla, and btw you can do a multistroke if sacrifice
-a shadow/glow.
+you can make presets of your favorite text styles.
 
 
 Instructions -
