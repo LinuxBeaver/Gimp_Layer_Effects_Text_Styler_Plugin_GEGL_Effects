@@ -14,7 +14,8 @@
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
-*2022 Beaver GEGL
+ *2022 Beaver GEGL Effects 
+ * 2022 Liam (for helping give Inner Glow a disable checkbox) 
  */
 
 #include "config.h"
@@ -83,8 +84,6 @@ property_color  (colorstroke, _("Outline's Color"), "white")
   description   (_("The shadow's color (defaults to 'black')"))
 
 
-
-
 enum_start (gegl_dropshadow_grow_shape)
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_SQUARE,  "square",  N_("Square"))
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_CIRCLE,  "circle",  N_("Circle"))
@@ -104,8 +103,6 @@ property_double (y, _("Shadow/Glow Y"), 10.0)
   ui_steps      (1, 10)
   ui_meta       ("unit", "pixel-distance")
   ui_meta       ("axis", "y")
-
-
 
 
 property_color  (color, _("Shadow/Glow Color"), "black")
@@ -139,7 +136,12 @@ property_double (radius, _("Shadow/Glow Blur radius"), 10.0)
   ui_meta       ("unit", "pixel-distance")
 
 
-property_double (innergradius, _("Inner Glow's 'Blur radius"), 0)
+property_boolean (innerglow, _("Enable Inner Glow"), FALSE)
+  description   (_("Whether to add an inner glow effect, which can be slow"))
+
+
+
+property_double (innergradius, _("Inner Glow's Blur radius"), 2.6)
   value_range   (0.0, 30.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
@@ -147,7 +149,7 @@ property_double (innergradius, _("Inner Glow's 'Blur radius"), 0)
   ui_meta       ("unit", "pixel-distance")
 
 
-property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 0)
+property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 7)
   value_range   (4, 30.0)
   ui_range      (4, 30.0)
   ui_digits     (0)
@@ -156,12 +158,12 @@ property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 0)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
 
-property_double (innergopacity, _("Inner Glow's opacity"), 0.0)
+property_double (innergopacity, _("Inner Glow's opacity"), 1.4)
   value_range   (0.0, 2.0)
   ui_steps      (0.01, 0.10)
 
 
-property_color (innergvalue, _("Inner Glow's Color"), "#797979")
+property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
     description (_("The color to paint over the input"))
  
 
@@ -173,13 +175,21 @@ property_color (innergvalue, _("Inner Glow's Color"), "#797979")
 
 #include "gegl-op.h"
 
+typedef struct
+{
+  GeglNode *input;
+  GeglNode *mcol;
+  GeglNode *innerglow;
+  GeglNode *stroke;
+  GeglNode *ds;
+  GeglNode *output;
+} State;
+
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
+  GeglProperties *o = GEGL_PROPERTIES (operation);
   GeglNode *input, *output, *bc, *image, *atop, *mbd, *mcol, *stroke, *stroke2, *innerglow, *ds;
-
-
-
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -188,11 +198,9 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:layer",
                                   NULL);
 
-
   stroke = gegl_node_new_child (gegl,
                                   "operation", "gegl:stroke",
                                   NULL);
-
 
   ds = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
@@ -202,87 +210,69 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:inner-glow",
                                   NULL);
 
-
   atop = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-atop",
                                   NULL);
-
-
 
   mbd = gegl_node_new_child (gegl,
                                   "operation", "gegl:mbd",
                                   NULL);
 
-
   mcol = gegl_node_new_child (gegl,
                                   "operation", "gegl:mcol",
                                   NULL);
 
-
-
-
-
-  gegl_node_link_many (input, atop, mbd, mcol, innerglow, stroke, ds, output, NULL);
+  gegl_node_link_many (input, atop, mbd, mcol, /* innerglow, */ stroke, ds, output, NULL);
   gegl_node_link (input, image);
   gegl_node_connect_from (atop, "aux", image, "output");
 
   gegl_operation_meta_redirect (operation, "string", image, "string");
-
   gegl_operation_meta_redirect (operation, "x", ds, "x");
-
-   gegl_operation_meta_redirect (operation, "y", ds, "y");
-
-   gegl_operation_meta_redirect (operation, "opacity", ds, "opacity");
-
-   gegl_operation_meta_redirect (operation, "grow_radius", ds, "grow-radius");
-
-gegl_operation_meta_redirect (operation, "radius", ds, "radius");
-
-gegl_operation_meta_redirect (operation, "color", ds, "color");
-
-
+  gegl_operation_meta_redirect (operation, "y", ds, "y");
+  gegl_operation_meta_redirect (operation, "opacity", ds, "opacity");
+  gegl_operation_meta_redirect (operation, "grow_radius", ds, "grow-radius");
+  gegl_operation_meta_redirect (operation, "radius", ds, "radius");
+  gegl_operation_meta_redirect (operation, "color", ds, "color");
   gegl_operation_meta_redirect (operation, "grow_shape", stroke, "grow-shape");
-
-   gegl_operation_meta_redirect (operation, "opacitystroke", stroke, "opacity");
-
-gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "radius");
-
+  gegl_operation_meta_redirect (operation, "opacitystroke", stroke, "opacity");
+  gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "radius");
   gegl_operation_meta_redirect (operation, "grow_radiusstroke", stroke, "grow-radius");
-
-
-
-
-
-   gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");
-
-
-   gegl_operation_meta_redirect (operation, "depth", mbd, "radius2");
-
-   gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
-
-
-   gegl_operation_meta_redirect (operation, "src", image, "src");
-
-
-
-
-gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
-
-gegl_operation_meta_redirect (operation, "innergradius", innerglow, "radius");
-
+  gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");
+  gegl_operation_meta_redirect (operation, "depth", mbd, "radius2");
+  gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
+  gegl_operation_meta_redirect (operation, "src", image, "src");
+  gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
+  gegl_operation_meta_redirect (operation, "innergradius", innerglow, "radius");
   gegl_operation_meta_redirect (operation, "innergopacity", innerglow, "opacity");
-
-
   gegl_operation_meta_redirect (operation, "innergvalue", innerglow, "value");
 
+  /* Now save points to the various gegl nodes so we can rewire them in
+   * update_graph() later
+   */
+  State *state = g_malloc0 (sizeof (State));
+  state->mcol = mcol;
+  state->innerglow = innerglow;
+  state->stroke = stroke;
+  state->ds = ds;
+  state->output = output;
+  o->user_data = state;
+}
 
+static void
+update_graph (GeglOperation *operation)
+{
+  GeglProperties *o = GEGL_PROPERTIES (operation);
+  State *state = o->user_data;
+  if (!state) return;
 
-
-
-
-
-
-
+  if (o->innerglow)
+  {
+    gegl_node_link_many (state->mcol, state->innerglow, state->stroke, state->ds, state->output, NULL);
+  }
+  else
+  {
+    gegl_node_link_many (state->mcol, state->stroke, state->ds, state->output, NULL);
+  }
 }
 
 static void
@@ -291,8 +281,10 @@ gegl_op_class_init (GeglOpClass *klass)
   GeglOperationClass *operation_class;
 
   operation_class = GEGL_OPERATION_CLASS (klass);
+  GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
 
   operation_class->attach = attach;
+  operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "gegl:effects",
