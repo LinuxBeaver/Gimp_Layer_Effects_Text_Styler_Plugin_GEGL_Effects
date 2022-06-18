@@ -150,8 +150,8 @@ property_double (innergradius, _("Inner Glow's Blur radius"), 2.6)
 
 
 property_double (innerggrow_radius, _("Inner Glow's 'Grow radius"), 7)
-  value_range   (4, 30.0)
-  ui_range      (4, 30.0)
+  value_range   (2, 30.0)
+  ui_range      (2, 30.0)
   ui_digits     (0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
