@@ -49,8 +49,8 @@ property_double (radius, _("Blur radius"), 9.0)
 
 
 property_double (grow_radius, _("Grow radius"), 8.0)
-  value_range   (4, 30.0)
-  ui_range      (4, 30.0)
+  value_range   (2, 30.0)
+  ui_range      (2, 30.0)
   ui_digits     (0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
