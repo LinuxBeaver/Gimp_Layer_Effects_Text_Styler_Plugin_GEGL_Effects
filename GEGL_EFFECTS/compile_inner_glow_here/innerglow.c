@@ -155,7 +155,7 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",        "gegl:inner-glow",
     "title",       _("Inner Glow"),
-    "categories",  "Aristic",
+    "categories",  "hidden",
     "reference-hash", "a3do6a1h11100g0fjf25sb2ac",
     "description", _("GEGL does an inner glow effect.  "
                      ""),
