@@ -163,8 +163,38 @@ property_double (innergopacity, _("Inner Glow's opacity"), 1.4)
   ui_steps      (0.01, 0.10)
 
 
+
 property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
     description (_("The color to paint over the input"))
+
+property_boolean (gradient, _("Enable Gradient"), FALSE)
+  description   (_("Whether to add Gradient overlay"))
+
+
+property_double (start_x, _("Gradient X1"), 659.0)
+    ui_meta("unit", "pixel-coordinate")
+    ui_meta("axis", "x")
+
+property_double (start_y, _("Gradient Y1"), 49.0)
+    ui_meta("unit", "pixel-coordinate")
+    ui_meta("axis", "y")
+
+property_double (end_x, _("Gradient X2"), 647.0)
+    ui_meta("unit", "pixel-coordinate")
+    ui_meta("axis", "x")
+
+property_double (end_y, _("Gradient Y2"), 572.0)
+    ui_meta ("unit", "pixel-coordinate")
+    ui_meta ("axis", "y")
+
+property_color (start_color, _("Gradient Start Color"), "#34ebd6")
+    description (_("The color at (x1, y1)"))
+
+
+property_color  (end_color, _("Gradient End Color"), "#fe18f2")
+    description (_("The color at (x2, y2)"))
+ 
+
  
 
 #else
@@ -178,18 +208,23 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
 typedef struct
 {
   GeglNode *input;
+  GeglNode *atop;
+  GeglNode *crop;
+  GeglNode *mbd;
   GeglNode *mcol;
   GeglNode *innerglow;
   GeglNode *stroke;
   GeglNode *ds;
   GeglNode *output;
+  GeglNode *image;
+  GeglNode *gradient;
 } State;
 
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *bc, *image, *atop, *mbd, *mcol, *stroke, *stroke2, *innerglow, *ds;
+  GeglNode *input, *output, *bc, *image, *atop, *mbd, *mcol, *stroke, *stroke2, *innerglow, *gradient, *crop, *ds;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -222,8 +257,16 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:mcol",
                                   NULL);
 
-  gegl_node_link_many (input, atop, mbd, mcol, /* innerglow, */ stroke, ds, output, NULL);
-  gegl_node_link (input, image);
+  gradient = gegl_node_new_child (gegl,
+                                  "operation", "gegl:linear-gradient",
+                                  NULL);
+
+  crop = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
+  gegl_node_link_many (input, atop, crop, mbd, mcol, /* innerglow, */ stroke, ds, output, NULL);
+  gegl_node_link_many (input, image, /* gradient, */ NULL);
   gegl_node_connect_from (atop, "aux", image, "output");
 
   gegl_operation_meta_redirect (operation, "string", image, "string");
@@ -245,17 +288,31 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "innergradius", innerglow, "radius");
   gegl_operation_meta_redirect (operation, "innergopacity", innerglow, "opacity");
   gegl_operation_meta_redirect (operation, "innergvalue", innerglow, "value");
+  gegl_operation_meta_redirect (operation, "start_x", gradient, "start-x");
+  gegl_operation_meta_redirect (operation, "start_y", gradient, "start-y");
+  gegl_operation_meta_redirect (operation, "end_x", gradient, "end-x");
+  gegl_operation_meta_redirect (operation, "end_y", gradient, "end-y");
+  gegl_operation_meta_redirect (operation, "start_color", gradient, "start-color");
+  gegl_operation_meta_redirect (operation, "end_color", gradient, "end-color");
+
 
   /* Now save points to the various gegl nodes so we can rewire them in
    * update_graph() later
    */
   State *state = g_malloc0 (sizeof (State));
+  o->user_data = state;
+
+  state->input = input;
+  state->atop = atop;
+  state->crop = crop;
+  state->mbd = mbd;
   state->mcol = mcol;
   state->innerglow = innerglow;
   state->stroke = stroke;
   state->ds = ds;
   state->output = output;
-  o->user_data = state;
+  state->image = image;
+  state->gradient = gradient;
 }
 
 static void
@@ -267,11 +324,37 @@ update_graph (GeglOperation *operation)
 
   if (o->innerglow)
   {
-    gegl_node_link_many (state->mcol, state->innerglow, state->stroke, state->ds, state->output, NULL);
+    if (o->gradient)
+    {
+      /* both innerglow and gradient */
+      gegl_node_link_many (state->input, state->atop, state->crop, state->mbd, state->mcol, state->innerglow, state->stroke, state->ds, state->output, NULL);
+      gegl_node_link_many (state->input, state->image, state->gradient, NULL);
+      gegl_node_connect_from (state->atop, "aux", state->gradient, "output");
+    }
+    else
+    {
+      /* innerglow but no gradient */
+      gegl_node_link_many (state->input, state->atop, state->crop, state->mbd, state->mcol, state->innerglow, state->stroke, state->ds, state->output, NULL);
+      gegl_node_link_many (state->input, state->image, NULL);
+      gegl_node_connect_from (state->atop, "aux", state->image, "output");
+    }
   }
   else
   {
-    gegl_node_link_many (state->mcol, state->stroke, state->ds, state->output, NULL);
+    if (o->gradient)
+    {
+      /* gradient but no innerglow */
+      gegl_node_link_many (state->input, state->atop, state->crop, state->mbd, state->mcol, state->stroke, state->ds, state->output, NULL);
+      gegl_node_link_many (state->input, state->image, state->gradient, NULL);
+      gegl_node_connect_from (state->atop, "aux", state->gradient, "output");
+    }
+    else
+    {
+      /* neither gradient nor innerglow */
+      gegl_node_link_many (state->input, state->atop, state->crop, state->mbd, state->mcol, state->stroke, state->ds, state->output, NULL);
+      gegl_node_link_many (state->input, state->image, NULL);
+      gegl_node_connect_from (state->atop, "aux", state->image, "output");
+    }
   }
 }
 
