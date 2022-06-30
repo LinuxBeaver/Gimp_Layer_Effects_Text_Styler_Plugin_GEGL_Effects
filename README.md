@@ -22,6 +22,7 @@ Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will 
 
 Image file overlay will not work if a gradient is activate.
 
+Use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
 ## Instructions 
 You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
