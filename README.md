@@ -11,10 +11,15 @@ you can make presets of your favorite text styles.
 
 ## Guide 
 Color change will only work correctly if the text is white.
+
 Setting the opacity of outline to 0 removes the stroke outline entirely and the shadow will take over.
+
 Setting the opacity of shadow/glow to 0 removes the shadow glow.
+
 Bevel Bumpmap is disabled by default but sliding the opacity meter up enables it.
+
 Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
+
 Image file overlay will not work if a gradient is activate.
 
 
