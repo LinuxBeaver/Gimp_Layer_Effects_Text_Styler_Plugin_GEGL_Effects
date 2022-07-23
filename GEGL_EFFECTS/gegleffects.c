@@ -50,6 +50,21 @@ enum_start (gegl_stroke_grow_shape)
 enum_end (GeglstrokeGrowShape)
 
 
+property_double (xstroke, _("X"), 1.0)
+  description   (_("Horizontal shadow offset"))
+  ui_range      (-40.0, 40.0)
+  ui_steps      (1, 10)
+    ui_meta     ("role", "output-extent")
+
+
+property_double (ystroke, _("Y"), 1.0)
+  description   (_("Vertical shadow offset"))
+  ui_range      (-40.0, 40.0)
+  ui_steps      (1, 10)
+    ui_meta     ("role", "output-extent")
+
+
+
 
 
 property_enum   (grow_shape, _("Grow shape"),
@@ -234,7 +249,7 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
   stroke = gegl_node_new_child (gegl,
-                                  "operation", "gegl:stroke",
+                                  "operation", "gegl:dropshadow",
                                   NULL);
 
   ds = gegl_node_new_child (gegl,
@@ -272,6 +287,8 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "string", image, "string");
   gegl_operation_meta_redirect (operation, "x", ds, "x");
   gegl_operation_meta_redirect (operation, "y", ds, "y");
+  gegl_operation_meta_redirect (operation, "ystroke", stroke, "y");
+  gegl_operation_meta_redirect (operation, "xstroke", stroke, "x");
   gegl_operation_meta_redirect (operation, "opacity", ds, "opacity");
   gegl_operation_meta_redirect (operation, "grow_radius", ds, "grow-radius");
   gegl_operation_meta_redirect (operation, "radius", ds, "radius");
