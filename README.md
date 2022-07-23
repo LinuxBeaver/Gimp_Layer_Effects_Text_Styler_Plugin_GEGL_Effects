@@ -25,7 +25,7 @@ Image file overlay will not work if a gradient is activate.
 Use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
 ## Instructions 
-You must manually compile mcol, mbd, stroke, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
+You must manually compile mcol, mbd, zzwhite, it, innerglow, and bevel and put the .so files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
 
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
