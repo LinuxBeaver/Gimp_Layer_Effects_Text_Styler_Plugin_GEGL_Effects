@@ -50,14 +50,14 @@ enum_start (gegl_stroke_grow_shape)
 enum_end (GeglstrokeGrowShape)
 
 
-property_double (xstroke, _("X"), 1.0)
+property_double (xstroke, _("X"), 0.0)
   description   (_("Horizontal shadow offset"))
   ui_range      (-40.0, 40.0)
   ui_steps      (1, 10)
     ui_meta     ("role", "output-extent")
 
 
-property_double (ystroke, _("Y"), 1.0)
+property_double (ystroke, _("Y"), 0.0)
   description   (_("Vertical shadow offset"))
   ui_range      (-40.0, 40.0)
   ui_steps      (1, 10)
