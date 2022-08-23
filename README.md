@@ -8,6 +8,7 @@ you can make presets of your favorite text styles.
 
 
 ![image preview](GE.png )
+![image preview](bevel_preview.png )
 
 ## Guide 
 Color change will only work correctly if the text is white.
