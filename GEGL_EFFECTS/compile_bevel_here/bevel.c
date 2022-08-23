@@ -40,7 +40,7 @@ property_int (bevel2, _("Depth"), 40)
     value_range (1, 100)
 
 
-property_double (th, _("Threshold of the Bevel's Transparency'"), 0.25)
+property_double (th, _("Threshold of the Bevel's Transparency'"), 0.100)
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
 
