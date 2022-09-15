@@ -21,7 +21,7 @@ Once you get done compiling each operation go to its build direcory and get the
 ![image preview](bevel_preview.png )
 
 ## Guide 
-Color change will only work correctly if the text is white.
+Color change will only work correctly if the text is white. This is because it uses the color overlay on multiply blend mode that perfectly changes the color white to anything.
 
 You must slide opacity of Outline up to use the outline stroke. Sliding it down again hides it as if it were never there.
 
