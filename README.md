@@ -19,6 +19,7 @@ Once you get done compiling each operation go to its build direcory and get the
 
 ![image preview](GE.png )
 ![image preview](bevel_preview.png )
+![image preview](innerglow_preview.png )
 
 ## Guide 
 Color change will only work correctly if the text is white. This is because it uses the color overlay on multiply blend mode that perfectly changes the color white to anything.
