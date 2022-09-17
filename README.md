@@ -1,5 +1,6 @@
 GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for!
 =========
+
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
 
@@ -46,6 +47,17 @@ You must manually compile effects, innerglow, and bevel and put the .so/dll file
 Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
 
+
+##OS specific location to put GEGL Filter binaries 
+
+Windows
+ C:\\Users\<YOUR NAME>\AppData\Local\gegl-0.4\plug-ins
+ 
+ Linux 
+ /home/(USERNAME)/.local/share/gegl-0.4/plug-ins
+ 
+ Linux (Flatpak)
+ /home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins
 
 
 ## Compiling and Installing
