@@ -1,11 +1,12 @@
-GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for!
+GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for! 
 =========
+September 23 2022 update has now given GEGL Effects a major revamp! It can now change internal blend modes for inner glow, gradient and bevel. As well as fragmentation of its list into three sectors "Outline and Shadow" "Bevel and InnerGlow" "Image and Gradient". This is the most professional and polished GEGL Effects has ever been.
 
 A custom GEGL filter that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
 
 GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
-which are more useful on their own as  in stand alone mode they can be fused with Gimp 
+which are more useful on their own as they have more options. 
 blend modes and give off more settings. 
 
 Instructions - If you choose not to use prebuilt binaries.
@@ -17,6 +18,7 @@ Once you get done compiling each operation go to its build direcory and get the
 
 
 ![image preview](GE.png )
+![image preview](effects4.png )
 ![image preview](bevel_preview.png )
 ![image preview](innerglow_preview.png )
 
@@ -34,8 +36,6 @@ Bevel Bumpmap is disabled by default but sliding the opacity meter up enables it
 Bevel lighting angle is on 90 by default which is not an interesting option so consider playing with it..
 
 Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
-
-Image file overlay will not work if a gradient is activate.
 
 Use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
