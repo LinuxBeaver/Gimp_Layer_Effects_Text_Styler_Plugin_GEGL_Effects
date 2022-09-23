@@ -7,7 +7,7 @@ you can make presets and get live preview updates of your favorite text styles.
 
 GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
 which are more useful on their own as they have more options. 
-blend modes and give off more settings. 
+
 
 Instructions - If you choose not to use prebuilt binaries.
 You must manually compile innerglow, bevel and effects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. 
