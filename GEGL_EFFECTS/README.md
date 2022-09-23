@@ -1,5 +1,7 @@
+You must compile effects.dll/so innerglow.dll/so and bevel.dll/so  and put them in /gegl-0.4/plug-ins 
 
-Put all the binaries in /gegl-0.4/plug-ins
+If you do not have all three of them this filter will not work proper!
+
 ## Compiling and Installing
 
 ### Linux
