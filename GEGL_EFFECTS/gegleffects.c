@@ -39,6 +39,8 @@ enum_start (gegl_blend_mode_type_effects)
 enum_end (GeglBlendModeType)
 
 
+
+
 enum_start (gegl_blend_mode_type_effectsig)
   enum_value (GEGL_BLEND_MODE_TYPE_OVER,      "Over",
               N_("Over"))
@@ -58,6 +60,12 @@ enum_start (gegl_blend_mode_type_effectsig)
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG,      "LinearLight",
               N_("LinearLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTIG,      "HardLight",
+              N_("HardLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_BURNIG,      "Burn",
+              N_("Burn"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORIG,      "LCH Color",
+              N_("LCH Color"))
 enum_end (GeglBlendModeTypeig)
 
 enum_start (gegl_blend_mode_type_effectsg)
@@ -81,6 +89,12 @@ enum_start (gegl_blend_mode_type_effectsg)
               N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSVHUEG,      "HSV Hue",
               N_("HSV Hue"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTG,      "HardLight",
+              N_("Hardlight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_BURNG,      "Burn",
+              N_("Burn"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORG,      "LCH Color",
+              N_("LCH Color"))
 enum_end (GeglBlendModeTypeg)
 
 
@@ -100,7 +114,7 @@ property_enum(guichange, _("Part of filter to be displayed"),
     BEAVER_UI_STROKESHADOW)
   description(_("Change the GUI option"))
 
-property_enum (blendmode, _("Blend Mode of Bevel's emboss'"),
+property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss'"),
     GeglBlendModeType, gegl_blend_mode_type_effects,
     GEGL_BLEND_MODE_TYPE_MULTIPLY)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -282,7 +296,7 @@ property_boolean (innerglow, _("Enable Inner Glow"), FALSE)
   description   (_("Whether to add an inner glow effect, which can be slow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_enum (blendmodeig, _("Blend Mode of Inner Glow"),
+property_enum (blendmodeinnerglow2, _("Blend Mode of Inner Glow"),
     GeglBlendModeTypeig, gegl_blend_mode_type_effectsig,
     GEGL_BLEND_MODE_TYPE_OVER)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -329,7 +343,7 @@ property_boolean (gradient, _("Enable Gradient"), FALSE)
   description   (_("Whether to add Gradient overlay"))
 ui_meta ("visible", "guichange {imagegradient}")
 
-property_enum (blendmodeg, _("Blend Mode of Gradient"),
+property_enum (blendmodegradient2, _("Blend Mode of Gradient"),
     GeglBlendModeTypeg, gegl_blend_mode_type_effectsg,
     GEGL_BLEND_MODE_TYPE_OVER)
   ui_meta ("visible", "guichange {imagegradient}")
@@ -421,6 +435,12 @@ typedef struct
   GeglNode *hsvhueg;
   GeglNode *linearlightg;
   GeglNode *saturation;
+  GeglNode *hardlightg;
+  GeglNode *hardlightig;
+  GeglNode *burng;
+  GeglNode *burnig;
+  GeglNode *lchcolorg;
+  GeglNode *lchcolorig;
 } State;
 
 static void
@@ -434,16 +454,17 @@ update_graph (GeglOperation *operation)
 
   if (!state) return;
 
-  multiplyb = state->multiply; /* the default */
-  switch (o->blendmode) {
+  multiplyb = state->multiply; /* the default. Bevel looks bad with most blend modes (outside of Multiply and Grain Merge) */
+  switch (o->blendmodebevel2) {
     case GEGL_BLEND_MODE_TYPE_MULTIPLY: multiplyb = state->multiplyb; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGE: multiplyb = state->grainmerge; break;
     case GEGL_BLEND_MODE_TYPE_SUBTRACT: multiplyb = state->subtract; break;
     case GEGL_BLEND_MODE_TYPE_GRAINEXTRACT: multiplyb = state->grainextract; break;
+
  }
 
   over = state->over; /* the default */
-  switch (o->blendmodeig) {
+  switch (o->blendmodeinnerglow2) {
     case GEGL_BLEND_MODE_TYPE_OVER: over = state->over; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGEIG: over = state->grainmergeig; break;
     case GEGL_BLEND_MODE_TYPE_ADDITION: over = state->addition; break;
@@ -453,11 +474,14 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_HSLCOLORIG: over = state->hslcolorig; break;
     case GEGL_BLEND_MODE_TYPE_OVERLAYIG: over = state->overlayig; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG: over = state->linearlightig; break;
+    case GEGL_BLEND_MODE_TYPE_HARDLIGHTIG: over = state->hardlightig; break;
+    case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break; 
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break; 
 
   }
 
   atopg = state->atopg; /* the default */
-  switch (o->blendmodeg) {
+  switch (o->blendmodegradient2) {
     case GEGL_BLEND_MODE_TYPE_ATOPG: atopg = state->atopg; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGEG: atopg = state->grainmergeg; break;
     case GEGL_BLEND_MODE_TYPE_ADDITIONG: atopg = state->additiong; break;
@@ -468,6 +492,9 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_OVERLAYG: atopg = state->overlayg; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTG: atopg = state->linearlightg; break;
     case GEGL_BLEND_MODE_TYPE_HSVHUEG: atopg = state->hsvhueg; break;
+    case GEGL_BLEND_MODE_TYPE_HARDLIGHTG: atopg = state->hardlightg; break;
+    case GEGL_BLEND_MODE_TYPE_BURNG: atopg = state->burng; break;
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORG: atopg = state->lchcolorg; break;
 
   }
  
@@ -545,7 +572,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation;
+  GeglNode *input, *output, *image, *mbd, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *lchcolorg, *lchcolorig, *burng;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -720,6 +747,28 @@ hsvhueg = gegl_node_new_child (gegl,
 linearlightg = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, NULL);
 
+hardlightig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
+
+hardlightg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
+
+burng = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
+
+burnig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
+
+lchcolorg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
+
+lchcolorig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
+
+
+
+
+
 
 
   gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
@@ -813,10 +862,16 @@ linearlightg = gegl_node_new_child (gegl,
   state->screeng = screeng;
   state->multiplyg = multiplyg;
   state->softlightg = softlightg;
-  state->hslcolorg = hslcolorg;
+  state->hslcolorg = hslcolorg; 
   state->hsvhueg = hsvhueg;
   state->additiong = additiong;
   state->saturation = saturation;
+  state->hardlightig = hardlightig;
+  state->hardlightg = hardlightg;
+  state->burng = burng;
+  state->burnig = burnig;
+  state->lchcolorg = lchcolorg;
+  state->lchcolorig = lchcolorig;
 }
 
 
@@ -833,7 +888,7 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:effects",
+    "name",        "gegl:layereffects",
     "title",       _("GEGL Effects"),
     "categories",  "Generic",
     "reference-hash", "45ed565h8500fca01b2ac",
