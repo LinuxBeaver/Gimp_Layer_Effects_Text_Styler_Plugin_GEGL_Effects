@@ -30,12 +30,12 @@
 enum_start (gegl_blend_mode_type_effects)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLY,      "Multiply",
               N_("Multiply"))
-  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGE,      "Grain Merge",
-              N_("Grain Merge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGE,      "GrainMerge",
+              N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_SUBTRACT,      "Subtract",
               N_("Subtract"))
-  enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACT,      "Grain Extract",
-              N_("Grain Extract"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACT,      "GrainExtract",
+              N_("GrainExtract"))
 enum_end (GeglBlendModeType)
 
 
@@ -44,8 +44,8 @@ enum_end (GeglBlendModeType)
 enum_start (gegl_blend_mode_type_effectsig)
   enum_value (GEGL_BLEND_MODE_TYPE_OVER,      "Over",
               N_("Over"))
-  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEIG,      "Grain Merge",
-              N_("Grain Merge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEIG,      "GrainMerge",
+              N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITION,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTIG,      "Softlight",
@@ -54,8 +54,8 @@ enum_start (gegl_blend_mode_type_effectsig)
               N_("Screen"))
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYIG,      "Multiply",
               N_("Multiply"))
-  enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORIG,      "HSL Color",
-              N_("HSL Color"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORIG,      "HSLColor",
+              N_("HSLColor"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYIG,      "Overlay",
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG,      "LinearLight",
@@ -64,15 +64,15 @@ enum_start (gegl_blend_mode_type_effectsig)
               N_("HardLight"))
   enum_value (GEGL_BLEND_MODE_TYPE_BURNIG,      "Burn",
               N_("Burn"))
-  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORIG,      "LCH Color",
-              N_("LCH Color"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORIG,      "LCHColor",
+              N_("LCHColor"))
 enum_end (GeglBlendModeTypeig)
 
 enum_start (gegl_blend_mode_type_effectsg)
   enum_value (GEGL_BLEND_MODE_TYPE_ATOPG,      "Over",
               N_("Over"))
-  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEG,      "Grain Merge",
-              N_("Grain Merge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEG,      "GrainMerge",
+              N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONG,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTG,      "Softlight",
@@ -81,20 +81,20 @@ enum_start (gegl_blend_mode_type_effectsg)
               N_("Screen"))
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYG,      "Multiply",
               N_("Multiply"))
-  enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORG,      "HSL Color",
-              N_("HSL Color"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORG,      "HSLColor",
+              N_("HSLColor"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYG,      "Overlay",
               N_("Overlay"))
-  enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTG,      "Linear Light",
-              N_("Linear Light"))
-  enum_value (GEGL_BLEND_MODE_TYPE_HSVHUEG,      "HSV Hue",
-              N_("HSV Hue"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTG,      "LinearLight",
+              N_("LinearLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HSVHUEG,      "HSVHue",
+              N_("HSVHue"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTG,      "HardLight",
               N_("Hardlight"))
   enum_value (GEGL_BLEND_MODE_TYPE_BURNG,      "Burn",
               N_("Burn"))
-  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORG,      "LCH Color",
-              N_("LCH Color"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORG,      "LCHColor",
+              N_("LCHColor"))
 enum_end (GeglBlendModeTypeg)
 
 
