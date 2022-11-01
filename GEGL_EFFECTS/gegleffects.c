@@ -148,7 +148,7 @@ property_double (bevel1, _("Rotate Bevel Lighting (90 resets)"), 90.0)
 
 
 property_double (radius1, _("Radius of Bevel"), 7.0)
-  value_range (7, 12.0)
+  value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -195,8 +195,8 @@ property_enum   (grow_shape, _("Grow shape"),
   ui_meta ("visible", "guichange {strokeshadow}")
 
 property_double (radiusstroke, _("Outline's Blur radius"), 0.0)
-  value_range   (0.0, 2)
-  ui_range      (0.0, 300.0)
+  value_range   (0.0, 3)
+  ui_range      (0.0, 3.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
@@ -505,7 +505,6 @@ update_graph (GeglOperation *operation)
     {
       /* both innerglow and gradient */
          gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
-      gegl_node_link_many (state->nopg, state->gradient, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
@@ -536,7 +535,6 @@ update_graph (GeglOperation *operation)
     {
       /* gradient but no innerglow */
          gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
-      gegl_node_link_many (state->nopg, state->gradient, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -773,7 +771,6 @@ lchcolorig = gegl_node_new_child (gegl,
 
   gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
   gegl_node_link_many (nopimage, image, NULL);
-  gegl_node_link_many (nopg, gradient, NULL);
  gegl_node_link_many (nopig, innerglow, NULL);
  gegl_node_link_many (nopb, mbd, NULL);
  gegl_node_link_many (nopm, mcol, NULL);
