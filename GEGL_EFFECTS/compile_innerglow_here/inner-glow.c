@@ -70,7 +70,7 @@ property_double (y, _("Y"), 0.0)
 
 
 property_double (radius, _("Blur radius"), 10.7)
-  value_range   (0.0, 30.0)
+  value_range   (0.0, 40.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
