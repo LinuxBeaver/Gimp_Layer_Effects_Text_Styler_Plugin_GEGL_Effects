@@ -693,7 +693,7 @@ subtract = gegl_node_new_child (gegl,
 /* grainextract, grainmerge, and subtract are for bevel and cannot be reused - ends here */
 
 grainmergeig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
 
 addition = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
@@ -714,12 +714,12 @@ softlightig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
 
 linearlightig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
 
 /* Blend modes below are for gradient*/
 
 grainmergeg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
 
 additiong = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
@@ -743,7 +743,7 @@ hsvhueg = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 37, "composite-mode", 0, NULL);
 
 linearlightg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
 
 hardlightig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
