@@ -107,9 +107,9 @@ property_int  (mradius, _("Radius"), 1)
     ui_meta     ("role", "output-extent")
 
 
-property_double  (fixoutline, _("Median to fix unwanted pixel outline"), 50)
+property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 60)
   value_range (50, 100)
-  description (_("Neighborhood alpha percentile"))
+  description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
 
 
 
@@ -126,7 +126,7 @@ property_double  (fixoutline, _("Median to fix unwanted pixel outline"), 50)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median, *median2, *output;
+  GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median, *median2, *in, *nop2, *output;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -136,6 +136,11 @@ static void attach (GeglOperation *operation)
   it    = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl",
                                   NULL);
+
+  in    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-in",
+                                  NULL);
+
 
   shadow    = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
@@ -160,9 +165,13 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:nop",
                                   NULL);
 
-  eblack    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:color-to-alpha",
+  nop2    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
                                   NULL);
+
+
+  eblack = gegl_node_new_child (gegl, "operation", "gegl:color-to-alpha", "transparency-threshold", 0.050, NULL);
+
 
   median    = gegl_node_new_child (gegl,
                                   "operation", "gegl:median-blur",
@@ -214,10 +223,9 @@ gegl_operation_meta_redirect (operation, "string", it, "string");
 
 
 
-
-
-  gegl_node_link_many (input, it, nop, shadow, color, atop, eblack, color2, median, median2, output, NULL);
+  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, in, median, median2, color2, output, NULL);
  gegl_node_connect_from (atop, "aux", nop, "output");
+ gegl_node_connect_from (in, "aux", nop2, "output");
 
 
 }
