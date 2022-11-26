@@ -223,7 +223,7 @@ gegl_operation_meta_redirect (operation, "string", it, "string");
 
 
 
-  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, in, median, median2, color2, output, NULL);
+  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, median, in, median2, color2, output, NULL);
  gegl_node_connect_from (atop, "aux", nop, "output");
  gegl_node_connect_from (in, "aux", nop2, "output");
 
