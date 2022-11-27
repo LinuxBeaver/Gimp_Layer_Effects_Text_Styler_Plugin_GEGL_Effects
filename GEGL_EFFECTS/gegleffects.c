@@ -153,6 +153,12 @@ property_double (radius1, _("Radius of Bevel"), 7.0)
   ui_gamma (1.5)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
+property_double (th, _("Bevel's unmodified edge pixel fix"), 0.100)
+  value_range (0.0, 0.1)
+  ui_range (0.0, 0.1)
+  ui_meta ("visible", "guichange {innerglowbevel}")
+    ui_meta     ("role", "output-extent")
+
 
 
 
@@ -333,10 +339,11 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double  (fixoutline, _("Fix Inner Glow outline with median blur"), 69)
+property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 69)
   value_range (50, 79)
   description (_("Neighborhood alpha percentile"))
   ui_meta ("visible", "guichange {innerglowbevel}")
+
 
 
 property_boolean (gradient, _("Enable Gradient"), FALSE)
@@ -814,6 +821,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "end_y", gradient, "end-y");
   gegl_operation_meta_redirect (operation, "start_color", gradient, "start-color");
   gegl_operation_meta_redirect (operation, "end_color", gradient, "end-color");
+  gegl_operation_meta_redirect (operation, "th", mbd, "th");
 
 
   /* Now save points to the various gegl nodes so we can rewire them in
