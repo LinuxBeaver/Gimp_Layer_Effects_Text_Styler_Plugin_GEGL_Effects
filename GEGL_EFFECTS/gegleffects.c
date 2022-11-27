@@ -340,7 +340,7 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
 
 
 property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 69)
-  value_range (50, 79)
+  value_range (50, 85)
   description (_("Neighborhood alpha percentile"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
