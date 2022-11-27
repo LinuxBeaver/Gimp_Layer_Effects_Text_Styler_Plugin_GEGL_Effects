@@ -69,7 +69,7 @@ property_double (y, _("Y"), 0.0)
 
 
 
-property_double (radius, _("Blur radius"), 10.7)
+property_double (radius, _("Blur radius"), 2.5)
   value_range   (0.0, 40.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
@@ -77,7 +77,7 @@ property_double (radius, _("Blur radius"), 10.7)
   ui_meta       ("unit", "pixel-distance")
 
 
-property_double (grow_radius, _("Grow radius"), 8.0)
+property_double (grow_radius, _("Grow radius"), 4.0)
   value_range   (2, 30.0)
   ui_range      (2, 30.0)
   ui_digits     (0)
@@ -86,7 +86,7 @@ property_double (grow_radius, _("Grow radius"), 8.0)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
 
-property_double (opacity, _("Opacity"), 1.4)
+property_double (opacity, _("Opacity"), 1.2)
   value_range   (0.0, 2.0)
   ui_steps      (0.01, 0.10)
 
@@ -126,7 +126,7 @@ property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 6
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median, *median2, *in, *nop2, *output;
+  GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median2, *in, *nop2, *output;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -173,10 +173,6 @@ static void attach (GeglOperation *operation)
   eblack = gegl_node_new_child (gegl, "operation", "gegl:color-to-alpha", "transparency-threshold", 0.050, NULL);
 
 
-  median    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur",
-                                  NULL);
-
   median2    = gegl_node_new_child (gegl,
                                   "operation", "gegl:median-blur",
                                   NULL);
@@ -201,9 +197,7 @@ gegl_operation_meta_redirect (operation, "y", shadow, "y");
 
 gegl_operation_meta_redirect (operation, "notouch", color, "value");
 
-gegl_operation_meta_redirect (operation, "mradius", median, "radius");
-
-gegl_operation_meta_redirect (operation, "fixoutline", median, "alpha-percentile");
+gegl_operation_meta_redirect (operation, "mradius", median2, "radius");
 
 gegl_operation_meta_redirect (operation, "fixoutline", median2, "alpha-percentile");
 
@@ -223,7 +217,7 @@ gegl_operation_meta_redirect (operation, "string", it, "string");
 
 
 
-  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, median, in, median2, color2, output, NULL);
+  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, in, median2, color2, output, NULL);
  gegl_node_connect_from (atop, "aux", nop, "output");
  gegl_node_connect_from (in, "aux", nop2, "output");
 
