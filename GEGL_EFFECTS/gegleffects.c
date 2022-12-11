@@ -222,7 +222,7 @@ property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
 
 
 
-property_color  (colorstroke, _("Outline's Color"), "#k")
+property_color  (colorstroke, _("Outline's Color"), "#000000")
     /* TRANSLATORS: the string 'black' should not be translated */
   description   (_("The shadow's color (defaults to 'black')"))
     ui_meta     ("role", "color-primary")
@@ -308,7 +308,7 @@ property_enum (blendmodeinnerglow2, _("Blend Mode of Inner Glow"),
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double (innergradius, _("Inner Glow's Blur radius"), 13.0)
+property_double (innergradius, _("Inner Glow's Blur radius"), 4.5)
   value_range   (0.0, 30.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
@@ -339,7 +339,7 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 69)
+property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 75)
   value_range (50, 85)
   description (_("Neighborhood alpha percentile"))
   ui_meta ("visible", "guichange {innerglowbevel}")
