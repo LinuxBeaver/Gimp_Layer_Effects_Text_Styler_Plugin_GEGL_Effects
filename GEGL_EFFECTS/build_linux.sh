@@ -8,6 +8,3 @@ cd ./compile_innerglow_here
 
 cd ../compile_bevel_here
 ./build_linux.sh
-
-cd ../
-
