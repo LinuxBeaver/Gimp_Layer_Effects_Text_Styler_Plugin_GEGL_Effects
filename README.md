@@ -6,7 +6,7 @@ GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be no
 you can make presets and get live preview updates of your favorite text styles. 
 
 GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
-which are more useful on their own as they have more options. MOTE - It will NOT work without bevel.so and inner-glow.so
+which are more useful on their own as they have more options. NOTE - It will NOT work without bevel.so and inner-glow.so
 
 
 Instructions - If you choose not to use prebuilt binaries.
