@@ -1,12 +1,12 @@
 GEGL EFFECTS by Beaver. The GEGL filter you've been waiting for! 
 =========
-September 23 2022 update has now given GEGL Effects a major revamp! It can now change internal blend modes for inner glow, gradient and bevel. As well as fragmentation of its list into three sectors "Outline and Shadow" "Bevel and InnerGlow" "Image and Gradient". This is the most professional and polished GEGL Effects has ever been.
+September 23 2022 update has given GEGL Effects a major revamp! It can now change internal blend modes for inner glow, gradient and bevel. As well as fragmentation of its list into three sectors "Outline and Shadow" "Bevel and InnerGlow" "Image and Gradient". This is the most professional and polished GEGL Effects has ever been.
 
-A custom GEGL filter that does layer effects. It may not be non-destructive but 
+GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
 
 GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
-which are more useful on their own as they have more options. 
+which are more useful on their own as they have more options. MOTE - It will NOT work without bevel.so and inner-glow.so
 
 
 Instructions - If you choose not to use prebuilt binaries.
@@ -22,8 +22,8 @@ Once you get done compiling each operation go to its build direcory and get the
 ![image preview](bevel_preview.png )
 ![image preview](innerglow_preview.png )
 
-## Guide 
-Color change will only work correctly if the text is white. This is because it uses the color overlay on multiply blend mode that perfectly changes the color white to anything.
+## Quick Guide 
+Color change will only work correctly if the text is white. This is because it uses the color overlay on multiply blend mode that perfectly changes the color white to anything. If the color is something else it will be as if you are applying a multiply blend mode color overlay. 
 
 You must slide opacity of Outline up to use the outline stroke. Sliding it down again hides it as if it were never there.
 
