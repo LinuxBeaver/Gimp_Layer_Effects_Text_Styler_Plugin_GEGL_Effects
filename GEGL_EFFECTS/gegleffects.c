@@ -15,7 +15,7 @@
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
  *2022 Beaver GEGL Effects 
- * 2022 Liam (for helping give Inner Glow a disable checkbox) 
+ * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox) 
  */
 
 #include "config.h"
@@ -897,7 +897,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects"),
     "categories",  "Generic",
     "reference-hash", "45ed565h8500fca01b2ac",
-    "description", _("GEGL text stying and speciality image outlining filter. Text recoloring only works if the color is white "
+    "description", _("GEGL text styling and speciality image outlining filter. Text recoloring only works if the color is white "
                      ""),
     NULL);
 }
