@@ -23,23 +23,23 @@ Once you get done compiling each operation go to its build direcory and get the
 ![image preview](innerglow_preview.png )
 
 ## Quick Guide 
-Color change will only work correctly if the text is white. This is because it uses the color overlay on multiply blend mode that perfectly changes the color white to anything. If the color is something else it will be as if you are applying a multiply blend mode color overlay. 
+1. Color change will only work correctly if the text is white. This is because it uses a color overlay operation on the multiply blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color.
 
-You must slide opacity of Outline up to use the outline stroke. Sliding it down again hides it as if it were never there.
+2. You must slide up the opacity slider of Outline to use the outline stroke. Sliding it down again hides it as if it were never present.
 
-You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never there.
+2b. You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never present.
 
-Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius.
+2c. You must slide bevel depth up to use most of the bevel option. Sliding it down again hides it as if it were never present.
 
-Bevel Bumpmap is disabled by default but sliding the opacity meter up enables it.
+3. Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter.
 
-Bevel lighting angle is on 90 by default which is not an interesting option so consider playing with it..
+4. Bevel lighting angle is on 90 by default which is not an interesting option so consider tweaking it. 
 
-Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
+5. Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
 
-Use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
+6. YOu can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
-Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. 
+7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. 
 
 ## Instructions 
 You must manually compile effects, innerglow, and bevel and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
