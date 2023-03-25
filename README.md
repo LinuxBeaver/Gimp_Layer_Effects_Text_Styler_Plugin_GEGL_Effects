@@ -1,6 +1,5 @@
 GEGL EFFECTS by Beaver. Layer Effects in Gimp
 =========
-September 23 2022 update has given GEGL Effects a major revamp! It can now change internal blend modes for inner glow, gradient and bevel. As well as fragmentation of its list into three sectors "Outline and Shadow" "Bevel and InnerGlow" "Image and Gradient". This is the most professional and polished GEGL Effects has ever been.
 
 GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
