@@ -15,10 +15,18 @@ Once you get done compiling each operation go to its build direcory and get the
 .so file and place it in /gegl-04/plugins. Click build_linux.sh to compile on Linux.
 
 
+## Previews 
 
+GEGL Effects blue text, black outline, black shadow, and linear light white inner glow.
 ![image preview](GE.png )
+
+GEGL Effects green text, pink outline, bevel, black shadow
 ![image preview](effects4.png )
+
+GEGL Bevel on its own with the multiply blend mode (Note this is a Windows XP theme for Linux)
 ![image preview](bevel_preview.png )
+
+GEGL Inner Glow on its own with the Overlay blend mode
 ![image preview](innerglow_preview.png )
 
 ## Quick Guide 
