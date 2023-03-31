@@ -1,6 +1,10 @@
-GEGL EFFECTS by Beaver. Layer Effects in Gimp
+GEGL EFFECTS by Beaver. Layer Effects Text Styling Gimp Plugin
 =========
 
+##  GEGL Effects Continual Edition (a branch with more advance features and routine updates) here
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/ContinualEdition
+
+----------------------------
 GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
 
