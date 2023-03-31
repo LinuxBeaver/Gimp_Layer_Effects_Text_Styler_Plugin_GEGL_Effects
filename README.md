@@ -1,70 +1,25 @@
-GEGL EFFECTS by Beaver. Layer Effects in Gimp
-=========
+This is a stable yet continual updating version of GEGL Effects that can co-exist with default GEGL Effects. Presets from normal GEGL Effects will not work with this version and there is no guarantee that future versions 
+of this will break presets. So feel free not to update, every release will contain a optional roll back.
 
-GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be non-destructive but 
-you can make presets and get live preview updates of your favorite text styles. 
-
-GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
-which are more useful on their own as they have more options. NOTE - It will NOT work without bevel.so and inner-glow.so
+You are expected to have GEGL InnerGlow and GEGL Bevel which can be downloaded here. The filter will not work without them.
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases
 
 
-Instructions - If you choose not to use prebuilt binaries.
-You must manually compile innerglow, bevel and effects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. 
+In total you should have, gegleffectspending, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
-Once you get done compiling each operation go to its build direcory and get the
-.so file and place it in /gegl-04/plugins. Click build_linux.sh to compile on Linux.
+This plugin will work alongside normal GEGLEffects for now.
 
-
-## Previews 
-
-GEGL Effects blue text, black outline, black shadow, and linear light white inner glow.
-![image preview](GE.png )
-
-GEGL Effects green text, pink outline, bevel, black shadow
-![image preview](effects4.png )
-
-GEGL Bevel on its own with the multiply blend mode (Note this is a Windows XP theme for Linux)
-![image preview](bevel_preview.png )
-
-GEGL Inner Glow on its own with the Overlay blend mode
-![image preview](innerglow_preview.png )
-
-## Quick Guide 
-1. Color change will only work correctly if the text is white. This is because it uses a color overlay operation on the multiply blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color.
-
-2. You must slide up the opacity slider of Outline to use the outline stroke. Sliding it down again hides it as if it were never present.
-
-2b. You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never present.
-
-2c. You must slide bevel depth up to use most of the bevel option. Sliding it down again hides it as if it were never present.
-
-3. Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter.
-
-4. Bevel lighting angle is on 90 by default which is not an interesting option so consider tweaking it. 
-
-5. Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
-
-6. YOu can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
-
-7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. 
-
-## Instructions 
-If you choose not to use release binaries you must manually compile effects, innerglow, and bevel and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations.
-
-Once you get done compiling each operation go to its build direcory and get the
-.so file and place it in gegl-04/plugins. Click build_linux.sh to compile on Linux.
+Put all the binaries in /gegl-0.4/plug-ins
 
 
-## OS specific location to put GEGL Filter binaries 
 
-Windows
- C:\\Users\<YOUR NAME>\AppData\Local\gegl-0.4\plug-ins
- 
- Linux 
- /home/(USERNAME)/.local/share/gegl-0.4/plug-ins
- 
- Linux (Flatpak)
- /home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins
+## Directories to put binaries
+
+Windows C:\Users<YOUR NAME>\AppData\Local\gegl-0.4\plug-ins
+
+Linux /home/(USERNAME)/.local/share/gegl-0.4/plug-ins
+
+Linux (Flatpak) /home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins
 
 
 ## Compiling and Installing
@@ -104,9 +59,6 @@ Then build the same way you would on Linux:
 meson setup --buildtype=release build
 ninja -C build
 ```
-
-Have fun BTFOing photoshop users.
-
 
 
 
