@@ -113,7 +113,7 @@ ninja -C build
 
 
 
-### Inner Glow and Bevel as bonus stand alone plugins are also included. These plugins are used in GEGL Effects but do more as stand alones.
+### Inner Glow and Bevel the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
 
 
