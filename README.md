@@ -1,3 +1,6 @@
+![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
+
+
 This is a stable yet continual updating version of GEGL Effects that can co-exist with default GEGL Effects. Presets from normal GEGL Effects will not work with this version and there is no guarantee that future versions 
 will not break text styling presets. Every release will contain a optional roll back.
 So you may want to download the latest version and just stick with it indefinitely. 
@@ -8,6 +11,9 @@ You are expected to also download GEGL InnerGlow, GEGL Bevel and  GEGL zzstrokeb
 In total you should have, gegleffectspending, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
 This plugin will work alongside normal GEGLEffects as seen here.
+
+![image preview](coexisting_plugins.jpg  )
+
 
 Put all the binaries in /gegl-0.4/plug-ins
 
@@ -60,5 +66,17 @@ meson setup --buildtype=release build
 ninja -C build
 ```
 
+
+### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects CV.
+----------------
+
+![image preview](/Image_previews/generated_text_style.png  )
+
+![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
+
+![image preview](/Image_previews/changes_bevel_outline_and_.image_overlay.png   )
+
+
+![image preview](/Image_previews/example_preset.png    )
 
 
