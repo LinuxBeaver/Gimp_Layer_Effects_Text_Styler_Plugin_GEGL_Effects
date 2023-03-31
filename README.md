@@ -76,6 +76,10 @@ ninja -C build
 
 ![image preview](/Image_previews/changes_bevel_outline_and_.image_overlay.png   )
 
+![image preview](/Image_previews/continual_pink.png    )
+
+
+![image preview](/Image_previews/flatpak2.png    )
 
 ![image preview](/Image_previews/example_preset.png    )
 
