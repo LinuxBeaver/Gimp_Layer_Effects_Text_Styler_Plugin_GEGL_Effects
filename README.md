@@ -64,7 +64,8 @@ ninja -C build
 ```
 
 
-### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects CV.
+### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
+CV can do everything the normal version can do and more.
 ----------------
 
 ![image preview](/Image_previews/generated_text_style.png  )
