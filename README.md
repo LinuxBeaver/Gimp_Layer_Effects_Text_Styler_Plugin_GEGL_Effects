@@ -1,13 +1,13 @@
 This is a stable yet continual updating version of GEGL Effects that can co-exist with default GEGL Effects. Presets from normal GEGL Effects will not work with this version and there is no guarantee that future versions 
-of this will break presets. So feel free not to update, every release will contain a optional roll back.
-
-You are expected to have GEGL InnerGlow and GEGL Bevel which can be downloaded here. The filter will not work without them.
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases
+will not break text styling presets. Every release will contain a optional roll back.
+So you may want to download the latest version and just stick with it indefinitely. 
 
 
+
+You are expected to also download GEGL InnerGlow, GEGL Bevel and  GEGL zzstrokebevelimage. The plugin will not work correctly without them.
 In total you should have, gegleffectspending, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
-This plugin will work alongside normal GEGLEffects for now.
+This plugin will work alongside normal GEGLEffects as seen here.
 
 Put all the binaries in /gegl-0.4/plug-ins
 
