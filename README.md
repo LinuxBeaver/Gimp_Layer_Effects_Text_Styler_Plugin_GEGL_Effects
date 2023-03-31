@@ -15,9 +15,6 @@ This plugin will work alongside normal GEGLEffects as seen here.
 ![image preview](coexisting_plugins.jpg  )
 
 
-Put all the binaries in /gegl-0.4/plug-ins
-
-
 
 ## Directories to put binaries
 
