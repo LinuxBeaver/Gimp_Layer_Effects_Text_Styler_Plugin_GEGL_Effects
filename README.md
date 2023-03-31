@@ -9,6 +9,8 @@ GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may no
 If you choose not to use prebuilt binaries. You must manually compile innerglow, zzstrokebevelimage, bevel and gegleffects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. Once you get done compiling each operation go to its build directory and get the .so or dll file and place it in /gegl-04/plugins. Click build_linux.sh to compile on Linux.
 
 
+## About CE
+
 This is a stable yet continual updating version of GEGL Effects that can co-exist with default GEGL Effects. Presets from normal GEGL Effects will not work with this version and there is no guarantee that future versions 
 will not break text styling presets. Every release will contain a optional roll back.
 So you may want to download the latest version and just stick with it indefinitely. 
