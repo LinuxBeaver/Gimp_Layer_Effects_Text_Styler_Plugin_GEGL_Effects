@@ -27,6 +27,21 @@
 
 #ifdef GEGL_PROPERTIES
 
+
+enum_start (gegl_blend_mode_type_effectszzbevoutlinege)
+  enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYGE,      "MultiplyGE",
+              N_("Multiply"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEGE,      "GrainMergeGE",
+              N_("GrainMerge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_SHINYGMGE,      "GrainMergealtGE",
+              N_("GrainMergeAlt"))
+  enum_value (GEGL_BLEND_MODE_TYPE_COLORDODGEGE,      "ColorDodgeGE",
+              N_("ColorDodge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
+              N_("HardLight"))
+enum_end (GeglBlendModeTypezzbevoutlinege)
+
+
 enum_start (gegl_blend_mode_type_effectszz)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLY,      "Multiply",
               N_("Multiply"))
@@ -42,6 +57,8 @@ enum_start (gegl_blend_mode_type_effectszz)
               N_("ColorDodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHT,      "HardLight",
               N_("HardLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_SCREEN,      "Screen",
+              N_("Screen"))
 enum_end (GeglBlendModeTypezz)
 
 
@@ -107,6 +124,7 @@ enum_end (GeglBlendModeTypegzz)
 
 
 
+
 enum_start (guichangeenumzz)
 enum_value   (BEAVER_UI_STROKESHADOW, "strokeshadow", N_("Outline and Shadow"))
 enum_value   (BEAVER_UI_INNERGLOWBEVEL, "innerglowbevel", N_("Bevel and Inner Glow"))
@@ -120,11 +138,6 @@ property_enum(guichange, _("Part of filter to be displayed"),
     guiendzz, guichangeenumzz,
     BEAVER_UI_STROKESHADOW)
   description(_("Change the GUI option"))
-
-property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss'"),
-    GeglBlendModeTypezz, gegl_blend_mode_type_effectszz,
-    GEGL_BLEND_MODE_TYPE_MULTIPLY)
-  ui_meta ("visible", "guichange {innerglowbevel}")
 
 
 
@@ -166,10 +179,24 @@ property_double (osth, _("Bevel's unmodified edge pixel fix"), 0.100)
   ui_meta ("visible", "guichange {innerglowbevel}")
     ui_meta     ("role", "output-extent")
 
-
 property_boolean (specialoutline, _("Enable effects on Outline"), FALSE)
   description    (_("Turn on special outline abilities"))
   ui_meta ("visible", "guichange {outlinespecial}")
+
+
+
+property_enum (blendmodebeveloutline, _("Blend Mode of Outline Bevel's emboss"),
+    GeglBlendModeTypezzbevoutlinege, gegl_blend_mode_type_effectszzbevoutlinege,
+    GEGL_BLEND_MODE_TYPE_MULTIPLYGE)
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss'"),
+    GeglBlendModeTypezz, gegl_blend_mode_type_effectszz,
+    GEGL_BLEND_MODE_TYPE_MULTIPLY)
+  ui_meta ("visible", "guichange {innerglowbevel}")
+
+
+
 
 
 property_int (osdepth, _("Bevel Outline Depth"), 1)
@@ -508,6 +535,7 @@ typedef struct
   GeglNode *colordodge;
   GeglNode *nopb2;
   GeglNode *hardlight;
+  GeglNode *screen;
 } State;
 
 static void
@@ -530,6 +558,7 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_SHINYGM: multiplyb = state->shinygm; break;
     case GEGL_BLEND_MODE_TYPE_COLORDODGE: multiplyb = state->colordodge; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHT: multiplyb = state->hardlight; break;
+    case GEGL_BLEND_MODE_TYPE_SCREEN: multiplyb = state->screen; break;
 
  }
 
@@ -640,7 +669,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *nopb2, *hardlight, *burng;
+  GeglNode *input, *output, *image, *mbd, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *nopb2, *hardlight, *screen, *burng;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -773,6 +802,9 @@ colordodge = gegl_node_new_child (gegl,
 
 hardlight = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
+
+screen = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, "composite-space", 0, "blend-space", 0, NULL);
 /* grainextract, grainmerge, and subtract are for bevel and cannot be reused - ends here */
 
 grainmergeig = gegl_node_new_child (gegl,
@@ -899,6 +931,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "oshue", stroke, "hue");
   gegl_operation_meta_redirect (operation, "oslightness", stroke, "lightness");
   gegl_operation_meta_redirect (operation, "enableoutline", stroke, "enableoutline");  
+  gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline");  
 
   /* Now save points to the various gegl nodes so we can rewire them in
    * update_graph() later
@@ -957,6 +990,7 @@ lchcolorig = gegl_node_new_child (gegl,
   state->colordodge = colordodge;
   state->nopb2 = nopb2;
   state->hardlight = hardlight;
+  state->screen = screen;
 }
 
 
