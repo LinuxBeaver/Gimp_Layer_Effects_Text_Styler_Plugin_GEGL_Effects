@@ -22,7 +22,7 @@ Same as March 30th except a major crash fix but happened. The crash appears to b
 Drop Shadow's "blur radius" slider use to show up to 300, now it only shows up to 110, but will be able to go up to 300 or higher if the user wants.
 
 
-..March 31st 2023 build 2..
+..March 31st 2023 build 2.. PUBLIC RELEASE!
 
 The same day GEGL Effects and zzstrokebevelimage was recompiled. Parameters of sstrokebevelimage AKA the outline was changed to lock its offset at (-15-15)
 
@@ -33,5 +33,12 @@ It seems there is a fundemental problem with the operation GEGL Opacity that I a
 
 Any presets that use drop shadow or stroke on 1 may not load so one will have to resave the preset at 0.999 (which is basically the same thing).
 
-The March 31st 2023 build 2 may be the first build fit to put on Github. 
+The March 31st 2023 build 2 was the first build fit to put on Github. 
   
+..March 31st 2023 build 3..
+
+The screen blend mode is now avalible for the bevel inside GEGL Effects. This change does not break presets but I thought it had the potential to do so. 
+
+..March 31st 2023 build 4..
+
+the bevel outline now has blend modes. This does not appear to break presets. It is almost midnight (near April 1st) and I did all this hard work in one day :D
