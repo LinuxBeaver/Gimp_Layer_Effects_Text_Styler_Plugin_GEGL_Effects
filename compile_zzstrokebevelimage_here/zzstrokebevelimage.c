@@ -22,6 +22,25 @@
 
 #ifdef GEGL_PROPERTIES
 
+enum_start (gegl_blend_mode_type_effectszzbevoutline)
+  enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYGE,      "MultiplyGE",
+              N_("Multiply"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEGE,      "GrainMergeGE",
+              N_("GrainMerge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_SHINYGMGE,      "GrainMergealtGE",
+              N_("GrainMergeAlt"))
+  enum_value (GEGL_BLEND_MODE_TYPE_COLORDODGEGE,      "ColorDodgeGE",
+              N_("ColorDodge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
+              N_("HardLight"))
+enum_end (GeglBlendModeTypezzbevoutline)
+
+
+property_enum (blendmodebeveloutline, _("Blend Mode of Bevel's emboss'"),
+    GeglBlendModeTypezzbevoutline, gegl_blend_mode_type_effectszzbevoutline,
+    GEGL_BLEND_MODE_TYPE_MULTIPLYGE)
+
+
 
 
 property_boolean (specialoutline, _("Special Outline Switch"), FALSE)
@@ -142,13 +161,17 @@ typedef struct
   GeglNode *input;
   GeglNode *behind;
   GeglNode *bevel;
-  GeglNode *multiply;
+  GeglNode *multiplyge;
   GeglNode *atop;
   GeglNode *layer;
   GeglNode *stroke;
   GeglNode *color;
   GeglNode *nop;
   GeglNode *huelight;
+  GeglNode *hardlightge;
+  GeglNode *colordodgege;
+  GeglNode *shinygmge;
+  GeglNode *grainmergege;
   GeglNode *output;
 } State; 
 
@@ -157,7 +180,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node; 
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *behind, *nop, *huelight, *bevel, *multiply, *atop, *layer, *stroke,  *color;
+  GeglNode *input, *output, *behind, *nop, *huelight, *bevel, *multiplyge, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -183,7 +206,7 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:dropshadow",
                                   NULL);
 
-  multiply    = gegl_node_new_child (gegl,
+  multiplyge    = gegl_node_new_child (gegl,
                                   "operation", "gegl:multiply",
                                   NULL);
 
@@ -203,15 +226,27 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:hue-chroma",
                                   NULL);
 
+grainmergege = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+
+shinygmge = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
+
+colordodgege = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 42, "composite-mode", 0, "composite-space", 1, "blend-space", 1, NULL);
+
+hardlightge = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
+
 
   gegl_node_link_many (input, behind, output, NULL);
-  gegl_node_link_many (input, stroke, color, atop, multiply, NULL);
+  gegl_node_link_many (input, stroke, color, atop, multiplyge, NULL);
   /*gegl_node_link (layer, NULL);*/
   gegl_node_link_many (atop, bevel, NULL);
 
- gegl_node_connect_from (multiply, "aux", bevel, "output"); 
+ gegl_node_connect_from (multiplyge, "aux", bevel, "output"); 
  gegl_node_connect_from (atop, "aux", layer, "output"); 
- gegl_node_connect_from (behind, "aux", multiply, "output"); 
+ gegl_node_connect_from (behind, "aux", multiplyge, "output"); 
 
 
 
@@ -257,13 +292,17 @@ static void attach (GeglOperation *operation)
   state->input = input;
   state->behind = behind;
   state->bevel = bevel;
-  state->multiply = multiply;
+  state->multiplyge = multiplyge;
   state->atop = atop;
   state->layer = layer;
   state->stroke = stroke;
   state->color = color;
   state->nop = nop;
   state->huelight = huelight;
+  state->hardlightge = hardlightge;
+  state->shinygmge = shinygmge;
+  state->grainmergege = grainmergege;
+  state->colordodgege = colordodgege;
   state->output = output;
   o->user_data = state;
 }
@@ -273,19 +312,31 @@ update_graph (GeglOperation *operation)
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
+  GeglNode *multiplyge;
   if (!state) return;
+
+  multiplyge = state->multiplyge; /* the default.  */
+  switch (o->blendmodebeveloutline) {
+    case GEGL_BLEND_MODE_TYPE_MULTIPLYGE: multiplyge = state->multiplyge; break;
+    case GEGL_BLEND_MODE_TYPE_GRAINMERGEGE: multiplyge = state->grainmergege; break;
+    case GEGL_BLEND_MODE_TYPE_SHINYGMGE: multiplyge = state->shinygmge; break;
+    case GEGL_BLEND_MODE_TYPE_COLORDODGEGE: multiplyge = state->colordodgege; break;
+    case GEGL_BLEND_MODE_TYPE_HARDLIGHTGE: multiplyge = state->hardlightge; break;
+
+ }
+
 
 
  if (o->enableoutline)
  if (o->specialoutline)
   {
     gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->input, state->stroke, state->color, state->atop, state->multiply,  NULL);
+    gegl_node_link_many (state->input, state->stroke, state->color, state->atop, multiplyge,  NULL);
     gegl_node_link_many (state->nop, state->layer, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel,  NULL);
-    gegl_node_connect_from (state->multiply, "aux", state->bevel, "output");
+    gegl_node_connect_from (multiplyge, "aux", state->bevel, "output");
     gegl_node_connect_from (state->atop, "aux", state->huelight, "output");
-    gegl_node_connect_from (state->behind, "aux", state->multiply, "output");
+    gegl_node_connect_from (state->behind, "aux", multiplyge, "output");
   }
 else
   {
