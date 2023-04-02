@@ -30,6 +30,8 @@ This plugin will work alongside normal GEGLEffects as seen here.
 
 Windows C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins
 
+Windows Alt C:\Users\AppData\Local\gegl-0.4\plug-ins
+
 Linux /home/(USERNAME)/.local/share/gegl-0.4/plug-ins
 
 Linux (Flatpak) /home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins
