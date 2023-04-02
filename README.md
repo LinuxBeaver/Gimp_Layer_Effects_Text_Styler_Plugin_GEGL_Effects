@@ -35,6 +35,11 @@ Linux /home/(USERNAME)/.local/share/gegl-0.4/plug-ins
 Linux (Flatpak) /home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins
 
 
+*note - Windows users may need to create the plug-ins folder if it doesn't exist.
+
+
+
+
 ## Compiling and Installing
 
 ### Linux
@@ -51,8 +56,6 @@ ninja -C build
 
 If you have an older version of gegl you may need to copy to `~/.local/share/gegl-0.3/plug-ins`
 instead (on Ubuntu 18.04 for example).
-
-
 
 ### Windows
 
