@@ -46,7 +46,7 @@ property_enum (blendmodebeveloutline, _("Blend Mode of Bevel's emboss'"),
 property_boolean (specialoutline, _("Special Outline Switch"), FALSE)
   description    (_("Turn on special outline abilities"))
 
-property_boolean (enableoutline, _("Enable normal outline switch"), TRUE)
+property_boolean (enableoutline, _("Enable normal outline switch"), FALSE)
   description    (_("Enable Outline"))
 
 
@@ -172,6 +172,7 @@ typedef struct
   GeglNode *colordodgege;
   GeglNode *shinygmge;
   GeglNode *grainmergege;
+  GeglNode *errorremover;
   GeglNode *output;
 } State; 
 
@@ -180,7 +181,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node; 
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *behind, *nop, *huelight, *bevel, *multiplyge, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
+  GeglNode *input, *output, *behind,   *nop, *errorremover, *huelight, *bevel, *multiplyge, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -219,12 +220,18 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
   bevel    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel",
+                                  "operation", "gegl:bevelbump",
                                   NULL);
 
   huelight    = gegl_node_new_child (gegl,
                                   "operation", "gegl:hue-chroma",
                                   NULL);
+
+  errorremover    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+
 
 grainmergege = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
@@ -240,7 +247,7 @@ hardlightge = gegl_node_new_child (gegl,
 
 
   gegl_node_link_many (input, behind, output, NULL);
-  gegl_node_link_many (input, stroke, color, atop, multiplyge, NULL);
+  gegl_node_link_many (input, errorremover, stroke, color, atop, multiplyge, NULL);
   /*gegl_node_link (layer, NULL);*/
   gegl_node_link_many (atop, bevel, NULL);
 
@@ -263,15 +270,20 @@ hardlightge = gegl_node_new_child (gegl,
 
   gegl_operation_meta_redirect (operation, "opacity", stroke, "opacity");
 
+  gegl_operation_meta_redirect (operation, "opacity", errorremover, "value");
+
+
+  gegl_operation_meta_redirect (operation, "color", stroke, "color");
+
   gegl_operation_meta_redirect (operation, "color", color, "value");
 
-  gegl_operation_meta_redirect (operation, "radius1", bevel, "radius1");
+  gegl_operation_meta_redirect (operation, "radius1", bevel, "radius");
 
   gegl_operation_meta_redirect (operation, "th", bevel, "th");
 
-  gegl_operation_meta_redirect (operation, "bevel1", bevel, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevel1", bevel, "elevation");
 
-  gegl_operation_meta_redirect (operation, "bevel2", bevel, "bevel2");
+  gegl_operation_meta_redirect (operation, "bevel2", bevel, "depth");
 
   gegl_operation_meta_redirect (operation, "azimuth", bevel, "azimuth");
 
@@ -303,6 +315,7 @@ hardlightge = gegl_node_new_child (gegl,
   state->shinygmge = shinygmge;
   state->grainmergege = grainmergege;
   state->colordodgege = colordodgege;
+  state->errorremover = errorremover;
   state->output = output;
   o->user_data = state;
 }
@@ -331,7 +344,7 @@ update_graph (GeglOperation *operation)
  if (o->specialoutline)
   {
     gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->input, state->stroke, state->color, state->atop, multiplyge,  NULL);
+    gegl_node_link_many (state->stroke, state->color, state->atop, multiplyge,  NULL);
     gegl_node_link_many (state->nop, state->layer, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel,  NULL);
     gegl_node_connect_from (multiplyge, "aux", state->bevel, "output");
@@ -341,12 +354,12 @@ update_graph (GeglOperation *operation)
 else
   {
     gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->input, state->stroke, state->color, NULL);
+    gegl_node_link_many (state->stroke, state->color, NULL);
      gegl_node_connect_from (state->behind, "aux", state->color, "output");
   }
 else
   {
-    gegl_node_link_many (state->input, state->output, NULL);
+    gegl_node_link_many (state->input,  state->output, NULL);
   }
 }
 
