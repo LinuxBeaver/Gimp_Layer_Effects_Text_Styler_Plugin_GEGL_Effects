@@ -2,7 +2,7 @@
 
 ## GEGL Effects CE by Beaver
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires two bonus filters, and one hidden operation. You will find that gegl:bevel and gegl:innerglow are more useful on their own as they have more options in stand alone. 
+GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires two bonus filters, and one hidden operation. You will find that gegl:bevelbump and gegl:innerglow are more useful on their own as they have more options in stand alone. 
 
 ## Instructions 
 
@@ -17,8 +17,8 @@ So you may want to download the latest version and just stick with it indefinite
 
 
 
-You are expected to also download GEGL InnerGlow, GEGL Bevel and  GEGL zzstrokebevelimage. The plugin will not work correctly without them.
-In total you should have, gegleffectspending, zzstrokebevelimage, bevel and innerglow for this filter to work.  
+You are expected to also download GEGL InnerGlow, GEGL BevelBump and  GEGL zzstrokebevelimage. The plugin will not work correctly without them.
+In total you should have, gegleffectspending, zzstrokebevelimage, bevelbump and innerglow for this filter to work.  
 
 This plugin will work alongside normal GEGLEffects as seen here.
 
