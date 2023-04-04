@@ -150,24 +150,28 @@ property_double(layeropacity, _("Opacity of Image File Overlay"), 1.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
-property_color  (optioncolor, _("Optional Color Overlay"), "#ffffff")
+property_color  (optioncolor, _("Color Overlay (only works on white text)"), "#ffffff")
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
+property_boolean (effectsswitchbevel, _("Enable Bevel (requires new gegl:bevelbump)"), FALSE)
+  description    (_("Please update to the latest version of GEGL Bevel to use this feature"))
+  ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_int (depth, _("Bevel Depth --ENABLE BEVEL"), 1)
+
+property_int (depth, _("Bevel Depth"), 30)
     description (_("Filter width"))
     value_range (1, 100)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (bevel1, _("Rotate Bevel Lighting (90 resets)"), 90.0)
+property_double (bevel1, _("Rotate Bevel Lighting"), 60.0)
     description (_("Elevation angle (degrees)"))
     value_range (55, 125)
     ui_meta ("unit", "degree")
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double (radius1, _("Radius of Bevel"), 7.0)
+property_double (radius1, _("Radius of Bevel"), 2.0)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
@@ -199,19 +203,19 @@ property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss'"),
 
 
 
-property_int (osdepth, _("Bevel Outline Depth"), 1)
+property_int (osdepth, _("Bevel Outline Depth"), 12)
     description (_("Filter width"))
     value_range (1, 70)
   ui_meta ("visible", "guichange {outlinespecial}")
 
-property_double (osbevel, _("Rotate Bevel Lighting (90 resets)"), 90.0)
+property_double (osbevel, _("Rotate Bevel Lighting (90 resets)"), 80.0)
     description (_("Elevation angle (degrees)"))
     value_range (55, 125)
     ui_meta ("unit", "degree")
   ui_meta ("visible", "guichange {outlinespecial}")
 
 
-property_double (osradius, _("Radius of Bevel"), 7.0)
+property_double (osradius, _("Radius of Bevel"), 3.0)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
@@ -603,7 +607,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop,  state->nopm, state->multiply, state->nopb, multiplyb,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopm, state->multiply, state->nopg, atopg,  state->crop, state->nopb, multiplyb,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
@@ -617,7 +621,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi,  state->crop, state->nopm, state->multiply, state->nopb, multiplyb, state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input,  state->nopimage, state->atopi, state->nopm, state->multiply,  state->crop, state->nopb, multiplyb, state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
@@ -633,7 +637,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg, state->crop, state->nopm, state->multiply, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input,  state->nopimage, state->atopi, state->nopm, state->multiply,  state->nopg, atopg, state->crop, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -645,7 +649,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->nopimage, state->atopi, state->crop,  state->nopm, state->multiply, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
+   gegl_node_link_many (state->input,   state->nopimage, state->atopi, state->nopm, state->multiply, state->crop, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -715,7 +719,7 @@ static void attach (GeglOperation *operation)
 
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel",
+                                  "operation", "gegl:bevelbump",
                                   NULL);
 
 
@@ -905,9 +909,9 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "blurstroke");
   gegl_operation_meta_redirect (operation, "grow_radiusstroke", stroke, "stroke");
   gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");
-  gegl_operation_meta_redirect (operation, "depth", mbd, "bevel2");
-  gegl_operation_meta_redirect (operation, "radius1", mbd, "radius1");
-  gegl_operation_meta_redirect (operation, "bevel1", mbd, "bevel1");
+  gegl_operation_meta_redirect (operation, "depth", mbd, "depth");
+  gegl_operation_meta_redirect (operation, "radius1", mbd, "radius");
+  gegl_operation_meta_redirect (operation, "bevel1", mbd, "elevation");
   gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
   gegl_operation_meta_redirect (operation, "src", image, "src");
   gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
@@ -932,6 +936,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "oslightness", stroke, "lightness");
   gegl_operation_meta_redirect (operation, "enableoutline", stroke, "enableoutline");  
   gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline");  
+  gegl_operation_meta_redirect (operation, "effectsswitchbevel", mbd, "effectsswitchbevel");  
 
   /* Now save points to the various gegl nodes so we can rewire them in
    * update_graph() later
@@ -1011,7 +1016,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Continual Version"),
     "categories",  "Generic",
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. Text recoloring only works if the color is white (march 31 2023 stable build) "
+    "description", _("GEGL text styling and speciality image outlining filter. (April 3 2023 stable build) "
                      ""),
     NULL);
 }
