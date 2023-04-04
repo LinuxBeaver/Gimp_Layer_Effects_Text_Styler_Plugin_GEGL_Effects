@@ -220,7 +220,7 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
   bevel    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevelbump",
+                                  "operation", "gegl:bevel",
                                   NULL);
 
   huelight    = gegl_node_new_child (gegl,
@@ -277,13 +277,13 @@ hardlightge = gegl_node_new_child (gegl,
 
   gegl_operation_meta_redirect (operation, "color", color, "value");
 
-  gegl_operation_meta_redirect (operation, "radius1", bevel, "radius");
+  gegl_operation_meta_redirect (operation, "radius1", bevel, "radius1");
 
   gegl_operation_meta_redirect (operation, "th", bevel, "th");
 
-  gegl_operation_meta_redirect (operation, "bevel1", bevel, "elevation");
+  gegl_operation_meta_redirect (operation, "bevel1", bevel, "bevel1");
 
-  gegl_operation_meta_redirect (operation, "bevel2", bevel, "depth");
+  gegl_operation_meta_redirect (operation, "bevel2", bevel, "bevel2");
 
   gegl_operation_meta_redirect (operation, "azimuth", bevel, "azimuth");
 
