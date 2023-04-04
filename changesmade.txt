@@ -42,3 +42,17 @@ The screen blend mode is now avalible for the bevel inside GEGL Effects. This ch
 ..March 31st 2023 build 4..
 
 the bevel outline now has blend modes. This does not appear to break presets. It is almost midnight (near April 1st) and I did all this hard work in one day :D
+
+..April 3 2023 builds ..
+
+GEGL nodes were rearranged so Gradient will always be on top of color overlay when the checkbox is enabled
+
+GEGL Bevel for both fill and outline now has a checkbox and when enabled it will choose a decent default preset automatically
+
+A new operation to replace gegl:bevel AKA gegl:bevelbump was added. gegl:bevel is not needed for GEGL EffectsCE, but it is
+needed for normal gegl effects, gegl chrome, and gegl goo.
+
+GEGL:BevelBump can coexist with GEGL:Bevel has a sharp bevel mode and emboss mode on stand alone that is not part of GEGL Effects. 
+Infact it is impossible for the emboss mode to ever be part of GEGL Effects unless Gimp changes to allow GEGL to
+communicate with multiple layers. Krita and Adobe can do this but Gimp cannot. 
+
