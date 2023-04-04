@@ -120,7 +120,7 @@ ninja -C build
 
 
 
-### Inner Glow and BevelBump the stand alones
+### Inner Glow and Bevel the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
 
 
