@@ -28,7 +28,7 @@ This plugin will work alongside normal GEGLEffects as seen here.
 
 ## Directories to put binaries and info
 
-.dll is Windows, .so is Linux
+.dll is for Windows and .so is for Linux
 
 Windows `C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins`
 
