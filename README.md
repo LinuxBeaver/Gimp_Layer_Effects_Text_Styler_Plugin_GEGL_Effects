@@ -1,3 +1,7 @@
+If you want this plugin in Gimp officially show support here.
+https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
+
+
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
 ## GEGL Effects CE by Beaver
