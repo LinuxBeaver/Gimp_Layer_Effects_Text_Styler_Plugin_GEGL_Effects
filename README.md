@@ -129,7 +129,7 @@ ninja -C build
 ### Inner Glow and Bevel the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
 
-![image preview](/Image_previews/inner_glow_promo.png    )
+![image preview](/Image_previews/innerglow_promo.png    )
 
 
 ![image preview](/Image_previews/bevel.png    )
