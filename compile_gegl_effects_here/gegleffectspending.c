@@ -14,7 +14,7 @@
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
- *2022 Beaver GEGL Effects  *2023 beaver GEGL Effects with the ability to bevel and image file overlay its outline
+ *2022 Beaver GEGL Effects  *2023 beaver GEGL Effects CE with new features like bevel outlines, thin/bold text mode and shines.
  * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox) 
  */
 
@@ -132,6 +132,7 @@ enum_value   (BEAVER_UI_STROKESHADOW, "strokeshadow", N_("Outline and Shadow"))
 enum_value   (BEAVER_UI_INNERGLOWBEVEL, "innerglowbevel", N_("Bevel and Inner Glow"))
 enum_value   (BEAVER_UI_IMAGEGRADIENT, "imagegradient", N_("Image file upload and Gradient"))
 enum_value   (BEAVER_UI_OUTLINESPECIAL, "outlinespecial", N_("Special Options for Outline"))
+enum_value   (BEAVER_UI_MISCOPTIONS, "miscoptions", N_("Miscellaneous Text Effects"))
   enum_end (guiendzz)
 
 
@@ -139,7 +140,7 @@ enum_value   (BEAVER_UI_OUTLINESPECIAL, "outlinespecial", N_("Special Options fo
 property_enum(guichange, _("Part of filter to be displayed"),
     guiendzz, guichangeenumzz,
     BEAVER_UI_STROKESHADOW)
-  description(_("Change the GUI option"))
+  description(_("Change the part of the GUI being displayed"))
 
 
 
@@ -147,8 +148,9 @@ property_file_path(src, _("Optional image file overlay upload "), "")
     description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...)"))
 ui_meta ("visible", "guichange {imagegradient}")
 
-property_double(layeropacity, _("Opacity of Image File Overlay"), 1.0)
-    value_range (0.0, 1.0)
+property_double(layeropacity, _("Opacity of Image File Overlay"), 0.999)
+    value_range (0.0, 0.999)
+  ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
@@ -173,6 +175,7 @@ property_double (radius1, _("Radius of Bevel"), 2.0)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
+  ui_steps      (0.01, 0.20)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 property_double (osth, _("Bevel's unmodified edge pixel fix"), 0.100)
@@ -198,7 +201,7 @@ property_enum (blendmodebeveloutline, _("Blend Mode of Outline Bevel's emboss"),
 
 
 property_int (osdepth, _("Bevel Outline Depth"), 12)
-    description (_("Filter width"))
+    description (_("Depth of Outline Bevel"))
     value_range (1, 70)
   ui_meta ("visible", "guichange {outlinespecial}")
 
@@ -213,7 +216,13 @@ property_double (osradius, _("Radius of Bevel"), 3.0)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
+  ui_steps      (0.01, 0.20)
   ui_meta ("visible", "guichange {outlinespecial}")
+
+property_double (bevelopacity, _("Bevel's Opacity"), 0.999)
+  value_range   (0.2, 0.999)
+  ui_steps      (0.01, 0.10)
+  ui_meta ("visible", "guichange {innerglowbevel}")
 
 
 
@@ -296,7 +305,7 @@ property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("The distance to expand the stroke before blurring; a negative value will contract the stroke instead"))
+  description (_("The distance to expand the stroke."))
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
@@ -378,12 +387,10 @@ property_double (radius, _("Shadow/Glow Blur radius"), 12.0)
   ui_meta       ("unit", "pixel-distance")
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_enum (blendmodebevel2, _("Select blend of Bevel"),
+property_enum (blendmodebevel2, _("Select blend or Enable/Disable Bevel"),
     GeglBlendModeTypezz, gegl_blend_mode_type_effectszz,
     GEGL_BLEND_MODE_TYPE_BEVELOFF)
   ui_meta ("visible", "guichange {innerglowbevel}")
-
-
 
 property_boolean (innerglow, _("Enable Inner Glow"), FALSE)
   description   (_("Whether to add an inner glow effect, which can be slow"))
@@ -411,7 +418,7 @@ property_double (innerggrow_radius, _("Inner Glow's Grow radius"), 5)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
+  description (_("The distance to expand the shadow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 property_double (innergopacity, _("Inner Glow's opacity"), 1.4)
@@ -422,7 +429,7 @@ property_double (innergopacity, _("Inner Glow's opacity"), 1.4)
 
 
 property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
-    description (_("The color to paint over the input"))
+    description (_("The color of the Inner Glow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
@@ -446,22 +453,26 @@ property_enum (blendmodegradient2, _("Blend Mode of Gradient"),
 property_double (start_x, _("Gradient X1"), 659.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "x")
+  ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
 property_double (start_y, _("Gradient Y1"), 49.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "y")
+  ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (end_x, _("Gradient X2"), 647.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "x")
+  ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (end_y, _("Gradient Y2"), 572.0)
     ui_meta ("unit", "pixel-coordinate")
     ui_meta ("axis", "y")
+  ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_color (start_color, _("Gradient Start Color"), "#34ebd6")
@@ -474,7 +485,101 @@ property_color  (end_color, _("Gradient End Color"), "#fe18f2")
 ui_meta ("visible", "guichange {imagegradient}")
  
 
- 
+
+property_boolean (enableshine, _("Enable/Disable Shiny Text"), FALSE)
+  description    (_("Whether text should be shiny"))
+ui_meta ("visible", "guichange {miscoptions}")
+
+
+property_enum (blendmodeshine, _("Blend Mode of Shiny Text"),
+    GeglBlendModeTypeshinegeffects, gegl_blend_mode_typeshinegeffects,
+    GEGL_BLEND_MODE_TYPE_REPLACESHINE)
+ui_meta ("visible", "guichange {miscoptions}")
+
+
+enum_start (gegl_blend_mode_typeshinegeffects)
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGESHINE,      "GrainMerge",
+              N_("GrainMerge"))
+  enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTSHINE,      "Hardlight",
+              N_("Hardlight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONSHINE,      "Addition",
+              N_("Addition"))
+  enum_value (GEGL_BLEND_MODE_TYPE_REPLACESHINE, "Replace",
+              N_("Replace"))
+enum_end (GeglBlendModeTypeshinegeffects)
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (opacityshine, _("Opacity of Gloss Shine"), 0.300)
+    description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
+    value_range (0.100, 0.900)
+    ui_range    (0.100, 0.700)
+  ui_gamma (1.5)
+ui_meta ("visible", "guichange {miscoptions}")
+
+
+
+property_double (x_scaleshine, _("X Scale of Gloss Shine"), 28.00)
+    description (_("Scale value for x axis"))
+    value_range (15, 60.0)
+    ui_range    (15, 60.0)
+    ui_meta     ("unit", "pixel-distance")
+    ui_meta     ("axis", "x")
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (y_scaleshine, _("Y Scale of Gloss Shine"), 56.0)
+    description (_("Scale value for y axis"))
+    value_range (15, 150.0)
+    ui_range    (15, 150.0)
+    ui_meta     ("unit", "pixel-distance")
+    ui_meta     ("axis", "y")
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (complexity, _("Complexity of Gloss Shine"), 0.8)
+    description (_("Complexity factor"))
+    value_range (0.1, 0.8)
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (blend_power, _("Dark to light intensity"), -0.600)
+    description (_("Intensity of the Gloss Shine Effect"))
+    value_range (-0.9, 0.0)
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_seed (seedshine, _("Random seed of Gloss Shine"), rand)
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (microblur, _("Very Mild Blur on Original Text "), 0)
+   description (_("Applies a blur of 0.50 on the original text layer under all applied effects. This fixes rough surfaces and may enhance the bevel effect. If applied to an image it is as if you ran gaussian blur 0.50"))
+   value_range (0.0, 0.5)
+   ui_range    (0.0, 0.5)
+  ui_steps      (0.01, 0.10)
+   ui_meta     ("unit", "pixel-distance")
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_int  (thinboldenable, _("Slide up or down to Enable/Disable Thin to Thick"), 0)
+  value_range (0, 5)
+  ui_range    (0, 5)
+  ui_meta     ("unit", "pixel-distance")
+  description (_("Sliding back to 0 will disable this effect. Thin to Thickness Slider"))
+ui_meta ("visible", "guichange {miscoptions}")
+
+
+
+property_double  (thinboldap, _("Thin to Thick text slider"), 50)
+  value_range (0, 100)
+  description (_("0 Makes text thin as possible. 100 makes text bold as possible. This is a median blur alpha percentile and should only be applied on text."))
+ui_meta ("visible", "guichange {miscoptions}")
+
+property_double (knockout, _("Knock out original text. (translucent text option)"), 0.0)
+    description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
+    value_range (0.0, 0.999)
+    ui_range    (0.0, 0.999)
+  ui_steps      (0.01, 0.10)
+ui_meta ("visible", "guichange {miscoptions}")
+
+
+
+
+
 
 #else
 
@@ -541,6 +646,13 @@ typedef struct
   GeglNode *hardlight;
   GeglNode *screen;
   GeglNode *beveloff;
+  GeglNode *shiny;
+  GeglNode *microblur;
+  GeglNode *thinbold;
+  GeglNode *mbdopacity;
+  GeglNode *xor;
+  GeglNode *opacityinput;
+  GeglNode *knockoutidref;
 } State;
 
 static void
@@ -548,23 +660,23 @@ update_graph (GeglOperation *operation)
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
-  GeglNode *multiplyb;
+  GeglNode *bevelmode;
   GeglNode *over;
   GeglNode *atopg;
 
   if (!state) return;
 
-  multiplyb = state->beveloff; /* the default. Bevel looks bad with most blend modes (outside of Multiply and Grain Merge) */
+  bevelmode = state->beveloff; /* the default. Bevel looks bad with most blend modes (outside of Multiply and Grain Merge) */
   switch (o->blendmodebevel2) {
-    case GEGL_BLEND_MODE_TYPE_MULTIPLY: multiplyb = state->multiplyb; break;
-    case GEGL_BLEND_MODE_TYPE_GRAINMERGE: multiplyb = state->grainmerge; break;
-    case GEGL_BLEND_MODE_TYPE_SUBTRACT: multiplyb = state->subtract; break;
-    case GEGL_BLEND_MODE_TYPE_GRAINEXTRACT: multiplyb = state->grainextract; break;
-    case GEGL_BLEND_MODE_TYPE_SHINYGM: multiplyb = state->shinygm; break;
-    case GEGL_BLEND_MODE_TYPE_COLORDODGE: multiplyb = state->colordodge; break;
-    case GEGL_BLEND_MODE_TYPE_HARDLIGHT: multiplyb = state->hardlight; break;
-    case GEGL_BLEND_MODE_TYPE_SCREEN: multiplyb = state->screen; break;
-    case GEGL_BLEND_MODE_TYPE_BEVELOFF: multiplyb = state->beveloff; break;
+    case GEGL_BLEND_MODE_TYPE_MULTIPLY: bevelmode = state->multiplyb; break;
+    case GEGL_BLEND_MODE_TYPE_GRAINMERGE: bevelmode = state->grainmerge; break;
+    case GEGL_BLEND_MODE_TYPE_SUBTRACT: bevelmode = state->subtract; break;
+    case GEGL_BLEND_MODE_TYPE_GRAINEXTRACT: bevelmode = state->grainextract; break;
+    case GEGL_BLEND_MODE_TYPE_SHINYGM: bevelmode = state->shinygm; break;
+    case GEGL_BLEND_MODE_TYPE_COLORDODGE: bevelmode = state->colordodge; break;
+    case GEGL_BLEND_MODE_TYPE_HARDLIGHT: bevelmode = state->hardlight; break;
+    case GEGL_BLEND_MODE_TYPE_SCREEN: bevelmode = state->screen; break;
+    case GEGL_BLEND_MODE_TYPE_BEVELOFF: bevelmode = state->beveloff; break;
 
  }
 
@@ -609,12 +721,14 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopm, state->multiply, state->nopg, atopg,  state->crop, state->nopb, multiplyb,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi, state->nopm, state->multiply, state->shiny,  state->nopg, atopg,  state->crop, state->nopb, bevelmode, state->knockoutidref,  state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
+      gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
+      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
       gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect_from (over, "aux", state->innerglow, "output");
       gegl_node_connect_from (atopg, "aux", state->gradient, "output");
@@ -623,12 +737,14 @@ update_graph (GeglOperation *operation)
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input,  state->nopimage, state->atopi, state->nopm, state->multiply,  state->crop, state->nopb, multiplyb, state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny,  state->crop, state->nopb, bevelmode, state->knockoutidref, state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity,  NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
+      gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
+      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
       gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect_from (over, "aux", state->innerglow, "output");
       gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
@@ -639,11 +755,13 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input,  state->nopimage, state->atopi, state->nopm, state->multiply,  state->nopg, atopg, state->crop, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny,  state->nopg, atopg, state->crop, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
+      gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
+      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
       gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect_from (atopg, "aux", state->gradient, "output");
       gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
@@ -651,11 +769,13 @@ update_graph (GeglOperation *operation)
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input,   state->nopimage, state->atopi, state->nopm, state->multiply, state->crop, state->nopb, multiplyb, state->stroke, state->ds, state->output, NULL);
+   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny, state->crop, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
+      gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
+      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
       gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
     }
@@ -675,7 +795,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *nopb2, *hardlight, *screen, *beveloff;
+  GeglNode *input, *output, *image, *mbd, *mbdopacity, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *nopb2, *hardlight, *screen, *shiny, *microblur, *thinbold, *opacityinput, *xor, *knockoutidref, *beveloff;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -683,6 +803,25 @@ static void attach (GeglOperation *operation)
   saturation = gegl_node_new_child (gegl,
                                   "operation", "gegl:hue-chroma",
                                   NULL);
+
+  knockoutidref = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+  /*This is Gimp's split blend mode'*/
+xor = gegl_node_new_child (gegl,
+                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+
+  opacityinput = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+
+
+  thinbold = gegl_node_new_child (gegl,
+                                  "operation", "gegl:median-blur",
+                                  NULL);
+
 
 
   image = gegl_node_new_child (gegl,
@@ -693,6 +832,10 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:zzstrokebevelimage",
                                   NULL);
 
+  shiny = gegl_node_new_child (gegl,
+                                  "operation", "gegl:shinytext",
+                                  NULL);
+
   ds = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
                                   NULL);
@@ -700,6 +843,11 @@ static void attach (GeglOperation *operation)
   innerglow = gegl_node_new_child (gegl,
                                   "operation", "gegl:innerglow",
                                   NULL);
+
+  microblur = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gaussian-blur",
+                                  NULL);
+
 
   /*atopi is the blend mode that will need to be switchable for gegl:layer src=*/
 
@@ -722,6 +870,10 @@ static void attach (GeglOperation *operation)
 
   mbd = gegl_node_new_child (gegl,
                                   "operation", "gegl:bevel",
+                                  NULL);
+
+  mbdopacity = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
                                   NULL);
 
 
@@ -762,11 +914,8 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:multiply",
                                   NULL);
 
-  /*multiplyb is the blend mode that will need to be switchable for gegl:bevel*/
+  /* bevelmode is the blend mode that will need to be switchable for gegl:bevel*/
 
-  multiplyb = gegl_node_new_child (gegl,
-                                  "operation", "gegl:multiply",
-                                  NULL);
 
   gradient = gegl_node_new_child (gegl,
                                   "operation", "gegl:linear-gradient",
@@ -789,6 +938,10 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 /* blend modes for bevel and cannot be reused*/
+
+multiplyb = gegl_node_new_child (gegl,
+                                    "operation", "gimp:layer-mode", "layer-mode", 30,  "composite-mode", 0, NULL);
+
 
 grainextract = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 46, "composite-mode", 0, NULL);
@@ -919,6 +1072,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "depth", mbd, "bevel2");
   gegl_operation_meta_redirect (operation, "radius1", mbd, "radius1");
   gegl_operation_meta_redirect (operation, "bevel1", mbd, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevelopacity", mbdopacity, "value");
   gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
   gegl_operation_meta_redirect (operation, "src", image, "src");
   gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
@@ -943,6 +1097,20 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "oslightness", stroke, "lightness");
   gegl_operation_meta_redirect (operation, "enableoutline", stroke, "enableoutline");  
   gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline");  
+  gegl_operation_meta_redirect (operation, "blend_power", shiny, "blend-power");  
+  gegl_operation_meta_redirect (operation, "opacityshine", shiny, "opacity");  
+  gegl_operation_meta_redirect (operation, "blendmodeshine", shiny, "blendmode");  
+  gegl_operation_meta_redirect (operation, "seedshine", shiny, "seed"); 
+  gegl_operation_meta_redirect (operation, "complexity", shiny, "complexity"); 
+  gegl_operation_meta_redirect (operation, "x_scaleshine", shiny, "x-scale"); 
+  gegl_operation_meta_redirect (operation, "y_scaleshine", shiny, "y-scale"); 
+  gegl_operation_meta_redirect (operation, "enableshine", shiny, "enable"); 
+  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-x"); 
+  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-y"); 
+  gegl_operation_meta_redirect (operation, "thinboldenable", thinbold, "radius"); 
+  gegl_operation_meta_redirect (operation, "thinboldap", thinbold, "alpha-percentile"); 
+  gegl_operation_meta_redirect (operation, "knockout", opacityinput, "value"); 
+ 
  
 
   /* Now save points to the various gegl nodes so we can rewire them in
@@ -975,6 +1143,7 @@ lchcolorig = gegl_node_new_child (gegl,
   state->over = over;
   state->crop = crop;
   state->mbd = mbd;
+  state->mbdopacity = mbdopacity;
   state->mcol = mcol;
   state->innerglow = innerglow;
   state->stroke = stroke;
@@ -999,11 +1168,17 @@ lchcolorig = gegl_node_new_child (gegl,
   state->lchcolorg = lchcolorg;
   state->lchcolorig = lchcolorig;
   state->shinygm = shinygm;
+  state->shiny = shiny;
   state->colordodge = colordodge;
   state->nopb2 = nopb2;
   state->hardlight = hardlight;
   state->screen = screen;
   state->beveloff = beveloff;
+  state->microblur = microblur;
+  state->thinbold = thinbold;
+  state->xor = xor;
+  state->knockoutidref = knockoutidref;
+  state->opacityinput = opacityinput;
 }
 
 
@@ -1024,7 +1199,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Continual Version"),
     "categories",  "Generic",
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. (April 4 2023 stable build) "
+    "description", _("GEGL text styling and speciality image outlining filter. (May 12 2023 ANNIVERSARY build) "
                      ""),
     NULL);
 }
