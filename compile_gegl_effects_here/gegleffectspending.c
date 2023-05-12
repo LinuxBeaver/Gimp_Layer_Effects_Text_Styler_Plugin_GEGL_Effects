@@ -434,11 +434,33 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
     description (_("The color of the Inner Glow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
+property_double (xinnerglow, _("Inner Glow X"), 0.0)
+  description   (_("Horizontal shadow offset"))
+  ui_range      (-15.0, 15.0)
+  value_range   (-15.0, 15.0)
+  ui_steps      (1, 2)
+  ui_meta       ("unit", "pixel-distance")
+  ui_meta       ("axis", "x")
+  ui_meta ("visible", "guichange {innerglowbevel}")
+
+property_double (yinnerglow, _("Inner Glow Y"), 0.0)
+  description   (_("Vertical shadow offset"))
+  ui_range      (-15.0, 15.0)
+  value_range   (-15.0, 15.0)
+  ui_steps      (1, 2)
+  ui_meta       ("unit", "pixel-distance")
+  ui_meta       ("axis", "y")
+  ui_meta ("visible", "guichange {innerglowbevel}")
+
+
+
 
 property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 75)
   value_range (50, 85)
   description (_("Neighborhood alpha percentile"))
   ui_meta ("visible", "guichange {innerglowbevel}")
+
+
 
 
 
@@ -1082,6 +1104,8 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "innergopacity", innerglow, "opacity");
   gegl_operation_meta_redirect (operation, "innergvalue", innerglow, "value2");
   gegl_operation_meta_redirect (operation, "fixoutline", innerglow, "fixoutline");
+  gegl_operation_meta_redirect (operation, "xinnerglow", innerglow, "x");
+  gegl_operation_meta_redirect (operation, "yinnerglow", innerglow, "y");
   gegl_operation_meta_redirect (operation, "start_x", gradient, "start-x");
   gegl_operation_meta_redirect (operation, "start_y", gradient, "start-y");
   gegl_operation_meta_redirect (operation, "end_x", gradient, "end-x");
@@ -1112,6 +1136,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "thinboldenable", thinbold, "radius"); 
   gegl_operation_meta_redirect (operation, "thinboldap", thinbold, "alpha-percentile"); 
   gegl_operation_meta_redirect (operation, "knockout", opacityinput, "value"); 
+
  
  
 
