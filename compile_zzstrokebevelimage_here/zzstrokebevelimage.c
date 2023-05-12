@@ -33,6 +33,8 @@ enum_start (gegl_blend_mode_type_effectszzbevoutline)
               N_("ColorDodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
               N_("HardLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE,      "DisableBevelGE",
+              N_("DisableOutlineBevel"))
 enum_end (GeglBlendModeTypezzbevoutline)
 
 
@@ -173,6 +175,7 @@ typedef struct
   GeglNode *shinygmge;
   GeglNode *grainmergege;
   GeglNode *errorremover;
+  GeglNode *disablebevel;
   GeglNode *output;
 } State; 
 
@@ -181,7 +184,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node; 
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *behind,   *nop, *errorremover, *huelight, *bevel, *multiplyge, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
+  GeglNode *input, *output, *behind,   *nop, *errorremover, *huelight, *bevel, *multiplyge, *disablebevel, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -191,6 +194,11 @@ static void attach (GeglOperation *operation)
   color   = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
                                   NULL);
+
+  disablebevel   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst",
+                                  NULL);
+
 
 
   nop   = gegl_node_new_child (gegl,
@@ -304,6 +312,7 @@ hardlightge = gegl_node_new_child (gegl,
   state->input = input;
   state->behind = behind;
   state->bevel = bevel;
+  state->disablebevel = disablebevel;
   state->multiplyge = multiplyge;
   state->atop = atop;
   state->layer = layer;
@@ -335,6 +344,8 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_SHINYGMGE: multiplyge = state->shinygmge; break;
     case GEGL_BLEND_MODE_TYPE_COLORDODGEGE: multiplyge = state->colordodgege; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTGE: multiplyge = state->hardlightge; break;
+    case GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE: multiplyge = state->disablebevel; break;
+
 
  }
 
