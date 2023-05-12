@@ -39,6 +39,8 @@ enum_start (gegl_blend_mode_type_effectszzbevoutlinege)
               N_("ColorDodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
               N_("HardLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE,      "DisableBevelGE",
+              N_("Outline Bevel Off"))
 enum_end (GeglBlendModeTypezzbevoutlinege)
 
 
@@ -190,7 +192,7 @@ property_boolean (specialoutline, _("Enable effects on Outline"), FALSE)
 
 
 
-property_enum (blendmodebeveloutline, _("Blend Mode of Outline Bevel's emboss"),
+property_enum (blendmodebeveloutline, _("Select blend or Enable/Disable Outline Bevel"),
     GeglBlendModeTypezzbevoutlinege, gegl_blend_mode_type_effectszzbevoutlinege,
     GEGL_BLEND_MODE_TYPE_MULTIPLYGE)
   ui_meta ("visible", "guichange {outlinespecial}")
