@@ -43,16 +43,34 @@ The screen blend mode is now avalible for the bevel inside GEGL Effects. This ch
 
 the bevel outline now has blend modes. This does not appear to break presets. It is almost midnight (near April 1st) and I did all this hard work in one day :D
 
-..April 3 2023 builds ..
+..April 3 and April 4 2023 builds ..
 
 GEGL nodes were rearranged so Gradient will always be on top of color overlay when the checkbox is enabled
 
-GEGL Bevel for both fill and outline now has a checkbox and when enabled it will choose a decent default preset automatically
+GEGL Bevel is not disabled by default entirely and the blend mode list has the off switch to blend mode conversion.
 
-A new operation to replace gegl:bevel AKA gegl:bevelbump was added. gegl:bevel is not needed for GEGL EffectsCE, but it is
-needed for normal gegl effects, gegl chrome, and gegl goo.
 
-GEGL:BevelBump can coexist with GEGL:Bevel has a sharp bevel mode and emboss mode on stand alone that is not part of GEGL Effects. 
-Infact it is impossible for the emboss mode to ever be part of GEGL Effects unless Gimp changes to allow GEGL to
-communicate with multiple layers. Krita and Adobe can do this but Gimp cannot. 
+..April 5th... 
+
+GEGL Bevel in stand alone was given an emboss checkbox. This has no effect
+on GEGL Effects.
+
+..May 12 2023..
+
+GEGL Effects has its one year anniversary update. Changes made
+
+New "Miscelleanous Text Styles" Tab added 
+
+GEGL Effect's Bevel now has an opacity meter. This makes blend modes like Color Dodge far more useful.
+
+GEGL Effects Thin to Bold Font resizing with median blur inside GEGL Effects. It is labelled "thin to thick"
+
+GEGL Effects calls gegl:sinus to shine text. Unfortunately this still requires a new hidden operation gegl:shiny-text
+
+GEGL Effects now has the ability to knock out text or make text semi translucent by calling Gimp's split blend mode.
+
+No presets have broke (YET)
+
+Some Filter sliders were set to move faster
+
 
