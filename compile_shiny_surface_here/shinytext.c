@@ -77,6 +77,8 @@ enum_end (GeglSinusgloss)
 
 
 enum_start (gegl_blend_mode_typeshineg)
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEALT,      "GrainMergeAlt",
+              N_("GrainMergeAlt"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGE,      "GrainMerge",
               N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHT,      "Hardlight",
@@ -84,16 +86,16 @@ enum_start (gegl_blend_mode_typeshineg)
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITION,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_REPLACE, "Replace",
-              N_("Replace"))
+              N_("Multiply"))
 enum_end (GeglBlendModeTypeshineg)
 
 property_enum (blendmode, _("Blend Mode of Shine"),
     GeglBlendModeTypeshineg, gegl_blend_mode_typeshineg,
     GEGL_BLEND_MODE_TYPE_REPLACE)
 
-property_boolean (enable, _("Disable Shine for GEGL Effects"), FALSE)
+property_boolean (enable, _("Enable Shine for GEGL Effects"), FALSE)
   description    (_("This option is only for GEGL Effects"))
-    ui_meta     ("role", "output-extent")
+
 
 
 
@@ -138,6 +140,8 @@ typedef struct
 {
   GeglNode *input;
   GeglNode *opacity;
+  GeglNode *crop;
+  GeglNode *crop2;
   GeglNode *nop0;
   GeglNode *nop;
   GeglNode *blend;
@@ -145,6 +149,7 @@ typedef struct
   GeglNode *addition;
   GeglNode *hardlight;
   GeglNode *grainmerge;
+  GeglNode *grainmergealt;
   GeglNode *replace;
   GeglNode *output;
 }State;
@@ -158,6 +163,7 @@ update_graph (GeglOperation *operation)
 
   GeglNode *blendchoice = state->replace; /* the default */
   switch (o->blendmode) {
+    case GEGL_BLEND_MODE_TYPE_GRAINMERGEALT: blendchoice = state->grainmergealt; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGE: blendchoice = state->grainmerge; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHT: blendchoice = state->hardlight; break;
     case GEGL_BLEND_MODE_TYPE_ADDITION: blendchoice = state->addition; break;
@@ -167,9 +173,9 @@ default: blendchoice = state->replace;
 }
   if (o->enable)
   {
-  gegl_node_link_many (state->input, blendchoice, state->output,  NULL);
-  gegl_node_link_many (state->sinus, state->opacity, NULL);
-  gegl_node_connect_from (blendchoice, "aux", state->opacity, "output");
+  gegl_node_link_many (state->input, blendchoice, state->crop2, state->output,  NULL);
+  gegl_node_link_many (state->sinus, state->opacity, state->crop, NULL);
+  gegl_node_connect_from (blendchoice, "aux", state->crop, "output");
   }
 else
   gegl_node_link_many (state->input, state->output,  NULL);
@@ -180,7 +186,7 @@ static void attach (GeglOperation *operation)
 {
 GeglProperties *o = GEGL_PROPERTIES (operation);
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *sinus, *replace, *addition, *grainmerge, *blend, *nop0, *nop, *hardlight, *opacity;
+  GeglNode *input, *output, *sinus, *replace, *addition, *crop, *crop2, *grainmerge, *grainmergealt, *blend, *nop0, *nop, *hardlight, *opacity;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -200,14 +206,21 @@ GeglProperties *o = GEGL_PROPERTIES (operation);
                                   "operation", "gegl:nop",
                                   NULL);
 
+  crop    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
+  crop2    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
   nop0    = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
 
 
-  replace    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-atop",
-                                  NULL);
+replace = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
 
 hardlight = gegl_node_new_child (gegl,
                                   "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "blend-space", 0, NULL);
@@ -218,6 +231,10 @@ addition = gegl_node_new_child (gegl,
 
 grainmerge = gegl_node_new_child (gegl,
                                   "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+
+grainmergealt = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
+
 
 
 
@@ -248,10 +265,13 @@ grainmerge = gegl_node_new_child (gegl,
   state->addition = addition;
   state->hardlight = hardlight;
   state->grainmerge = grainmerge;
+  state->grainmergealt = grainmergealt;
   state->replace = replace;
   state->sinus = sinus;
   state->nop = nop;
   state->nop = nop0;
+  state->crop = crop;
+  state->crop2 = crop2;
   state->blend = blend;
   state->output = output;
 
