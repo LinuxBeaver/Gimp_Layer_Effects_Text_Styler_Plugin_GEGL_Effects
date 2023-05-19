@@ -130,10 +130,10 @@ enum_end (GeglBlendModeTypegzz)
 
 
 enum_start (guichangeenumzz)
-enum_value   (BEAVER_UI_STROKESHADOW, "strokeshadow", N_("Outline and Shadow"))
+enum_value   (BEAVER_UI_STROKESHADOW, "strokeshadow", N_("Color Fill, Outline and Shadow"))
 enum_value   (BEAVER_UI_INNERGLOWBEVEL, "innerglowbevel", N_("Bevel and Inner Glow"))
 enum_value   (BEAVER_UI_IMAGEGRADIENT, "imagegradient", N_("Image file upload and Gradient"))
-enum_value   (BEAVER_UI_OUTLINESPECIAL, "outlinespecial", N_("Special Options for Outline"))
+enum_value   (BEAVER_UI_OUTLINESPECIAL, "outlinespecial", N_("Special Options for Outline and Shadow"))
 enum_value   (BEAVER_UI_MISCOPTIONS, "miscoptions", N_("Miscellaneous Text Effects"))
   enum_end (guiendzz)
 
@@ -146,23 +146,24 @@ property_enum(guichange, _("Part of filter to be displayed"),
 
 
 
-property_file_path(src, _("Optional image file overlay upload "), "")
+property_file_path(src, _("Image file overlay upload "), "")
     description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...)"))
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double(layeropacity, _("Opacity of Image File Overlay"), 0.999)
     value_range (0.0, 0.999)
-  ui_steps      (0.01, 0.10)
+  ui_steps      (0.01, 0.50)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
-property_color  (optioncolor, _("Color Overlay (only works on white text)"), "#ffffff")
+property_color  (optioncolor, _("Text color change (Will only work on white text.)"), "#ffffff")
+    description (_("Making the color white will make it transparent. If applied to white text it will become any color you choose."))
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
 
 property_int (depth, _("Bevel Depth"), 30)
-    description (_("Filter width"))
+    description (_("Depth of bevel that works with some but not all blend modes"))
     value_range (1, 100)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
@@ -202,46 +203,95 @@ property_enum (blendmodebeveloutline, _("Select blend or Enable/Disable Outline 
 
 
 
-property_int (osdepth, _("Bevel Outline Depth"), 12)
-    description (_("Depth of Outline Bevel"))
+property_int (osdepth, _("Outline Bevel Depth"), 12)
+    description (_("Depth of Outline Bevel that works with some but not all blend modes"))
     value_range (1, 70)
   ui_meta ("visible", "guichange {outlinespecial}")
 
-property_double (osbevel, _("Rotate Bevel Lighting (90 resets)"), 80.0)
+property_double (osbevel, _("Rotate Outline Bevel Lighting (90 resets)"), 80.0)
     description (_("Elevation angle (degrees)"))
     value_range (55, 125)
     ui_meta ("unit", "degree")
   ui_meta ("visible", "guichange {outlinespecial}")
 
 
-property_double (osradius, _("Radius of Bevel"), 3.0)
+property_double (osradius, _("Radius of Outline Bevel"), 3.0)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
   ui_steps      (0.01, 0.20)
   ui_meta ("visible", "guichange {outlinespecial}")
 
-property_double (bevelopacity, _("Bevel's Opacity"), 0.999)
+
+property_double (osbevelopacity, _("Outline Bevel's Opacity"), 0.999)
   value_range   (0.2, 0.999)
   ui_steps      (0.01, 0.10)
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+
+
+property_double (bevelopacity, _("Bevel's Opacity"), 0.999)
+  value_range   (0.2, 0.999)
+  ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
 
-property_file_path(ossrc, _("Optional image file overlay upload "), "")
+property_file_path(ossrc, _("Image file overlay for Outline upload "), "")
     description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...)"))
   ui_meta ("visible", "guichange {outlinespecial}")
 
-property_double (oshue, _("Hue of image file overlay"),  0.0)
+property_double (oshue, _("Hue rotation of Outline's Image file overlay"),  0.0)
    description  (_("Hue adjustment"))
    value_range  (-180.0, 180.0)
   ui_meta ("visible", "guichange {outlinespecial}")
 
 
-property_double (oslightness, _("Lightness of image file overlay"), 0.0)
+property_double (oslightness, _("Lightness of Outline's Image file overlay"), 0.0)
    description  (_("Lightness adjustment"))
    value_range  (-100.0, 100.0)
   ui_meta ("visible", "guichange {outlinespecial}")
+
+property_boolean (specialshadowoptions, _("Enable/Disable special options for Shadow/Glow"), FALSE)
+  description    (_("Turn on special drop shadow glow's special abilities"))
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+
+property_boolean (enableshadow, _("Enable Drop Shadow"), TRUE)
+  description    (_("Enable Drop Shadow. This option is hidden via output extent."))
+    ui_meta     ("role", "output-extent")
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+
+property_file_path(shadowimage, _("Image file overlay for Shadow/Glow"), "")
+    description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...)"))
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+
+property_double (blurshadowimage, _("Blur Shadow/Glow's Image file overlay"), 0)
+   description (_("Standard deviation for the XY axis"))
+   value_range (0.0, 40.0)
+   ui_range    (0.24, 40.0)
+   ui_gamma    (3.0)
+  ui_steps      (0.01, 0.50)
+   ui_meta     ("unit", "pixel-distance")
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+property_boolean (enableaura, _("Enable Aura mode for Shadow Glow (Requires Enabling Special Options for Shadow Glow First)"), FALSE)
+  description    (_("This can be disabled both by unchecking this box and special options for drop shadow. Enabling this gives drop shadow glow a aura effect and seed."))
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+property_double (aurasize, _("Glow Aura Intensity"), 10)
+    description (_("Average diameter of each tile (in pixels)"))
+    value_range (4, 15.0)
+    ui_meta     ("unit", "pixel-distance")
+  ui_steps      (0.01, 0.50)
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+property_seed (seedaura, _("Seed of Glow Aura"), randaura)
+  ui_meta ("visible", "guichange {outlinespecial}")
+
+
 
 
 
@@ -255,7 +305,7 @@ property_boolean (enableoutline, _("Enable Outline"), FALSE)
 
 property_double (opacitystroke, _("Outline's Opacity"), 0.999)
   value_range   (0.0, 0.999)
-  ui_steps      (0.01, 0.10)
+  ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
@@ -267,16 +317,16 @@ enum_start (gegl_stroke_grow_shapeszz)
 enum_end (GeglstrokeGrowShapeszz)
 
 
-property_double (xstroke, _("Outline X Position"), 0.0)
-  description   (_("Horizontal shadow offset"))
+property_double (xstroke, _("Outline Horizontal Position"), 0.0)
+  description   (_("Horizontal outline fill offset"))
   value_range   (-15.0, 15.0)
   ui_steps      (1, 10)
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
 
-property_double (ystroke, _("Outline Y Position"), 0.0)
-  description   (_("Vertical shadow offset"))
+property_double (ystroke, _("Outline Vertical Position"), 0.0)
+  description   (_("Vertical outline fill offset"))
   value_range   (-15.0, 15.0)
    ui_steps      (1, 10)
   ui_meta ("visible", "guichange {strokeshadow}")
@@ -285,13 +335,13 @@ property_double (ystroke, _("Outline Y Position"), 0.0)
 
 
 
-property_enum   (grow_shape, _("Grow shape"),
+property_enum   (grow_shape, _("Outline's Base Shape"),
                  GeglstrokeGrowShapeszz, gegl_stroke_grow_shapeszz,
                  GEGL_stroke_GROW_SHAPE_CIRCLE)
-  description   (_("The shape to expand or contract the stroke in"))
+  description   (_("The shape to expand or contract the outline fill in"))
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (radiusstroke, _("Outline's Blur radius"), 0.0)
+property_double (radiusstroke, _("Ability for Outline to puff out"), 0.0)
   value_range   (0.0, 3)
   ui_range      (0.0, 3.0)
   ui_steps      (1, 5)
@@ -300,14 +350,14 @@ property_double (radiusstroke, _("Outline's Blur radius"), 0.0)
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
-property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
+property_double (grow_radiusstroke, _("Outline's Size"), 12.0)
   value_range   (0.0, 100.0)
   ui_range      (0.0, 50.0)
   ui_digits     (0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("The distance to expand the stroke."))
+  description (_("The distance to expand the outline."))
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
@@ -315,7 +365,7 @@ property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
 
 property_color  (colorstroke, _("Outline's Color"), "#000000")
     /* TRANSLATORS: the string 'black' should not be translated */
-  description   (_("The shadow's color (defaults to 'black')"))
+  description   (_("The outline's color"))
     ui_meta     ("role", "color-primary")
   ui_meta ("visible", "guichange {strokeshadow}")
 
@@ -325,33 +375,35 @@ property_double (opacity, _("Shadow/Glow Opacity --ENABLE SHADOW/GLOW"), 0.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (hue, _("Hue"),  0.0)
+property_double (hue, _("Hue (image file overlay only)"),  0.0)
    description  (_("Hue adjustment"))
    value_range  (-180.0, 180.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
-property_double (chroma, _("Chroma"), 0.0)
+property_double (chroma, _("Chroma (image file overlay only)"), 0.0)
    description  (_("Chroma adjustment"))
    value_range  (-100.0, 100.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (lightness, _("Lightness"), 0.0)
    description  (_("Lightness adjustment"))
-   value_range  (-100.0, 100.0)
+   value_range  (-50.0, 50.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
 
-property_double (x, _("Shadow/Glow X"), 10.0)
+property_double (x, _("Shadow/Glow Horizontal Distance"), 10.0)
   description   (_("Horizontal shadow offset"))
+  value_range   (-200, 200)
   ui_range      (-40.0, 40.0)
   ui_steps      (1, 10)
   ui_meta       ("unit", "pixel-distance")
   ui_meta       ("axis", "x")
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (y, _("Shadow/Glow Y"), 10.0)
+property_double (y, _("Shadow/Glow Vertical Distance"), 10.0)
   description   (_("Vertical shadow offset"))
+  value_range   (-200, 200)
   ui_range      (-40.0, 40.0)
   ui_steps      (1, 10)
   ui_meta       ("unit", "pixel-distance")
@@ -371,7 +423,7 @@ property_color  (color, _("Shadow/Glow Color"), "black")
 
 
 
-property_double (grow_radius, _("Shadow/Glow Grow radius"), 0.0)
+property_double (grow_radius, _("Shadow/Glow Grow size"), 0.0)
   value_range   (0.0, 100.0)
   ui_range      (0.0, 50.0)
   ui_digits     (0)
@@ -381,9 +433,9 @@ property_double (grow_radius, _("Shadow/Glow Grow radius"), 0.0)
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (radius, _("Shadow/Glow Blur radius"), 12.0)
+property_double (radius, _("Shadow/Glow Blur intensity"), 12.0)
   value_range   (0.0, G_MAXDOUBLE)
-  ui_range      (0.0, 110.0)
+  ui_range      (0.0, 90.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
@@ -404,26 +456,27 @@ property_enum (blendmodeinnerglow2, _("Blend Mode of Inner Glow"),
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double (innergradius, _("Inner Glow's Blur radius"), 4.5)
+property_double (innergradius, _("Inner Glow's Blur intensity"), 4.5)
   value_range   (0.0, 30.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
+  description (_("Making blur intensity very low will make an InnerStroke"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
-property_double (innerggrow_radius, _("Inner Glow's Grow radius"), 5)
-  value_range   (1, 30.0)
+property_double (innerggrow_radius, _("Inner Glow's Size"), 5)
+  value_range   (1, 40.0)
   ui_range      (1, 30.0)
   ui_digits     (0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("The distance to expand the shadow"))
+  description (_("The distance to expand the innerglow."))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (innergopacity, _("Inner Glow's opacity"), 1.4)
+property_double (innergopacity, _("Inner Glow's Opacity"), 1.4)
   value_range   (0.0, 2.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -434,8 +487,8 @@ property_color (innergvalue, _("Inner Glow's Color"), "#ff8f00")
     description (_("The color of the Inner Glow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (xinnerglow, _("Inner Glow X"), 0.0)
-  description   (_("Horizontal shadow offset"))
+property_double (xinnerglow, _("Inner Glow Horizontal Distance"), 0.0)
+  description   (_("Horizontal shadow offset.  Anything other then zero makes inner glow an inner shadow."))
   ui_range      (-15.0, 15.0)
   value_range   (-15.0, 15.0)
   ui_steps      (1, 2)
@@ -443,8 +496,8 @@ property_double (xinnerglow, _("Inner Glow X"), 0.0)
   ui_meta       ("axis", "x")
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (yinnerglow, _("Inner Glow Y"), 0.0)
-  description   (_("Vertical shadow offset"))
+property_double (yinnerglow, _("Inner Glow Vertical Distance"), 0.0)
+  description   (_("Vertical shadow offset. Anything other then zero makes inner glow an inner shadow."))
   ui_range      (-15.0, 15.0)
   value_range   (-15.0, 15.0)
   ui_steps      (1, 2)
@@ -457,7 +510,7 @@ property_double (yinnerglow, _("Inner Glow Y"), 0.0)
 
 property_double  (fixoutline, _("Inner Glow's unmodified pixel fix"), 75)
   value_range (50, 85)
-  description (_("Neighborhood alpha percentile"))
+  description (_("If innerglow isn't covering a few pixels on the edge. Slide this up.'"))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
@@ -474,26 +527,26 @@ property_enum (blendmodegradient2, _("Blend Mode of Gradient"),
   ui_meta ("visible", "guichange {imagegradient}")
 
 
-property_double (start_x, _("Gradient X1"), 659.0)
+property_double (start_x, _("Gradient Horizontal1"), 659.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "x")
   ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
 
-property_double (start_y, _("Gradient Y1"), 49.0)
+property_double (start_y, _("Gradient Vertical1"), 49.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "y")
   ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
-property_double (end_x, _("Gradient X2"), 647.0)
+property_double (end_x, _("Gradient Horizontal2"), 647.0)
     ui_meta("unit", "pixel-coordinate")
     ui_meta("axis", "x")
   ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {imagegradient}")
 
-property_double (end_y, _("Gradient Y2"), 572.0)
+property_double (end_y, _("Gradient Vertical2"), 572.0)
     ui_meta ("unit", "pixel-coordinate")
     ui_meta ("axis", "y")
   ui_steps      (0.01, 0.10)
@@ -522,6 +575,8 @@ ui_meta ("visible", "guichange {miscoptions}")
 
 
 enum_start (gegl_blend_mode_typeshinegeffects)
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEALTSHINE,      "GrainMergeAlt",
+              N_("GrainMergeAlt"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGESHINE,      "GrainMerge",
               N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTSHINE,      "Hardlight",
@@ -529,20 +584,20 @@ enum_start (gegl_blend_mode_typeshinegeffects)
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONSHINE,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_REPLACESHINE, "Replace",
-              N_("Replace"))
+              N_("Multiply"))
 enum_end (GeglBlendModeTypeshinegeffects)
 ui_meta ("visible", "guichange {miscoptions}")
 
-property_double (opacityshine, _("Opacity of Gloss Shine"), 0.300)
+property_double (opacityshine, _("Opacity of Gloss Shine"), 0.500)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
-    value_range (0.100, 0.900)
-    ui_range    (0.100, 0.700)
+    value_range (0.100, 0.999)
+    ui_range    (0.100, 0.950)
   ui_gamma (1.5)
 ui_meta ("visible", "guichange {miscoptions}")
 
 
 
-property_double (x_scaleshine, _("X Scale of Gloss Shine"), 28.00)
+property_double (x_scaleshine, _("Horizontal Scale of Gloss Shine"), 28.00)
     description (_("Scale value for x axis"))
     value_range (15, 60.0)
     ui_range    (15, 60.0)
@@ -550,7 +605,7 @@ property_double (x_scaleshine, _("X Scale of Gloss Shine"), 28.00)
     ui_meta     ("axis", "x")
 ui_meta ("visible", "guichange {miscoptions}")
 
-property_double (y_scaleshine, _("Y Scale of Gloss Shine"), 56.0)
+property_double (y_scaleshine, _("Vertical Scale of Gloss Shine"), 56.0)
     description (_("Scale value for y axis"))
     value_range (15, 150.0)
     ui_range    (15, 150.0)
@@ -579,7 +634,7 @@ property_double (microblur, _("Very Mild Blur on Original Text "), 0)
    ui_meta     ("unit", "pixel-distance")
 ui_meta ("visible", "guichange {miscoptions}")
 
-property_int  (thinboldenable, _("Slide up or down to Enable/Disable Thin to Thick"), 0)
+property_int  (thinboldenable, _("Slide up or down to Enable/Disable Thin to Thick slider"), 0)
   value_range (0, 5)
   ui_range    (0, 5)
   ui_meta     ("unit", "pixel-distance")
@@ -745,7 +800,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi, state->nopm, state->multiply, state->shiny,  state->nopg, atopg,  state->crop, state->nopb, bevelmode, state->knockoutidref,  state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi, state->nopm, state->multiply,  state->nopg, atopg,  state->crop, state->shiny, state->nopb, bevelmode, state->knockoutidref,  state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
@@ -761,7 +816,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny,  state->crop, state->nopb, bevelmode, state->knockoutidref, state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, state->atopi,  state->nopm, state->multiply, state->crop, state->shiny, state->nopb, bevelmode, state->knockoutidref, state->nopig, over, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity,  NULL);
@@ -779,7 +834,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny,  state->nopg, atopg, state->crop, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, state->atopi,  state->nopm, state->multiply, state->nopg, atopg, state->crop, state->shiny, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -793,7 +848,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, state->atopi,  state->nopm, state->multiply, state->shiny, state->crop, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
+   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, state->atopi,  state->nopm, state->multiply,  state->crop, state->shiny, state->nopb, bevelmode, state->knockoutidref, state->stroke, state->ds, state->xor, state->output, NULL);
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -861,7 +916,7 @@ xor = gegl_node_new_child (gegl,
                                   NULL);
 
   ds = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dropshadow",
+                                  "operation", "gegl:zzstrokebevelimage",
                                   NULL);
 
   innerglow = gegl_node_new_child (gegl,
@@ -1074,7 +1129,9 @@ lchcolorig = gegl_node_new_child (gegl,
 
 
 
-
+  gegl_operation_meta_redirect (operation, "seedaura", ds, "seed");
+  gegl_operation_meta_redirect (operation, "aurasize", ds, "tile-size");
+  gegl_operation_meta_redirect (operation, "enableaura", ds, "enableaura");
   gegl_operation_meta_redirect (operation, "string", image, "string");
   gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
   gegl_operation_meta_redirect (operation, "hue", saturation, "hue");
@@ -1085,9 +1142,13 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "ystroke", stroke, "y");
   gegl_operation_meta_redirect (operation, "xstroke", stroke, "x");
   gegl_operation_meta_redirect (operation, "opacity", ds, "opacity");
-  gegl_operation_meta_redirect (operation, "grow_radius", ds, "grow-radius");
-  gegl_operation_meta_redirect (operation, "radius", ds, "radius");
+  gegl_operation_meta_redirect (operation, "grow_radius", ds, "stroke");
+  gegl_operation_meta_redirect (operation, "radius", ds, "blurstroke");
   gegl_operation_meta_redirect (operation, "color", ds, "color");
+  gegl_operation_meta_redirect (operation, "specialshadowoptions", ds, "specialoutline"); 
+  gegl_operation_meta_redirect (operation, "enableshadow", ds, "enableoutline"); 
+  gegl_operation_meta_redirect (operation, "shadowimage", ds, "src");
+  gegl_operation_meta_redirect (operation, "blurshadowimage", ds, "blurshadowimage");
   gegl_operation_meta_redirect (operation, "grow_shape", stroke, "grow-shape");
   gegl_operation_meta_redirect (operation, "opacitystroke", stroke, "opacity");
   gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "blurstroke");
@@ -1116,6 +1177,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "osdepth", stroke, "bevel2");
   gegl_operation_meta_redirect (operation, "osradius", stroke, "radius1");
   gegl_operation_meta_redirect (operation, "osbevel", stroke, "bevel1");
+  gegl_operation_meta_redirect (operation, "osbevelopacity", stroke, "opacitybevel");
   gegl_operation_meta_redirect (operation, "osth", stroke, "th");
   gegl_operation_meta_redirect (operation, "ossrc", stroke, "src");
   gegl_operation_meta_redirect (operation, "specialoutline", stroke, "specialoutline");
@@ -1226,7 +1288,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Continual Version"),
     "categories",  "Generic",
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. (May 12 2023 ANNIVERSARY build) "
+    "description", _("GEGL text styling and speciality image outlining filter. May 17 2023 Stable Build"
                      ""),
     NULL);
 }
