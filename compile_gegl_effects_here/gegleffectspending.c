@@ -175,8 +175,8 @@ property_double (bevel1, _("Rotate Bevel Lighting"), 60.0)
 
 
 property_double (radius1, _("Radius of Bevel"), 2.0)
-  value_range (1.0, 12.0)
-  ui_range (1.0, 12)
+  value_range (1.0, 20.0)
+  ui_range (1.0, 15)
   ui_gamma (1.5)
   ui_steps      (0.01, 0.20)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -1288,7 +1288,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Continual Version"),
     "categories",  "Generic",
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. May 17 2023 Stable Build"
+    "description", _("GEGL text styling and speciality image outlining filter. May 23 2023 Stable Build"
                      ""),
     NULL);
 }
