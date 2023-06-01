@@ -58,7 +58,7 @@ property_int (bevel2, _("Depth"), 40)
     value_range (1, 100)
 
 
-property_double (th, _("Threshold of the Bevel's Transparency'"), 0.100)
+property_double (th, _("Threshold of the Bevel's transparency"), 0.100)
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
 
@@ -67,6 +67,13 @@ property_double (azimuth, _("Rotate Lighting"), 40.0)
     value_range (0, 350)
     ui_meta ("unit", "degree")
     ui_meta ("direction", "ccw")
+
+
+property_double (slideupblack, _("Slide up if Bevel is very dark or black. "), 0.00)
+    description (_("GEGL Bevel works on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up."))
+  value_range   (0.00, 0.999)
+  ui_steps      (0.01, 0.50)
+
 
 
 #else
@@ -85,6 +92,10 @@ typedef struct
   GeglNode *boxblur;
   GeglNode *emb;
   GeglNode *th;
+  GeglNode *whitecolor;
+  GeglNode *normallayer;
+  GeglNode *slideupblack;
+  GeglNode *fix;
   GeglNode *output;
 } State; 
 
@@ -93,7 +104,8 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *boxblur, *blur, *emb, *th;
+  GeglNode *input, *output, *boxblur, *blur, *emb, *th, *fix, *whitecolor, *normallayer, *slideupblack;
+  GeglColor *white_color = gegl_color_new ("#ffffff");
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -118,8 +130,27 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
+  whitecolor    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color-overlay",
+                                   "value", white_color, NULL);
 
-  gegl_node_link_many (input, blur, boxblur, emb, th, output, NULL);
+
+normallayer = gegl_node_new_child (gegl,
+                                    "operation", "gimp:layer-mode", "layer-mode", 28,  "composite-mode", 2, NULL);
+
+
+ slideupblack   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+ fix   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
+
+
+  gegl_node_link_many (input, whitecolor, blur, boxblur, emb, th, fix, output, NULL);
+
   gegl_operation_meta_redirect (operation, "radius1", blur, "std-dev-x");
   gegl_operation_meta_redirect (operation, "radius1", blur, "std-dev-y");
   gegl_operation_meta_redirect (operation, "bevel1", emb, "elevation");
@@ -127,6 +158,7 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "azimuth", emb, "azimuth");
   gegl_operation_meta_redirect (operation, "radius2", boxblur, "radius");
   gegl_operation_meta_redirect (operation, "th", th, "value");
+  gegl_operation_meta_redirect (operation, "slideupblack", slideupblack, "value");
 
 
 
@@ -140,6 +172,10 @@ static void attach (GeglOperation *operation)
   state->boxblur = boxblur;
   state->emb = emb;
   state->th = th;
+  state->whitecolor = whitecolor;
+  state->normallayer = normallayer;
+  state->slideupblack = slideupblack;
+  state->fix = fix;
   state->output = output;
   o->user_data = state;
 }
@@ -154,11 +190,15 @@ update_graph (GeglOperation *operation)
   if (o->effectsswitchbevel)
   if (o->embossmode)
   {
-    gegl_node_link_many (state->blur, state->boxblur,  state->emb, state->output, NULL);
+    gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->fix, state->output, NULL);
+    gegl_node_link_many (state->whitecolor, state->slideupblack,  NULL);
+      gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
   }
 else
   {
-    gegl_node_link_many (state->blur, state->boxblur,  state->emb, state->th, state->output, NULL);
+    gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->th, state->fix, state->output, NULL);
+    gegl_node_link_many (state->whitecolor, state->slideupblack,  NULL);
+      gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
   }
 else
   {
