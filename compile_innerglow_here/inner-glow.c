@@ -32,11 +32,6 @@ property_string (string, _("Invert Transparency"), TUTORIAL)
     ui_meta     ("role", "output-extent")
 
 
-property_color (eblack, _("Color"), "#000000")
-    description(_("The color to make transparent."))
-    ui_meta     ("role", "output-extent")
-
-
 enum_start (gegl_dropshadow_grow_shapeig)
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_SQUAREig,  "squareig",  N_("Square"))
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_CIRCLEig,  "circleig",  N_("Circle"))
@@ -69,7 +64,7 @@ property_double (y, _("Y"), 0.0)
 
 
 
-property_double (radius, _("Blur radius"), 2.5)
+property_double (radius, _("Blur radius"), 9)
   value_range   (0.0, 40.0)
   ui_range      (0.0, 30.0)
   ui_steps      (1, 5)
@@ -91,20 +86,13 @@ property_double (opacity, _("Opacity"), 1.2)
   ui_steps      (0.01, 0.10)
 
 
-property_color  (notouch, _("Don't touch. Needed for filter to work"), "#")
-    ui_meta     ("role", "output-extent")
 
 
 property_color (value2, _("Color"), "#fbff00")
     description (_("The color to paint over the input"))
     ui_meta     ("role", "color-primary")
 
-property_int  (mradius, _("Radius"), 1)
-  value_range (0, 1)
-  ui_range    (0, 1)
-  ui_meta     ("unit", "pixel-distance")
-  description (_("Neighborhood radius, a negative value will calculate with inverted percentiles"))
-    ui_meta     ("role", "output-extent")
+
 
 
 property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 60)
@@ -127,6 +115,10 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median2, *in, *nop2, *output;
+  GeglColor *black_color = gegl_color_new ("#000000");
+  GeglColor *hidden_color = gegl_color_new ("#00ffffAA");
+
+
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -148,7 +140,8 @@ static void attach (GeglOperation *operation)
 
   color    = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
-                                  NULL);
+                                   "value", hidden_color, NULL);
+
 
   color2    = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
@@ -170,13 +163,13 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
-  eblack = gegl_node_new_child (gegl, "operation", "gegl:color-to-alpha", "transparency-threshold", 0.050, NULL);
+  eblack = gegl_node_new_child (gegl, "operation", "gegl:color-to-alpha", "transparency-threshold", 0.050,
+                                   "value", black_color, NULL);
 
 
-  median2    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur",
-                                  NULL);
-
+  median2     = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
+                                         "radius",       1,
+                                         NULL);
 
 
 
@@ -195,13 +188,9 @@ gegl_operation_meta_redirect (operation, "x", shadow, "x");
 
 gegl_operation_meta_redirect (operation, "y", shadow, "y");
 
-gegl_operation_meta_redirect (operation, "notouch", color, "value");
 
-gegl_operation_meta_redirect (operation, "mradius", median2, "radius");
 
 gegl_operation_meta_redirect (operation, "fixoutline", median2, "alpha-percentile");
-
-gegl_operation_meta_redirect (operation, "eblack", eblack, "color");
 
 gegl_operation_meta_redirect (operation, "string", it, "string");
 
