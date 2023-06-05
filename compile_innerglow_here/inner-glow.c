@@ -48,16 +48,16 @@ property_enum   (grow_shape, _("Grow shape"),
 
 property_double (x, _("X"), 0.0)
   description   (_("Horizontal shadow offset"))
-  ui_range      (-15.0, 15.0)
-  value_range   (-15.0, 15.0)
+  ui_range      (-20.0, 20.0)
+  value_range   (-20.0, 20.0)
   ui_steps      (1, 2)
   ui_meta       ("unit", "pixel-distance")
   ui_meta       ("axis", "x")
 
 property_double (y, _("Y"), 0.0)
   description   (_("Vertical shadow offset"))
-  ui_range      (-15.0, 15.0)
-  value_range   (-15.0, 15.0)
+  ui_range      (-20.0, 20.0)
+  value_range   (-20.0, 20.0)
   ui_steps      (1, 2)
   ui_meta       ("unit", "pixel-distance")
   ui_meta       ("axis", "y")
@@ -65,8 +65,8 @@ property_double (y, _("Y"), 0.0)
 
 
 property_double (radius, _("Blur radius"), 9)
-  value_range   (0.0, 40.0)
-  ui_range      (0.0, 30.0)
+  value_range   (0.0, 60.0)
+  ui_range      (0.0, 40.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
@@ -206,9 +206,8 @@ gegl_operation_meta_redirect (operation, "string", it, "string");
 
 
 
-  gegl_node_link_many (input, nop2, it, nop, shadow, color, atop, eblack, in, median2, color2, output, NULL);
- gegl_node_connect_from (atop, "aux", nop, "output");
- gegl_node_connect_from (in, "aux", nop2, "output");
+  gegl_node_link_many (input, it,  shadow, color, atop, in, median2, color2, output, NULL);
+ gegl_node_connect_from (in, "aux", input, "output");
 
 
 }
