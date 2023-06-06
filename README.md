@@ -1,3 +1,5 @@
+Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
+
 If you want this plugin in Gimp officially show support here.
 https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
 
