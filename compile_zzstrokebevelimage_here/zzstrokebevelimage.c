@@ -185,6 +185,12 @@ property_double (lightness, _("Lightness of image file overlay"), 0.0)
    value_range  (-100.0, 100.0)
 
 
+property_string (string, _("Graph1"), GEGLSYNTAXZONE)
+    ui_meta     ("role", "output-extent")
+
+#define GEGLSYNTAXZONE \
+" id=1 clear aux=[ ref=1 ]  ] "\
+
 
 
 #else
@@ -219,6 +225,10 @@ typedef struct
   GeglNode *gaussian;
   GeglNode *cubismglow;
   GeglNode *move;
+  GeglNode *ontop;
+  GeglNode *nop2;
+  GeglNode *crop;
+  GeglNode *graph;
   GeglNode *output;
 } State; 
 
@@ -227,16 +237,22 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node; 
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *behind, *median, *cubismglow, *gaussian, *move,   *nop, *opacity, *huelight, *opacitybevel, *bevel, *multiplyge, *disablebevel, *blurshadowimage, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color;
+  GeglNode *input, *output, *behind, *median, *cubismglow, *gaussian, *crop, *nop2, *move,   *nop, *opacity, *huelight, *graph, *opacitybevel, *bevel, *multiplyge, *disablebevel, *blurshadowimage, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color,  *ontop;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
 
 
-  color   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:color-overlay",
+ ontop   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-in",
                                   NULL);
+
+
+  color   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color",
+                                  NULL);
+
 
   median      = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
                                          "percentile",       100.0,
@@ -253,6 +269,11 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:translate",
                                   NULL);
 
+  crop   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
+
 
   disablebevel   = gegl_node_new_child (gegl,
                                   "operation", "gegl:dst",
@@ -264,6 +285,10 @@ static void attach (GeglOperation *operation)
 
 
 
+  nop2   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
 
   nop   = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
@@ -271,7 +296,7 @@ static void attach (GeglOperation *operation)
 
 
   behind   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dst-over",
+                                  "operation", "gegl:src",
                                   NULL);
 
 
@@ -279,6 +304,10 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:dropshadow",
                                   NULL);
 
+
+  graph    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gegl",
+                                  NULL);
 
   atop    = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-atop",
@@ -326,14 +355,7 @@ hardlightge = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
 
 
-  gegl_node_link_many (input, behind, output, NULL);
-  gegl_node_link_many (input, median, gaussian, move, opacity, color, atop, multiplyge, NULL);
-  /*gegl_node_link (layer, NULL);*/
-  gegl_node_link_many (atop, bevel, opacitybevel, NULL);
 
- gegl_node_connect_from (multiplyge, "aux", bevel, "output"); 
- gegl_node_connect_from (atop, "aux", layer, "output"); 
- gegl_node_connect_from (behind, "aux", multiplyge, "output"); 
 
 
   gegl_operation_meta_redirect (operation, "tile_saturation", cubismglow, "tile-saturation");
@@ -382,6 +404,8 @@ hardlightge = gegl_node_new_child (gegl,
 
   gegl_operation_meta_redirect (operation, "lightness", huelight, "lightness");
 
+  gegl_operation_meta_redirect (operation, "string",  graph, "string");
+
 
 
 
@@ -413,6 +437,10 @@ hardlightge = gegl_node_new_child (gegl,
   state->median = median;
   state->gaussian = gaussian;
   state->move = move;
+  state->ontop = ontop;
+  state->nop2 = nop2;
+  state->graph = graph;
+  state->crop = crop;
   o->user_data = state;
 }
 
@@ -441,33 +469,33 @@ update_graph (GeglOperation *operation)
  if (o->specialoutline)
  if (o->enableaura)
   {
-    gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->median, state->cubismglow, state->gaussian, state->move, state->opacity, state->color, state->atop, multiplyge,  NULL);
+    gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge, state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
     gegl_node_connect_from (multiplyge, "aux", state->opacitybevel, "output");
     gegl_node_connect_from (state->atop, "aux", state->huelight, "output");
-    gegl_node_connect_from (state->behind, "aux", multiplyge, "output");
+      gegl_node_link_many (state->color, state->nop2, state->opacity, NULL);
+      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
   }
 else
   {
-    gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->median, state->gaussian, state->move, state->opacity, state->color, state->atop, multiplyge,  NULL);
+    gegl_node_link_many (state->input, state->median, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge,  state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
     gegl_node_connect_from (multiplyge, "aux", state->opacitybevel, "output");
     gegl_node_connect_from (state->atop, "aux", state->huelight, "output");
-    gegl_node_connect_from (state->behind, "aux", multiplyge, "output");
+      gegl_node_link_many (state->color, state->nop2,  state->opacity, NULL);
+      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
   }
 else
   {
-    gegl_node_link_many (state->input, state->behind, state->output, NULL);
-    gegl_node_link_many (state->median, state->gaussian,  state->move, state->opacity, state->color, NULL);
-     gegl_node_connect_from (state->behind, "aux", state->color, "output");
+    gegl_node_link_many (state->input, state->median, state->gaussian,  state->move, state->ontop, state->crop, state->output, NULL);
+      gegl_node_link_many (state->color, state->nop2, state->opacity, NULL);
+      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
   }
 else
   {
-    gegl_node_link_many (state->input,  state->output, NULL);
+    gegl_node_link_many (state->input, state->graph, state->output, NULL);
   }
 }
 
@@ -488,7 +516,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("Hidden Operation to bevel and image file overlay a stroke for GEGL Effects. GEGL Effects will not work at all without this hidden operation."),
     "categories",  "hidden",
     "reference-hash", "33234v25str2ac",
-    "description", _("Hidden Operation for testing on GEGL Effects"
+    "description", _("Hidden Operation for GEGL Effects - This is a rough reimagination of Gimp's drop shadow filter with many new things and technical options that drop shadow was not capable of doing. GEGL Effects no longer calls Gimp's GEGL drop shadow filter. It uses this under the hood."
                      ""),
     NULL);
 }
