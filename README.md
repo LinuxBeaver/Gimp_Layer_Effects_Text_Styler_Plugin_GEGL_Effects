@@ -8,11 +8,11 @@ https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
 
 ## GEGL Effects CE by Beaver
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires two bonus filters, and one hidden operation. You will find that gegl:bevel and gegl:innerglow are more useful on their own as they have more options in stand alone. 
+GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
 
 ## Instructions 
 
-If you choose not to use prebuilt binaries. You must manually compile innerglow, zzstrokebevelimage, bevel and gegleffects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. Once you get done compiling each operation go to its build directory and get the .so or dll file and place it in /gegl-04/plugins. Click build_linux.sh to compile on Linux.
+If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
 
 
 ## About CE
@@ -23,8 +23,8 @@ So you may want to download the latest version and just stick with it indefinite
 
 
 
-You are expected to also download GEGL InnerGlow, GEGL Bevel and  GEGL zzstrokebevelimage. The plugin will not work correctly without them.
-In total you should have, gegleffectspending, zzstrokebevelimage, bevel and innerglow for this filter to work.  
+You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
+In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
 This plugin will work alongside normal GEGLEffects as seen here.
 
@@ -128,7 +128,7 @@ ninja -C build
 
 
 
-### Inner Glow and Bevel the stand alones
+### Inner Glow Bevel and Glass Over text, the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
 
 ![image preview](/Image_previews/innerglow_promo.png    )
@@ -136,5 +136,6 @@ ninja -C build
 
 ![image preview](/Image_previews/bevel.png    )
 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
 
