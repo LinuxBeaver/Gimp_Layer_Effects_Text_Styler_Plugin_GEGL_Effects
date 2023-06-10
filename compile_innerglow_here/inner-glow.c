@@ -17,21 +17,25 @@
  * 2022 Beaver (GEGL inner glow)
  */
 
+/*GEGL Inner Glow is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef GEGL_PROPERTIES
 
 
-
+/*This is GEGL syntax I wrote. Its operation is gegl:gegl and it represents a GEGL Graph inside a GEGL Graph. */
 #define TUTORIAL \
 "   id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true     aux=[ ref=1 ] color-overlay value=#000000   n"\
 
 
 property_string (string, _("Invert Transparency"), TUTORIAL)
     ui_meta     ("role", "output-extent")
+/*The GEGL Graph is being called here*/
 
 
+/*This is an enum list for the base shape of inner stroke/shadow/glow. It should not be renamed.*/
 enum_start (gegl_dropshadow_grow_shapeig)
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_SQUAREig,  "squareig",  N_("Square"))
   enum_value (GEGL_DROPSHADOW_GROW_SHAPE_CIRCLEig,  "circleig",  N_("Circle"))
@@ -86,21 +90,14 @@ property_double (opacity, _("Opacity"), 1.2)
   ui_steps      (0.01, 0.10)
 
 
-
-
 property_color (value2, _("Color"), "#fbff00")
     description (_("The color to paint over the input"))
     ui_meta     ("role", "color-primary")
 
 
-
-
 property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 60)
   value_range (50, 100)
   description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
-
-
-
 
 
 #else
@@ -114,9 +111,9 @@ property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 6
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *it, *shadow, *c2a, *white, *color, *nop, *color2, *eblack, *atop, *median2, *in, *nop2, *output;
-  GeglColor *black_color = gegl_color_new ("#000000");
+  GeglNode *input, *it, *shadow,   *color, *color2,  *atop, *median2, *in,  *output;
   GeglColor *hidden_color = gegl_color_new ("#00ffffAA");
+/*This is a trick to bake in color nodes*/
 
 
 
@@ -141,7 +138,7 @@ static void attach (GeglOperation *operation)
   color    = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
                                    "value", hidden_color, NULL);
-
+/*This is a trick to bake in color nodes*/
 
   color2    = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
@@ -154,61 +151,24 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
-  nop    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-  nop2    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-
-  eblack = gegl_node_new_child (gegl, "operation", "gegl:color-to-alpha", "transparency-threshold", 0.050,
-                                   "value", black_color, NULL);
-
-
   median2     = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
                                          "radius",       1,
                                          NULL);
 
-
-
 gegl_operation_meta_redirect (operation, "grow_radius", shadow, "grow-radius");
-
 gegl_operation_meta_redirect (operation, "radius", shadow, "radius");
-
-  gegl_operation_meta_redirect (operation, "opacity", shadow, "opacity");
-
+gegl_operation_meta_redirect (operation, "opacity", shadow, "opacity");
 gegl_operation_meta_redirect (operation, "grow-shape", shadow, "grow-shape");
-
-
-  gegl_operation_meta_redirect (operation, "value2", color2, "value");
-
+gegl_operation_meta_redirect (operation, "value2", color2, "value");
 gegl_operation_meta_redirect (operation, "x", shadow, "x");
-
 gegl_operation_meta_redirect (operation, "y", shadow, "y");
-
-
-
 gegl_operation_meta_redirect (operation, "fixoutline", median2, "alpha-percentile");
-
 gegl_operation_meta_redirect (operation, "string", it, "string");
-
-
-
-
-
-
-
-
-
-
-
-
 
   gegl_node_link_many (input, it,  shadow, color, atop, in, median2, color2, output, NULL);
  gegl_node_connect_from (in, "aux", input, "output");
-
+/*This is telling GEGL to put everything from input to atop inside the gegl:src-in blend mode. Src-In is like a combination between Gimp's alpha lock and replace blend mode.*/
+/*Out of all the operations that ship with GEGL Effects. Inner Glow is the only one that has a simple GEGL Graph and it is the only one that is pure GEGL. As of June 7th 2023 */
 
 }
 

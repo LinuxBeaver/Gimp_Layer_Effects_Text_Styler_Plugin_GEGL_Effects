@@ -17,6 +17,10 @@
  * 2023 Beaver (GEGL ZZStrokeBevelImageOverlay a hidden operation fork of drop shadow to give GEGL Effects outline the ability to add a bevel, image file overlay and more. May 16 23 it now gives GEGL Effects drop shadow a blurred image file overlay. May 17 2023 it now has an aura seed option for shadow glow )
  */
 
+/*zzstrokebevelimage is a hidden operations for GEGL Effects. The goal is to eventually bake it inside GEGL Effects and get rid of this hidden operation. 
+This hidden operation is meant to be a better drop shadow. Before it existed GEGL Effects called Gimp's normal drop shadow filter*/
+
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
@@ -35,8 +39,6 @@ property_double (tile_saturation, _("Glow Spacing"), 2.5)
 property_seed (seed, _("Seed of Glow Aura"), rand)
 
 
-
-
 property_double (blurshadowimage, _("Blur Drop Shadow/Glow's Image file overlay"), 0)
    description (_("Standard deviation for the horizontal axis"))
    value_range (0.0, 40.0)
@@ -45,10 +47,7 @@ property_double (blurshadowimage, _("Blur Drop Shadow/Glow's Image file overlay"
    ui_meta     ("unit", "pixel-distance")
 
 
-
-
-
-
+/*ENUM list of blend modes for Outline Bevel*/
 enum_start (gegl_blend_mode_type_effectszzbevoutline)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYGE,      "MultiplyGE",
               N_("Multiply"))
@@ -80,7 +79,7 @@ property_boolean (specialoutline, _("Special Outline Switch"), FALSE)
 property_boolean (enableoutline, _("Enable normal outline switch"), FALSE)
   description    (_("Enable Outline"))
 
-
+/*ENUM list of blend modes for Base Outline Shape*/
 enum_start (gegl_stroke_grow_shapeszz2)
   enum_value (GEGL_stroke_GROW_SHAPE_SQUAREzz,  "square",  N_("Square"))
   enum_value (GEGL_stroke_GROW_SHAPE_CIRCLEzz,  "circle",  N_("Circle"))
@@ -188,10 +187,9 @@ property_double (lightness, _("Lightness of image file overlay"), 0.0)
 property_string (string, _("Graph1"), GEGLSYNTAXZONE)
     ui_meta     ("role", "output-extent")
 
+/*GEGL Syntax here. Operation is gegl:gegl. This syntax is instructing zzstrokebevelimage to remove everything*/
 #define GEGLSYNTAXZONE \
 " id=1 clear aux=[ ref=1 ]  ] "\
-
-
 
 #else
 
@@ -259,11 +257,13 @@ static void attach (GeglOperation *operation)
                                          "alpha-percentile", 100.0,
                                          "abyss-policy",     GEGL_ABYSS_NONE,
                                          NULL);
+/*Example of a baked in median blur setting*/
 
   gaussian    = gegl_node_new_child (gegl, "operation", "gegl:gaussian-blur",
                                          "clip-extent", FALSE,
                                          "abyss-policy", 0,
                                          NULL);
+/*Example of a baked in gaussian blur setting*/
 
   move   = gegl_node_new_child (gegl,
                                   "operation", "gegl:translate",
@@ -359,56 +359,29 @@ hardlightge = gegl_node_new_child (gegl,
 
 
   gegl_operation_meta_redirect (operation, "tile_saturation", cubismglow, "tile-saturation");
-
   gegl_operation_meta_redirect (operation, "tile_size", cubismglow, "tile-size");
-
   gegl_operation_meta_redirect (operation, "seed", cubismglow, "seed");
-
   gegl_operation_meta_redirect (operation, "blurshadowimage", blurshadowimage, "std-dev-x");
-
   gegl_operation_meta_redirect (operation, "blurshadowimage", blurshadowimage, "std-dev-y");
-
   gegl_operation_meta_redirect (operation, "stroke", median, "radius");
-
   gegl_operation_meta_redirect (operation, "blurstroke", gaussian, "std-dev-x");
-
   gegl_operation_meta_redirect (operation, "blurstroke", gaussian, "std-dev-y");
-
   gegl_operation_meta_redirect (operation, "x", move, "x");
-
   gegl_operation_meta_redirect (operation, "y", move, "y");
-
   gegl_operation_meta_redirect (operation, "grow_shape", median, "neighborhood");
-
   gegl_operation_meta_redirect (operation, "opacity", opacity, "value");
-
   gegl_operation_meta_redirect (operation, "opacitybevel", opacitybevel, "value");
-
   gegl_operation_meta_redirect (operation, "color", stroke, "color");
-
   gegl_operation_meta_redirect (operation, "color", color, "value");
-
   gegl_operation_meta_redirect (operation, "radius1", bevel, "radius1");
-
   gegl_operation_meta_redirect (operation, "th", bevel, "th");
-
   gegl_operation_meta_redirect (operation, "bevel1", bevel, "bevel1");
-
   gegl_operation_meta_redirect (operation, "bevel2", bevel, "bevel2");
-
   gegl_operation_meta_redirect (operation, "azimuth", bevel, "azimuth");
-
   gegl_operation_meta_redirect (operation, "src", layer, "src");
-
   gegl_operation_meta_redirect (operation, "hue", huelight, "hue");
-
   gegl_operation_meta_redirect (operation, "lightness", huelight, "lightness");
-
   gegl_operation_meta_redirect (operation, "string",  graph, "string");
-
-
-
-
 
  /* Now save points to the various gegl nodes so we can rewire them in
    * update_graph() later
@@ -452,7 +425,7 @@ update_graph (GeglOperation *operation)
   GeglNode *multiplyge;
   if (!state) return;
 
-  multiplyge = state->multiplyge; /* the default.  */
+  multiplyge = state->multiplyge; /* the default outline bevel that is meant to be switched into other blend modes.  */
   switch (o->blendmodebeveloutline) {
     case GEGL_BLEND_MODE_TYPE_MULTIPLYGE: multiplyge = state->multiplyge; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGEGE: multiplyge = state->grainmergege; break;
@@ -461,7 +434,7 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTGE: multiplyge = state->hardlightge; break;
     case GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE: multiplyge = state->disablebevel; break;
 
-
+ /* This is a really complex if else scenario Beaver did all by themselves. Beaver wishes in the future that this will become more simple.  */
  }
 
 
@@ -520,5 +493,5 @@ gegl_op_class_init (GeglOpClass *klass)
                      ""),
     NULL);
 }
-
+ /* This operation is hidden from Gimp's GUI because the "categories" is set to "hidden".  */
 #endif

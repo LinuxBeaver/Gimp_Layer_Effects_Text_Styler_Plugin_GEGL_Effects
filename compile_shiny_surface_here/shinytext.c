@@ -17,16 +17,13 @@
  * GEGL Shiny Text for GEGL Effects CE- Beaver 2023
  */
 
+/*Shiny Text is a hidden operations for GEGL Effects. The goal is to eventually bake it inside GEGL Effects and get rid of this hidden operation. */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef GEGL_PROPERTIES
 
-/*
-Search through GEGL's source code in /operations/common to find templates.
-
-Example Templates below that call gaussian blur and hsl color overlay together'
- */
 
 property_double (opacity, _("Opacity of Gloss Shine"), 1)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
@@ -69,13 +66,14 @@ property_color  (color1, _("Color 1"), "#ffffff")
 property_color  (color2, _("Color 2"), "#000000")
     ui_meta     ("role", "output-extent")
 
+/*Shiny Text ENUM list one of two here. This is gegl:sinus's native settings. */
 enum_start (gegl_sinus_gloss)
   enum_value (GEGL_SINUS_BLEND_LINEAR , "linear",   N_("Linear"))
   enum_value (GEGL_SINUS_BLEND_BILINEAR , "bilinear", N_("Bilinear"))
   enum_value (GEGL_SINUS_BLEND_SINUSOIDAL, "sinusoidal", N_("Sinusoidal"))
 enum_end (GeglSinusgloss)
 
-
+/*Shiny Text ENUM list two of two here. This is the blend mode switcher for shiny text. */
 enum_start (gegl_blend_mode_typeshineg)
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEALT,      "GrainMergeAlt",
               N_("GrainMergeAlt"))
@@ -95,9 +93,6 @@ property_enum (blendmode, _("Blend Mode of Shine"),
 
 property_boolean (enable, _("Enable Shine for GEGL Effects"), FALSE)
   description    (_("This option is only for GEGL Effects"))
-
-
-
 
 
 property_enum (sinusmode, _("Sinus Mode"),
@@ -252,10 +247,6 @@ grainmergealt = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "blend_power", sinus, "blend-power");
 
 
-
-
-  
-
   /* now save references to the gegl nodes so we can use them
    * later, when update_graph() is called
    */
@@ -298,5 +289,5 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "description", _("GEGL renders a shiny effect on text. This won't work on normal images. Only Text! Users are specified to use Gimp/GEGL blend modes and opacity slider with this"),
     NULL);
 }
-
+/*Shiny Text does not show up in the GUI because its "categories" is set to "hidden". */
 #endif
