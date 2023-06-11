@@ -4,7 +4,7 @@ https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
 Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/ContinualJune10th2023/
 
-After putting the binaries in the instructed place restart Gimp and go to GEGL Operations. 
+After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. 
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
