@@ -1,8 +1,10 @@
-Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
-
 If you want this plugin in Gimp officially show support here.
 https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
 
+Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/ContinualJune10th2023/
+
+After putting the binaries in the instructed place restart Gimp and go to GEGL Operations. 
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
@@ -89,23 +91,23 @@ ninja -C build
 ## Quick Guide 
 0. This is meant to be applied on text layers or raster text/image. It does live previews but does NOT actively apply when typing text.  Lots of people are let down by this but that is just the way it is. In the future when Gimp gets non-destructive editing and a GEGL text plugin then it will in theory be possible. 
 
-1. Color change will only work correctly if the text is white. This is because it uses a color overlay operation on the multiply blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color.
+1. Color change will only work correctly if the text is white. This is because it uses a color overlay operation on the multiply blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color. (THIS IS STILL COMPLETELY RELEVANT BUT WE NOW HAVE A SOLID COLOR OPTION FOR COLOR OVERLAY)
 
 2. You must enable the checkbox to use the outline but it also has an opacity slider that hides it.
 
 2b. You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never present.
 
-2c. You must slide bevel depth up to use most of the bevel option. Sliding it down again hides it as if it were never present.
+2c. You must slide bevel depth up to use most of the bevel option. Sliding it down again hides it as if it were never present. (THIS IS NOT RELEVANT ANYMORE)
 
 3. Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter.
 
-4. Bevel lighting angle is on 90 by default which is not an interesting option so consider tweaking it. 
+4. Bevel lighting angle is on 90 by default which is not an interesting option so consider tweaking it. (THIS IS NOT RELEVANT ANYMORE)
 
 5. Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
 
 6. You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
-7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. 
+7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. (WE NOW HAVE AN EXTRA OUTLINE TO DO FOUR OUTLINES)
 
 
 
