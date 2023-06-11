@@ -19,10 +19,7 @@ If you choose not to use prebuilt binaries. You must compile innerglow, glassove
 
 ## About CE
 
-This is a stable yet continual updating version of GEGL Effects that can co-exist with default GEGL Effects. Presets from normal GEGL Effects will not work with this version and there is no guarantee that future versions 
-will not break text styling presets. Every release will contain a optional roll back.
-So you may want to download the latest version and just stick with it indefinitely. 
-
+This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that i recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 
 You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
