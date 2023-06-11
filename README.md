@@ -1,4 +1,4 @@
-GEGL EFFECTS by Beaver. Layer Effects Text Styling Gimp Plugin
+OLD STABLE - GEGL EFFECTS by Beaver. Layer Effects Text Styling Gimp Plugin - this version can co-exist with CE. No other version can. Beaver recommends you use the latest version.
 =========
 
 ##  GEGL Effects Continual Edition (a branch with more advance features and routine updates) here
