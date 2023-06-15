@@ -1,4 +1,4 @@
-high pass of box blur
+Bevel's source code
 =========
 
 A custom GEGL operation (and by extension GIMP filter) that implements a reversal of Box Blur's algorithm to sharpen images'
