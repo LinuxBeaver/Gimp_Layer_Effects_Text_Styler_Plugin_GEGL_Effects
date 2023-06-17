@@ -323,7 +323,7 @@ static void attach (GeglOperation *operation)
 
 
   bevel    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel",
+                                  "operation", "lb:bevel",
                                   NULL);
 
   huelight    = gegl_node_new_child (gegl,

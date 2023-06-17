@@ -1531,7 +1531,7 @@ additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel",
+                                  "operation", "lb:bevel",
                                   NULL);
 
   mbdopacity = gegl_node_new_child (gegl,
@@ -1582,7 +1582,7 @@ screen = gegl_node_new_child (gegl,
 
 
   innerglow = gegl_node_new_child (gegl,
-                                  "operation", "gegl:innerglow",
+                                  "operation", "lb:innerglow",
                                   NULL);
 
   /*The nop functions as a ref and ID for inner glow's placement in a GEGL Graph*/

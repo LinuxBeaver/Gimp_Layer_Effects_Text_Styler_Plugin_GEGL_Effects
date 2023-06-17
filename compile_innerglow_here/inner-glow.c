@@ -182,8 +182,8 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_class->attach = attach;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:innerglow",
-    "title",       _("Inner Glow"),
+    "name",        "lb:innerglow",
+    "title",       _("Inner Glow (to blend)"),
     "categories",  "Aristic",
     "reference-hash", "g3do6aaoo1100g0fjf25sb2ac",
     "description", _("GEGL does an inner glow effect. For this filter to work you need to use the 'Normal' or other blending options. Or a duplicate layer on top.  "

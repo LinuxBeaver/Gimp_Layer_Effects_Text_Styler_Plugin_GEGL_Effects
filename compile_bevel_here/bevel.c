@@ -206,9 +206,9 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:bevel",
-    "title",       _("Bevel"),
-    "categories",  "Aristic",
+    "name",        "lb:bevel",
+    "title",       _("Bevel (to blend)"),
+    "categories",  "Artistic",
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
     "description", _("You are expected to use GEGL or Gimp blend modes with this plugin. Works best with blend modes multiply and grain merge. Emboss mode requires non-GEGL Gimp blend modes"
                      ""),
