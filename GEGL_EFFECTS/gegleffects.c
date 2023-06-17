@@ -600,7 +600,7 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
   innerglow = gegl_node_new_child (gegl,
-                                  "operation", "gegl:innerglow",
+                                  "operation", "lb:innerglow",
                                   NULL);
 
   /*atopi is the blend mode that will need to be switchable for gegl:layer src=*/
@@ -623,7 +623,7 @@ static void attach (GeglOperation *operation)
 
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel",
+                                  "operation", "lb:bevel",
                                   NULL);
 
 
@@ -660,7 +660,7 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:multiply",
                                   NULL);
 
-  /*multiplyb is the blend mode that will need to be switchable for gegl:bevel*/
+  /*multiplyb is the blend mode that will need to be switchable for gegl:blendablebevel*/
 
   multiplyb = gegl_node_new_child (gegl,
                                   "operation", "gegl:multiply",
@@ -677,7 +677,7 @@ static void attach (GeglOperation *operation)
   /*over = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 0, "composite-mode", 0, NULL);*/
 
-  /*over is the blend mode that will need to be switchable for gegl:innerglow*/
+  /*over is the blend mode that will need to be switchable for gegl:innergloweffects*/
 
   over = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-atop",
