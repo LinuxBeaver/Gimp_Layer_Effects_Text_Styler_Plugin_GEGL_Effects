@@ -1,3 +1,9 @@
+high pass of box blur
+=========
+
+A custom GEGL operation (and by extension GIMP filter) that implements a reversal of Box Blur's algorithm to sharpen images'
+
+
 
 ## Compiling and Installing
 
@@ -10,7 +16,7 @@ most distributions).
 ```bash
 meson setup --buildtype=release build
 ninja -C build
-
+cp build/high-pass-box.so ~/.local/share/gegl-0.4/plug-ins
 ```
 
 If you have an older version of gegl you may need to copy to `~/.local/share/gegl-0.3/plug-ins`

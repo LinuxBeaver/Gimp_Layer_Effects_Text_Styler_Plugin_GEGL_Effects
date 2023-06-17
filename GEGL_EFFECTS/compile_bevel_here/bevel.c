@@ -17,13 +17,15 @@
  * 2022 Beaver (GEGL Bevel) 
  */
 
+/*GEGL Bevel is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef GEGL_PROPERTIES
 
 property_boolean (effectsswitchbevel, _("Enable Bevel (FOR GEGL EFFECTS ONLY)"), TRUE)
-  description    (_("This switch exist for GEGL Effects testing. You won't find it in stand alone bevel'"))
+  description    (_("This switch exist for GEGL Effects testing. You won't find it in stand alone bevel. Or even in current *June 7th 2023 GEGL Effects.'"))
     ui_meta     ("role", "output-extent")
 
 property_boolean (embossmode, _("Emboss Mode (use Gimp's layer Grain Merge blend mode)"), FALSE)
@@ -31,20 +33,15 @@ property_boolean (embossmode, _("Emboss Mode (use Gimp's layer Grain Merge blend
 
 
 
-
-
-
-
-
 property_double (radius1, _("Radius Normal Bevel"), 7.0)
-  value_range (1.0, 40.0)
-  ui_range (1.0, 12)
+  value_range (0.5, 40.0)
+  ui_range (1.0, 9.0)
   ui_gamma (1.5)
 
 property_int (radius2, _("Radius Sharp Bevel"), 0)
    description(_("Box Blur -0 means disabled by default"))
-   value_range (0, 8)
-   ui_range    (0, 8)
+   value_range (0, 10.0)
+   ui_range    (0, 9.0)
    ui_gamma   (1.5)
 
 
@@ -58,15 +55,23 @@ property_int (bevel2, _("Depth"), 40)
     value_range (1, 100)
 
 
-property_double (th, _("Threshold of the Bevel's Transparency'"), 0.100)
+property_double (th, _("Bevel's coverage threshold. Lower covers more."), 0.100)
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
+  ui_meta     ("sensitive", "! embossmode")
 
 property_double (azimuth, _("Rotate Lighting"), 40.0)
     description (_("Light angle (degrees)"))
     value_range (0, 350)
     ui_meta ("unit", "degree")
     ui_meta ("direction", "ccw")
+
+
+property_double (slideupblack, _("Slide up if Bevel is very dark or black. "), 0.00)
+    description (_("GEGL Bevel works on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up."))
+  value_range   (0.00, 0.999)
+  ui_steps      (0.01, 0.50)
+
 
 
 #else
@@ -85,6 +90,10 @@ typedef struct
   GeglNode *boxblur;
   GeglNode *emb;
   GeglNode *th;
+  GeglNode *whitecolor;
+  GeglNode *normallayer;
+  GeglNode *slideupblack;
+  GeglNode *fix;
   GeglNode *output;
 } State; 
 
@@ -93,7 +102,8 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *boxblur, *blur, *emb, *th;
+  GeglNode *input, *output, *boxblur, *blur, *emb, *th, *fix, *whitecolor, *normallayer, *slideupblack;
+  GeglColor *white_color = gegl_color_new ("#ffffff");
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
@@ -106,9 +116,6 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:box-blur",
                                   NULL);
 
-
-
-
  emb   = gegl_node_new_child (gegl,
                                   "operation", "gegl:emboss",
                                   NULL);
@@ -118,8 +125,23 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
+  whitecolor    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color-overlay",
+                                   "value", white_color, NULL);
 
-  gegl_node_link_many (input, blur, boxblur, emb, th, output, NULL);
+
+normallayer = gegl_node_new_child (gegl,
+                                    "operation", "gimp:layer-mode", "layer-mode", 28,  "composite-mode", 2, NULL);
+
+
+ slideupblack   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+ fix   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
   gegl_operation_meta_redirect (operation, "radius1", blur, "std-dev-x");
   gegl_operation_meta_redirect (operation, "radius1", blur, "std-dev-y");
   gegl_operation_meta_redirect (operation, "bevel1", emb, "elevation");
@@ -127,8 +149,7 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "azimuth", emb, "azimuth");
   gegl_operation_meta_redirect (operation, "radius2", boxblur, "radius");
   gegl_operation_meta_redirect (operation, "th", th, "value");
-
-
+  gegl_operation_meta_redirect (operation, "slideupblack", slideupblack, "value");
 
 
  /* Now save points to the various gegl nodes so we can rewire them in
@@ -140,6 +161,10 @@ static void attach (GeglOperation *operation)
   state->boxblur = boxblur;
   state->emb = emb;
   state->th = th;
+  state->whitecolor = whitecolor;
+  state->normallayer = normallayer;
+  state->slideupblack = slideupblack;
+  state->fix = fix;
   state->output = output;
   o->user_data = state;
 }
@@ -154,20 +179,21 @@ update_graph (GeglOperation *operation)
   if (o->effectsswitchbevel)
   if (o->embossmode)
   {
-    gegl_node_link_many (state->blur, state->boxblur,  state->emb, state->output, NULL);
+    gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->fix, state->output, NULL);
+    gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
+    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
   }
 else
   {
-    gegl_node_link_many (state->blur, state->boxblur,  state->emb, state->th, state->output, NULL);
+    gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->th, state->fix, state->output, NULL);
+    gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
+    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
   }
 else
   {
     gegl_node_link_many (state->input,  state->output, NULL);
   }
 }
-
-
-
 
 
 static void
@@ -184,7 +210,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("Bevel"),
     "categories",  "Aristic",
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
-    "description", _("You are expected to use GEGL or Gimp blend modes with this plugin. Works best with blend modes multiply and grain merge. Emboss mode requires non-GEGL Gimp  blend modes"
+    "description", _("You are expected to use GEGL or Gimp blend modes with this plugin. Works best with blend modes multiply and grain merge. Emboss mode requires non-GEGL Gimp blend modes"
                      ""),
     NULL);
 }

@@ -4,7 +4,7 @@ project('bevel', 'c',
 
 # These arguments are only used to build the shared library
 # not the executables that use the library.
-lib_args = ['-DBUILDING_EFFECTS']
+lib_args = ['-DBUILDING_GEGLTESTING']
 
 gegl = dependency('gegl-0.3', required : false)
 if not gegl.found()
