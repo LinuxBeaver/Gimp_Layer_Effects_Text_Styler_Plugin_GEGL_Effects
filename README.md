@@ -25,7 +25,7 @@ This is a stable yet continual updating version of GEGL Effects that can co-exis
 You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
 In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
-This plugin will work alongside normal GEGLEffects as seen here.
+This plugin will work alongside a special legacy version of GEGL Effects as seen here.
 
 ![image preview](coexisting_plugins.jpg  )
 
