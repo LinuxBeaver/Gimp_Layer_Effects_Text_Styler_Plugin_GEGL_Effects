@@ -19,6 +19,16 @@
 
 /*GEGL Bevel is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
 
+
+/*
+Graph here to test without installing. 
+
+id=1 gimp:layer-mode layer-mode=normal composite-mode=clip-to-backdrop aux=[color value=#ffffff  opacity value=0.1 ]
+gaussian-blur std-dev-x=2 std-dev-y=2
+emboss azimuth=44 depth=9
+gimp:threshold-alpha value=0.03
+ */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
@@ -55,7 +65,8 @@ property_int (bevel2, _("Depth"), 40)
     value_range (1, 100)
 
 
-property_double (th, _("Bevel's coverage threshold. Lower covers more."), 0.100)
+property_double (th, _("Bevel's coverage threshold."), 0.100)
+    description (_("Lower covers more and higher covers less."))
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
   ui_meta     ("sensitive", "! embossmode")
@@ -67,8 +78,8 @@ property_double (azimuth, _("Rotate Lighting"), 40.0)
     ui_meta ("direction", "ccw")
 
 
-property_double (slideupblack, _("Slide up if Bevel is very dark or black. "), 0.00)
-    description (_("GEGL Bevel works on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up."))
+property_double (slideupblack, _("Black Bevel/Image Bevel mode."), 0.00)
+    description (_("This slider allows GEGL bevel to works on black Bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an image's details."))
   value_range   (0.00, 0.999)
   ui_steps      (0.01, 0.50)
 

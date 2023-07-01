@@ -55,7 +55,26 @@ then the title and or gegl operation of name of one mf my plugins; example "gegl
 where it is used. 
 
 
+Crude recreation of parts of GEGL Effects graph. This just shows how the nodes are ordered. They are many things missing and I can't possibly list all the options. 
+DropShadow is used in place of the hidden operation. REQUIRES lb:bevel and lb:innerglow
+
+Remove the # to see a particular effect in action
+
+id=1 
+#src-atop aux=[ ref=1 layer src=image_link_here.jpg ]
+id=2
+#gimp:layer-mode layer-mode=normal composite-mode=clip-to-backdrop aux=[ ref=2 color-overlay value=#0057ff  ]
+#id=3 over aux=[ ref=3 glassovertext ]
+#id=4 src-atop aux=[ linear-gradient start-x= start-y= end-x= end-y= star-color= end-color=  ]
+crop
+#id=5 multiply aux=[ ref=5 sinus color1=#ffffff color2=#000000 seed=343  complexity=0.3 ]
+#id=6 multiply aux=[ ref=6 lb:bevel bevel1=49 bevel2=93  ]
+#id=7 id over aux=[ ref=7 lb:innerglow   ]
+#dropshadow x=0 y=0 grow-radius=12 radius=1 opacity=1 color=#ff000b
+#dropshadow
+
 */
+
 
 
 #include "config.h"
@@ -322,7 +341,8 @@ property_double(coloropacity, _("Opacity of Color Overlay"), 0.999)
   ui_steps      (0.01, 0.50)
     ui_meta     ("role", "output-extent")
   ui_meta ("visible", "guichange {strokeshadow}")
-/* This option is hidden via output extent. The right click HTML notation slider on color overlay can change the opacity */
+/* This option is hidden via output extent. The right click HTML notation slider on color overlay can change the opacity
+and it saves space in the GUI. If one day a better GUI comes along I'd like to enable this. */
 
 property_boolean (enableoutline, _("Enable Outline"), FALSE)
   description    (_("Disable or Enable Outline"))
@@ -372,7 +392,8 @@ property_boolean (enableshadow, _("Enable Drop Shadow"), TRUE)
   description    (_("Enable Drop Shadow. This option is hidden via output extent."))
     ui_meta     ("role", "output-extent")
   ui_meta ("visible", "guichange {strokeshadow}")
-/* This option is hidden via output extent. Drop Shadow is always enabled but hidden with 0 opacity. This checkbox actually disables it */
+/* This option is hidden via output extent. Drop Shadow is always enabled but hidden with 0 opacity. This checkbox actually disables it.
+I choose not to use this in GEGL Effects */
 
 property_double (opacity, _("Shadow/Glow Opacity --ENABLE SHADOW/GLOW"), 0.0)
   value_range   (0.0, 0.999)
@@ -445,11 +466,7 @@ property_double (radius1, _("Radius of Bevel"), 2.0)
   ui_steps      (0.01, 0.20)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (osth, _("Bevel's unmodified edge pixel fix"), 0.100)
-  value_range (0.0, 0.1)
-  ui_range (0.0, 0.1)
-  ui_meta ("visible", "guichange {innerglowbevel}")
-    ui_meta     ("role", "output-extent")
+
 
 
 property_double (slideupblack, _("Black Bevel and Image Bevel mode. "), 0.00)
@@ -816,12 +833,6 @@ Unfortunately to enable the extra outline the user has to Enable Extra Outline C
 slide up the opacity slider. It is what it is though inconvient. Users should be greatful that such complex
 text styling is even possible in the first place. */
 
-property_double (extrassgopacity, _("Extra Outline/Shadow/Glow's Opacity "), 0.0)
-  value_range   (0.0, 0.999)
-  ui_steps      (0.01, 0.50)
-  ui_meta ("visible", "guichange {extraosg}")
-    ui_meta     ("role", "output-extent")
-
 
 property_double (xextraoutline, _("Extra Outline/Shadow/Glow Horizontal Distance"), 0.0)
   description   (_("Horizontal shadow offset"))
@@ -1048,7 +1059,6 @@ typedef struct
   GeglNode *nopextrassg;
   GeglNode *behindextrassg;
   GeglNode *extrassg;
-  GeglNode *extrassgopacity;
 /*All nodes relating to extra outline shadow glow end here*/
 
 /*All nodes relating to gradient start here*/
@@ -1263,8 +1273,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many ( state->image, state->saturation, NULL);
       gegl_node_connect_from (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
-      gegl_node_link_many (state->nopextrassg, state->extrassg, state->extrassgopacity, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassgopacity, "output");
+      gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
+      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
       gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
@@ -1295,8 +1305,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many ( state->image, state->saturation, NULL);
       gegl_node_connect_from (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
-      gegl_node_link_many (state->nopextrassg, state->extrassg, state->extrassgopacity, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassgopacity, "output");
+      gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
+      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
       gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
@@ -1330,8 +1340,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many ( state->image, state->saturation, NULL);
       gegl_node_connect_from (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
-      gegl_node_link_many (state->nopextrassg, state->extrassg, state->extrassgopacity, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassgopacity, "output");
+      gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
+      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
       gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
@@ -1362,8 +1372,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many ( state->image, state->saturation, NULL);
       gegl_node_connect_from (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
-      gegl_node_link_many (state->nopextrassg, state->extrassg, state->extrassgopacity, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassgopacity, "output");
+      gegl_node_link_many (state->nopextrassg, state->extrassg,  NULL);
+      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
       gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
@@ -1390,7 +1400,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *mbdopacity, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *hardlight, *screen, *shiny, *microblur, *thinbold, *opacityinput, *xor, *knockoutidref, *beveloff, *extrassg, *nopextrassg, *behindextrassg, *extrassgopacity, *grainmergeimage, *additionimage, *overlayimage, *multiplyimage, *screenimage, *hslcolorimage, *softlightimage, *linearlightimage, *hardlightimage, *lchcolorimage, *hsvhueimage, *grainmergecolor, *additioncolor, *overlaycolor,  *screencolor, *hslcolorcolor, *softlightcolor, *linearlightcolor, *hardlightcolor, *lchcolorcolor, *hsvhuecolor, *nocolor, *solidcolor, *coloropacity, *strokebehind, *nopstrokebehind, *nopdsbehind, *dsbehind, *opacitygradient, *cropcolor, *glassovertext, *glassover, *nopglass, *repairgeglgraph, *hueig;
+  GeglNode *input, *output, *image, *mbd, *mbdopacity, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *hardlight, *screen, *shiny, *microblur, *thinbold, *opacityinput, *xor, *knockoutidref, *beveloff, *extrassg, *nopextrassg, *behindextrassg, *grainmergeimage, *additionimage, *overlayimage, *multiplyimage, *screenimage, *hslcolorimage, *softlightimage, *linearlightimage, *hardlightimage, *lchcolorimage, *hsvhueimage, *grainmergecolor, *additioncolor, *overlaycolor,  *screencolor, *hslcolorcolor, *softlightcolor, *linearlightcolor, *hardlightcolor, *lchcolorcolor, *hsvhuecolor, *nocolor, *solidcolor, *coloropacity, *strokebehind, *nopstrokebehind, *nopdsbehind, *dsbehind, *opacitygradient, *cropcolor, *glassovertext, *glassover, *nopglass, *repairgeglgraph, *hueig;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -1531,8 +1541,9 @@ additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel",
+                                  "operation", "lb:bevel", "th", 0.100,
                                   NULL);
+ /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
   mbdopacity = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity",
@@ -1726,11 +1737,6 @@ behindextrassg = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
 
-/*This nop was once a function that was disabled. zzstrokebevelimags opacity caused problems for a technical reason so I had to make an extra opacity meter*/
-  extrassgopacity = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
 /* All nodes relating to Extra Outline, Shadw Glow end here*/
 
 /* All nodes relating to image file overlay begin here*/
@@ -1869,7 +1875,6 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "osradius", stroke, "radius1");
   gegl_operation_meta_redirect (operation, "osbevel", stroke, "bevel1");
   gegl_operation_meta_redirect (operation, "osbevelopacity", stroke, "opacitybevel");
-  gegl_operation_meta_redirect (operation, "osth", stroke, "th");
   gegl_operation_meta_redirect (operation, "ossrc", stroke, "src");
   gegl_operation_meta_redirect (operation, "specialoutline", stroke, "specialoutline");
   gegl_operation_meta_redirect (operation, "oshue", stroke, "hue");
@@ -1960,7 +1965,6 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "osdepthextra", extrassg, "bevel2");
   gegl_operation_meta_redirect (operation, "osradiusextra", extrassg, "radius1");
   gegl_operation_meta_redirect (operation, "osbevelextra", extrassg, "bevel1");
-  gegl_operation_meta_redirect (operation, "extrassgopacity", extrassgopacity, "value");
   /*End of Extra Outline Shadow Glow's GUI asociations*/
 
   /*Beginning of Knock Out Text's GUI asociations*/
@@ -2100,7 +2104,6 @@ drop shadow is applied in a gegl graph below them.*/
   state->extrassg = extrassg;
   state->behindextrassg = behindextrassg;
   state->nopextrassg = nopextrassg;
-  state->extrassgopacity = extrassgopacity;
   /*All Nodes relating extra outline shadow glow end here*/
 
   /*All Nodes relating knock out text start here*/
@@ -2141,7 +2144,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Continual Version"),
     "categories",  "Generic",
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. June 10th 2023 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. June 24th 2023 Stable Build "
                      ""),
     NULL);
 }

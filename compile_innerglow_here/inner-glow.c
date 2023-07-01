@@ -19,6 +19,12 @@
 
 /*GEGL Inner Glow is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
 
+/*
+Recreation of Inner Glow's GEGL Graph. May not be 100% accurate but you can test it without installing this way.
+
+id=0 src-in aux=[ ref=0 id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true     aux=[ ref=1 ] color-overlay value=#000000 dropshadow x=0 y=0 grow-radius=3 radius=3 color-overlay value=#ff0000  ]
+median-blur radius=3 alpha-percentile=94 */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
@@ -26,14 +32,10 @@
 
 
 /*This is GEGL syntax I wrote. Its operation is gegl:gegl and it represents a GEGL Graph inside a GEGL Graph. */
-#define TUTORIAL \
+#define GRAPHUSEDBYINNERGLOW \
 "   id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true     aux=[ ref=1 ] color-overlay value=#000000   n"\
 
-
-property_string (string, _("Invert Transparency"), TUTORIAL)
-    ui_meta     ("role", "output-extent")
-/*The GEGL Graph is being called here*/
-
+/*On June 24 2023 I finally figured out how to bake in GEGL Graphs*/
 
 /*This is an enum list for the base shape of inner stroke/shadow/glow. It should not be renamed.*/
 enum_start (gegl_dropshadow_grow_shapeig)
@@ -123,8 +125,9 @@ static void attach (GeglOperation *operation)
 
 
   it    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gegl",
+                                  "operation", "gegl:gegl", "string", GRAPHUSEDBYINNERGLOW,
                                   NULL);
+/*On June 24 2023 I finally figured out how to bake in GEGL Graphs*/
 
   in    = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-in",

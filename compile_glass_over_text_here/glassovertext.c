@@ -19,6 +19,25 @@
 
 /*GEGL Glass Over Text was once just a stand alone plugin, but now it is also part of GEGL Effects. The stand alone version still exist and does more then the GEGL Effects implementation of it. */
 
+
+/*
+GEGL Graph Below
+ */
+
+/*
+color-overlay  value=#ffffff
+gaussian-blur std-dev-x=1 std-dev-y=1
+emboss azimuth=44 depth=29 
+id=1
+gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]  crop  color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]
+color-overlay value=#ffffff
+gaussian-blur std-dev-x=0 std-dev-y=0
+ */
+
+
+/*GEGL Graph here. NOTE FOR DEVS replacing"gimp:layer-mode layer-mode=erase with gegl:xor does not work proper. I tried and you can try it too and watch it fail. GEGL blend modes are not as good as 
+Gimp blend modes  */
+
 #include "config.h"
 #include <glib/gi18n-lib.h>
 
@@ -52,28 +71,10 @@ property_boolean (enableglasstext, _("Enable Glass on Text for GEGL Effects"), T
 /*     ui_meta     ("role", "output-extent") hides this from showing up in the GUI */
 
 
-/*
-GEGL Graph Below
- */
-
-/*
-color-overlay  value=#ffffff
-gaussian-blur std-dev-x=1 std-dev-y=1
-emboss azimuth=44 depth=29 
-id=1
-gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]  crop  color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]
-color-overlay value=#ffffff
-gaussian-blur std-dev-x=0 std-dev-y=0
- */
 
 
-/*GEGL Graph here. NOTE FOR DEVS replacing"gimp:layer-mode layer-mode=erase with gegl:xor does not work proper. I tried and you can try it too and watch it fail. GEGL blend modes are not as good as 
-Gimp blend modes  */
-property_string (string, _("Graph"), TUTORIAL)
-    ui_meta     ("role", "output-extent")
 
-
-#define TUTORIAL \
+#define TUTORIALGLASSTEXT \
 " id=1 gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]  crop  color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]  "\
 
 property_double (azimuth, _("Azimuth"), 30.0)
@@ -194,7 +195,7 @@ GeglProperties *o = GEGL_PROPERTIES (operation);
                                   NULL);
 
   string = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gegl",
+                                  "operation", "gegl:gegl", "string", TUTORIALGLASSTEXT,
                                   NULL);
 
   hyperopacity = gegl_node_new_child (gegl,
@@ -225,7 +226,6 @@ GeglProperties *o = GEGL_PROPERTIES (operation);
   glassover = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-in",
                                   NULL);
-
 
 glasslinearlight = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);

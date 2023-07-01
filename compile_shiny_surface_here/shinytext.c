@@ -17,7 +17,8 @@
  * GEGL Shiny Text for GEGL Effects CE- Beaver 2023
  */
 
-/*Shiny Text is a hidden operations for GEGL Effects. The goal is to eventually bake it inside GEGL Effects and get rid of this hidden operation. */
+/*Shiny Text is a hidden operations for GEGL Effects. It is literally just gegl:sinus done in a special setting with a disable checkbox.
+ The goal is to eventually bake it inside GEGL Effects and get rid of this hidden operation. */
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
