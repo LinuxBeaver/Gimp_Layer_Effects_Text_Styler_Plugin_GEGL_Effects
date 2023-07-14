@@ -1,4 +1,4 @@
-project('bevel', 'c',
+project('bevel_bump', 'c',
   version : '0.1',
   license : 'GPL-3.0-or-later')
 
@@ -10,7 +10,7 @@ gegl = dependency('gegl-0.3', required : false)
 if not gegl.found()
     gegl = dependency('gegl-0.4')
 endif
-shlib = shared_library('bevel', 'bevel.c', 'config.h',
+shlib = shared_library('bevel', 'bevel_bump.c', 'config.h',
   c_args : lib_args,
   dependencies : gegl,
   name_prefix : '',
