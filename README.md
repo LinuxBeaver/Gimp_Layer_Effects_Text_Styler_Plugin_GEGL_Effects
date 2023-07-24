@@ -120,6 +120,8 @@ ninja -C build
 
 ![image preview](/Image_previews/continual_pink.png    )
 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/69cacb6a-04e5-4539-b245-1b99857a4403)
+
 
 ![image preview](/Image_previews/flatpak2.png    )
 
