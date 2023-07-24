@@ -485,7 +485,7 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:zzstrokebevelimage",
+    "name",        "lb:zzstrokebevelimage",
     "title",       _("Hidden Operation to bevel and image file overlay a stroke for GEGL Effects. GEGL Effects will not work at all without this hidden operation."),
     "categories",  "hidden",
     "reference-hash", "33234v25str2ac",

@@ -289,11 +289,12 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:glassovertext",
+    "name",        "lb:glassovertext",
     "title",       _("Glass Over Text"),
-    "categories",  "Artistic",
     "reference-hash", "stglass238a5125700fc254001b2ac",
     "description", _("Glass Over Text Effect - Filter expects user to place effect on layer above or use the normal blend mode. It may even be a good idea to experiment with other blend modes."),
+    "gimp:menu-path", "<Image>/Filters/Text Styling",
+    "gimp:menu-label", _("Glass over text (to blend)..."),
     NULL);
 }
 

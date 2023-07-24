@@ -283,7 +283,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:shinytext",
+    "name",        "lb:shinytext",
     "title",       _("Shiny Text"),
     "categories",  "hidden",
     "reference-hash", "sglosa28a5125700fc254001b2ac",

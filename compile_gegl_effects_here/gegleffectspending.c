@@ -476,10 +476,28 @@ property_double (slideupblack, _("Black Bevel and Image Bevel mode. "), 0.00)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
+
 property_double (bevelopacity, _("Bevel's Opacity"), 0.999)
   value_range   (0.15, 0.999)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
+
+
+property_enum (typebevel, _("Type of Bevel"),
+    GeglBlendModeTypebeavbeveleffects, gegl_blend_mode_typebeavbeveleffects,
+    GEGL_BEVEL_NORMAL)
+  description (_("Change between normal bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from normal bevel. "))
+  ui_meta ("visible", "guichange {innerglowbevel}")
+
+enum_start (gegl_blend_mode_typebeavbeveleffects)
+  enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
+              N_("Normal Bevel"))
+  enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
+              N_("Sharp Bevel"))
+enum_end (GeglBlendModeTypebeavbeveleffects)
+
+
+
 
 property_enum (blendmodebevel2, _("Select blend or Enable/Disable Bevel"),
     GeglBlendModeTypezz, gegl_blend_mode_type_effectszz,
@@ -1247,6 +1265,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     case GEGL_BLEND_MODE_TYPE_LCHCOLORG: atopg = state->lchcolorg; break;
 
   }
+
+
        /* Second full Node listing. (contains four GEGL graphs for each checkbox) Nodes must be listed in proper orders. This is the GEGL Graph */
   if (o->innerglow)
   {
@@ -1413,7 +1433,7 @@ static void attach (GeglOperation *operation)
 gegl effects use to use the default drop shadow until Beaver realized that the only way to give GEGL Effects styles seen in Adobe's layer effects was to abandon gegl:dropshadow and
 make a enhanced version of it. */
   stroke = gegl_node_new_child (gegl,
-                                  "operation", "gegl:zzstrokebevelimage",
+                                  "operation", "lb:zzstrokebevelimage",
                                   NULL);
 
 strokebehind = gegl_node_new_child (gegl,
@@ -1435,7 +1455,7 @@ strokebehind = gegl_node_new_child (gegl,
 gegl effects use to use the default drop shadow until Beaver realized that the only way to give GEGL Effects styles seen in Adobe's layer effects was to abandon gegl:dropshadow and
 make a enhanced version of it. */
   ds = gegl_node_new_child (gegl,
-                                  "operation", "gegl:zzstrokebevelimage",
+                                  "operation", "lb:zzstrokebevelimage",
                                   NULL);
 
 dsbehind = gegl_node_new_child (gegl,
@@ -1541,7 +1561,7 @@ additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", "th", 0.100,
+                                  "operation", "lb:bevel", "th", 0.100, 
                                   NULL);
  /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
@@ -1726,7 +1746,7 @@ lchcolorg = gegl_node_new_child (gegl,
 gegl effects use to use the default drop shadow until Beaver realized that the only way to give GEGL Effects styles seen in Adobe's layer effects was to abandon gegl:dropshadow and
 make a enhanced version of it. */
 extrassg = gegl_node_new_child (gegl,
-                                  "operation", "gegl:zzstrokebevelimage",
+                                  "operation", "lb:zzstrokebevelimage",
                                   NULL);
 
 behindextrassg = gegl_node_new_child (gegl,
@@ -1804,7 +1824,7 @@ additionimage = gegl_node_new_child (gegl,
 
   /*This is the hidden operation shiny text. Which is literally gegl:sinus on a specific setting, with a blend mode switcher and checkbox. */
   shiny = gegl_node_new_child (gegl,
-                                  "operation", "gegl:shinytext",
+                                  "operation", "lb:shinytext",
                                   NULL);
 
   microblur = gegl_node_new_child (gegl,
@@ -1829,7 +1849,7 @@ drop shadow is applied in a gegl graph below them.*/
 
   /* All nodes relating to glass on text begin here */
   glassovertext = gegl_node_new_child (gegl,
-                                  "operation", "gegl:glassovertext",
+                                  "operation", "lb:glassovertext",
                                   NULL);
 
 
@@ -1891,6 +1911,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "slideupblack", mbd, "slideupblack");
   gegl_operation_meta_redirect (operation, "bevelopacity", mbdopacity, "value");
   gegl_operation_meta_redirect (operation, "th", mbd, "th");
+  gegl_operation_meta_redirect (operation, "typebevel", mbd, "type");
   /*End of Bevel's GUI asociations*/
 
   /*Beginning of Image file Overlay's GUI asociations*/
@@ -2141,11 +2162,12 @@ gegl_op_class_init (GeglOpClass *klass)
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "gegl:layereffectscontinual",
-    "title",       _("GEGL Effects Continual Version"),
-    "categories",  "Generic",
+    "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. June 24th 2023 Stable Build "
+    "description", _("GEGL text styling and specialty image outlining filter. July 22th 2023 Stable Build"
                      ""),
+    "gimp:menu-path", "<Image>/Filters/Text Styling",
+    "gimp:menu-label", _("GEGL Effects CE..."),
     NULL);
 }
 
