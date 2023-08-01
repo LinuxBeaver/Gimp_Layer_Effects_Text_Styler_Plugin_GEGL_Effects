@@ -135,11 +135,11 @@ property_double (stroke, _("Grow radius"), 12.0)
   description (_("The distance to expand the shadow before blurring; a negative value will contract the shadow instead"))
 
 
-property_double (opacity, _("Opacity"), 1)
+property_double (opacity, _("Opacity"), 1.0)
   value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.10)
 
-property_double (opacitybevel, _("Opacity Bevel Outline"), 1)
+property_double (opacitybevel, _("Opacity Bevel Outline"), 1.0)
   value_range   (0.2, 1.0)
   ui_steps      (0.01, 0.10)
 

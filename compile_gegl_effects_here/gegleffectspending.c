@@ -22,7 +22,7 @@
 
 To help future devs I will list predicted scenarios that I believe will lead to GEGL effects or any of my plugins breaking compatibility with future versions of Gimp. 
 --
-First example of how GEGL effects can and eventually break is if Gimp team adds new blend modes. 
+1st example of how GEGL effects can and eventually break is if Gimp team adds new blend modes that will over ride "operation", "gimp:layer-mode", "layer-mode", #,
 
 In Example, Gimp's Split blend mode is 60
 
@@ -30,12 +30,12 @@ split = gegl_node_new_child (gegl,
 "operation", "gimp:layer-mode", "layer-mode", 60,
 "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
 
-If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number.
+If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number. 
 
-Resulting in a scenario where all my plugins will not work (by using the wrong blend mode) until the number 60 is changed to 61 or 59. (we'll have to figure it out when it happens).
+Resulting in a scenario where all my plugins will not work (by using the wrong blend mode) until the number 60 is changed to 61 or 59. (we'll have to figure it out when it happens) but I'll guess 61.
 All Gimp exclusive blend modes will have to be updated when this happens. That will break a ton of my plugins but the fix should be trivial.
 --
-The second most common reason GEGL Effects will break is if a GEGL operation changes its value. In example gaussian blur's values are
+The second most common reason GEGL Effects will break is if a GEGL operation changes its properties. In example gaussian blur's values are
 
 gaussian-blur std-dev-x=30  std-dev-y=30
 
@@ -54,6 +54,8 @@ The fourth most common scenario is if Gimp's team adds a new filter that has the
 then the title and or gegl operation of name of one mf my plugins; example "gegl:bevel" would have to change to "bevel2" everywhere in my codebase
 where it is used. 
 
+The fifth is if the namespace gegl: is blocked (for GEGL only) and the namespace lb: gets disallowed for being too short, changing it to a new namespace will fix things for sure.
+
 
 Crude recreation of parts of GEGL Effects graph. This just shows how the nodes are ordered. They are many things missing and I can't possibly list all the options. 
 DropShadow is used in place of the hidden operation. REQUIRES lb:bevel and lb:innerglow
@@ -64,11 +66,11 @@ id=1
 #src-atop aux=[ ref=1 layer src=image_link_here.jpg ]
 id=2
 #gimp:layer-mode layer-mode=normal composite-mode=clip-to-backdrop aux=[ ref=2 color-overlay value=#0057ff  ]
-#id=3 over aux=[ ref=3 glassovertext ]
 #id=4 src-atop aux=[ linear-gradient start-x= start-y= end-x= end-y= star-color= end-color=  ]
 crop
 #id=5 multiply aux=[ ref=5 sinus color1=#ffffff color2=#000000 seed=343  complexity=0.3 ]
 #id=6 multiply aux=[ ref=6 lb:bevel bevel1=49 bevel2=93  ]
+#id=3 over aux=[ ref=3 glassovertext ]
 #id=7 id over aux=[ ref=7 lb:innerglow   ]
 #dropshadow x=0 y=0 grow-radius=12 radius=1 opacity=1 color=#ff000b
 #dropshadow
@@ -87,13 +89,13 @@ enum_start (gegl_blend_mode_type_effectszzbevoutlinege)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYGE,      "MultiplyGE",
               N_("Multiply"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEGE,      "GrainMergeGE",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_SHINYGMGE,      "GrainMergealtGE",
-              N_("GrainMergeAlt"))
+              N_("Grain Merge Alt"))
   enum_value (GEGL_BLEND_MODE_TYPE_COLORDODGEGE,      "ColorDodgeGE",
-              N_("ColorDodge"))
+              N_("Color Dodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE,      "DisableBevelGE",
               N_("Outline Bevel Off"))
 enum_end (GeglBlendModeTypezzbevoutlinege)
@@ -104,13 +106,13 @@ enum_start (gegl_blend_mode_type_effectszzbevoutlinegeextra)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYGEextra,      "MultiplyGE",
               N_("Multiply"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEGEextra,      "GrainMergeGE",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_SHINYGMGEextra,      "GrainMergealtGE",
-              N_("GrainMergeAlt"))
+              N_("Grain Merge Alt"))
   enum_value (GEGL_BLEND_MODE_TYPE_COLORDODGEGEextra,      "ColorDodgeGE",
-              N_("ColorDodge"))
+              N_("Color Dodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGEextra,      "HardLightGE",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_DISABLEBEVELGEextra,      "DisableBevelGE",
               N_("Outline Bevel Off"))
 enum_end (GeglBlendModeTypezzbevoutlinegeextra)
@@ -121,17 +123,17 @@ enum_start (gegl_blend_mode_type_effectszz)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLY,      "Multiply",
               N_("Multiply Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGE,      "GrainMerge",
-              N_("GrainMerge Bevel"))
+              N_("Grain Merge Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_SHINYGM,      "GrainMergealt",
               N_("GrainMergeAlt Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_SUBTRACT,      "Subtract",
               N_("Subtract Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACT,      "GrainExtract",
-              N_("GrainExtract Bevel"))
+              N_("Grain Extract Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_COLORDODGE,      "ColorDodge",
-              N_("ColorDodge Bevel"))
+              N_("Color Dodge Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHT,      "HardLight",
-              N_("HardLight Bevel"))
+              N_("Hard Light Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_SCREEN,      "Screen",
               N_("Screen Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_BEVELOFF,      "BevelOff",
@@ -143,39 +145,39 @@ enum_end (GeglBlendModeTypezz)
 /*This is the enum list of blend modes for Inner Glow.*/
 enum_start (gegl_blend_mode_type_effectsigzz)
   enum_value (GEGL_BLEND_MODE_TYPE_OVER,      "Over",
-              N_("Over"))
+              N_("Normal"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEIG,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITION,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTIG,      "Softlight",
-              N_("Softlight"))
+              N_("Soft Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_SCREENIG,      "Screen",
               N_("Screen"))
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYIG,      "Multiply",
               N_("Multiply"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORIG,      "HSLColor",
-              N_("HSLColor"))
+              N_("HSL Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYIG,      "Overlay",
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG,      "LinearLight",
-              N_("LinearLight"))
+              N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTIG,      "HardLight",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_BURNIG,      "Burn",
               N_("Burn"))
   enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORIG,      "LCHColor",
-              N_("LCHColor"))
+              N_("LCh Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_HUEIG,      "Hue",
-              N_("Hue"))
+              N_("HSV Hue"))
 enum_end (GeglBlendModeTypeigzz)
 
 /*This is the enum list of blend modes for Gradient.*/
 enum_start (gegl_blend_mode_type_effectsgzz)
   enum_value (GEGL_BLEND_MODE_TYPE_ATOPG,      "Over",
-              N_("Over"))
+              N_("Normal"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEG,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONG,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTG,      "Softlight",
@@ -189,23 +191,23 @@ enum_start (gegl_blend_mode_type_effectsgzz)
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYG,      "Overlay",
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTG,      "LinearLight",
-              N_("LinearLight"))
+              N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSVHUEG,      "HSVHue",
-              N_("HSVHue"))
+              N_("HSV Hue"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTG,      "HardLight",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_BURNG,      "Burn",
               N_("Burn"))
   enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORG,      "LCHColor",
-              N_("LCHColor"))
+              N_("LCh Color"))
 enum_end (GeglBlendModeTypegzz)
 
 /*This is the enum list of blend modes for Image File Overlay.*/
 enum_start (gegl_blend_mode_type_effectsgzzimage)
   enum_value (GEGL_BLEND_MODE_TYPE_NORMALIMAGE,      "NormalImage",
-              N_("NormalImage"))
+              N_("Normal Image"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEIMAGE,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONIMAGE,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTIMAGE,      "Softlight",
@@ -215,17 +217,17 @@ enum_start (gegl_blend_mode_type_effectsgzzimage)
   enum_value (GEGL_BLEND_MODE_TYPE_MULTIPLYIMAGE,      "Multiply",
               N_("Multiply"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORIMAGE,      "HSLColor",
-              N_("HSLColor"))
+              N_("HSL Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYIMAGE,      "Overlay",
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTIMAGE,      "LinearLight",
-              N_("LinearLight"))
+              N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTIMAGE,      "HardLight",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORIMAGE,      "LCHColor",
-              N_("LCHColor"))
+              N_("LCh Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSVHUEIMAGE,      "HSVHue",
-              N_("HSVHue"))
+              N_("HSV Hue"))
 enum_end (GeglBlendModeTypegzzimage)
 
 /*This is the enum list of blend modes for Color Overlay*/
@@ -235,25 +237,25 @@ enum_start (gegl_blend_mode_type_effectsgzzcolor)
   enum_value (GEGL_BLEND_MODE_TYPE_SOLIDCOLOR,      "SolidColor",
               N_("Solid Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGECOLOR,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONCOLOR,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_SOFTLIGHTCOLOR,      "Softlight",
-              N_("Softlight"))
+              N_("Soft Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_SCREENCOLOR,      "Screen",
               N_("Screen"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSLCOLORCOLOR,      "HSLColor",
-              N_("HSLColor"))
+              N_("HSL Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYCOLOR,      "Overlay",
               N_("Overlay"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTCOLOR,      "LinearLight",
-              N_("LinearLight"))
+              N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTCOLOR,      "HardLight",
-              N_("HardLight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_LCHCOLORCOLOR,      "LCHColor",
-              N_("LCHColor"))
+              N_("LCh Color"))
   enum_value (GEGL_BLEND_MODE_TYPE_HSVHUECOLOR,      "HSVHue",
-              N_("HSVHue"))
+              N_("HSV Hue"))
   enum_value (GEGL_BLEND_MODE_TYPE_NOCOLOR,      "NoColor",
               N_("No Color"))
 enum_end (GeglBlendModeTypegzzcolor)
@@ -275,11 +277,11 @@ enum_end (GeglstrokeGrowShapeszzextra)
 /*This is the enum list of shiny text's blend mode switcher.*/
 enum_start (gegl_blend_mode_typeshinegeffects)
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEALTSHINE,      "GrainMergeAlt",
-              N_("GrainMergeAlt"))
+              N_("Grain MergeAlt"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGESHINE,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTSHINE,      "Hardlight",
-              N_("Hardlight"))
+              N_("Hard Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONSHINE,      "Addition",
               N_("Addition"))
   enum_value (GEGL_BLEND_MODE_TYPE_REPLACESHINE, "Replace",
@@ -290,11 +292,11 @@ ui_meta ("visible", "guichange {miscoptions}")
 /*This is the enum list of glass text's blend mode switcher.*/
 enum_start (gegl_blend_mode_type_glass)
   enum_value (GEGL_BLEND_MODE_TYPE_GLASSOVER,      "GlassOver",
-              N_("GlassOver"))
+              N_("Normal"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEGLASS,      "GrainMerge",
-              N_("GrainMerge"))
+              N_("Grain Merge"))
   enum_value (GEGL_BLEND_MODE_TYPE_LINEARLIGHTGLASS,      "LinearLight",
-              N_("LinearLight"))
+              N_("Linear Light"))
   enum_value (GEGL_BLEND_MODE_TYPE_SUBTRACTGLASS,      "Subtract",
               N_("Subtract"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYGLASS, "Overlay",
@@ -1273,7 +1275,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->cropcolor, state->nopglass,  state->glassover,   state->nopg, atopg,  state->crop, state->shiny, state->nopb, bevelmode, state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->cropcolor,  state->nopg, atopg,  state->crop, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
@@ -1308,7 +1310,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop, state->nopglass, state->glassover,  state->shiny, state->nopb, bevelmode, state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
@@ -1343,7 +1345,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->cropcolor, state->nopglass,  state->glassover,  state->nopg, atopg, state->crop, state->shiny, state->nopb, bevelmode, state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->cropcolor,  state->nopg, atopg, state->crop, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
@@ -1378,7 +1380,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop, state->nopglass,  state->glassover,  state->shiny, state->nopb, bevelmode, state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
@@ -1648,7 +1650,7 @@ hslcolorig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, NULL);
 
 softlightig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0,  NULL);
 
 linearlightig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
@@ -1841,8 +1843,6 @@ A median blur at zero radius is confirmed to make no changes to an image.
 This option resets gegl:opacity's value to prevent a known bug where
 plugins like clay, glossy balloon and custom bevel glitch out when
 drop shadow is applied in a gegl graph below them.*/
- 
- 
  
 
   /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them end here  */
@@ -2159,12 +2159,12 @@ gegl_op_class_init (GeglOpClass *klass)
 
   operation_class->attach = attach;
   operation_meta_class->update = update_graph;
-
+ /*btw, if GEGL Effects (or any of my plugins) ever breaks try changing the name space from gegl: or lb: to something else.*/
   gegl_operation_class_set_keys (operation_class,
     "name",        "gegl:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. July 22th 2023 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. August 1st 2023 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),

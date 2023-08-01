@@ -26,10 +26,10 @@
 #ifdef GEGL_PROPERTIES
 
 
-property_double (opacity, _("Opacity of Gloss Shine"), 1)
+property_double (opacity, _("Opacity of Gloss Shine"), 1.0)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
-    value_range (0.100, 1)
-    ui_range    (0.1, 1)
+    value_range (0.100, 1.0)
+    ui_range    (0.1, 1.0)
 
 
 
