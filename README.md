@@ -8,11 +8,12 @@ If you already have any or most of these binaries overide all of them with the l
 
 **Preconfigured Windows Binaries can be found here** (over write anything that you already have)
 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual---Experimental-update-that-calls-other-major-Gimp-plugins/Windows_Binaries
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_12_2023_Windows_Binaries.zip
+
 
 **Preconfigured Linux Binaries can be found here** (over write anything that you already have)
 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual---Experimental-update-that-calls-other-major-Gimp-plugins/Linux_Binaries
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/2407e2c2cc75155724786582a0ff102069b4de26/GEGL_Effects_aug_12_2023_Linux_Binaries.zip
 
 **Building From Source is easy** 
 
