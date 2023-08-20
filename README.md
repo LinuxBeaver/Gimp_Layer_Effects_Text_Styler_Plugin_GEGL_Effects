@@ -6,6 +6,15 @@ To example things simple. GEGL Effects got an update that allows it to use most 
 
 If you already have any or most of these binaries overide all of them with the latest version.
 
+**Preconfigured Windows Binaries can be found here** (over write anything that you already have)
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual---Experimental-update-that-calls-other-major-Gimp-plugins/Windows_Binaries
+
+**Preconfigured Linux Binaries can be found here** (over write anything that you already have)
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual---Experimental-update-that-calls-other-major-Gimp-plugins/Linux_Binaries
+
+**Building From Source is easy** 
+Just click the build_everything for your OS. On Windows you will need MySys2. If correctly done a folder called "LinuxBinaries" or "WindowsBinaries" will be generated with all 19 binaries needed for this special branch of GEGL Effects CE.
+
 ## Image previews of this special branch of GEGL Effects using my major text stylers.
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ad8df18b-a116-4984-b18c-9c0124328e44)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/45a13adb-d4b7-4af8-9d8f-5c334db37453)
