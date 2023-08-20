@@ -1,10 +1,23 @@
-If you want this plugin in Gimp officially show support here.
-https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
+**THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE** 
 
-Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/Continual_July22_2023
+It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. This version of GEGL Effects needs to overwrite normal GEGL Effects CE, they cannot co-exist. This branch is assumed stable. 
 
-After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. 
+To example things simple. GEGL Effects got an update that allows it to use most of my other individual text styling plugins. You can run plugins of mine like "Glossy Balloon" "Custom Bevel" and "Sharp Bevel " inside GEGL Effects.  After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. If you use Gimp 2.99 you will find it in the main menu under filters>text styling.
+
+If you already have any or most of these binaries overide all of them with the latest version.
+
+## Image previews of this special branch of GEGL Effects using my major text stylers.
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ad8df18b-a116-4984-b18c-9c0124328e44)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/45a13adb-d4b7-4af8-9d8f-5c334db37453)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/8fbde507-b0c7-4d8b-b79f-0adb6b721f77)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/9a28c803-459a-4ef5-b999-c90b6745d7b9)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/73c1392e-6d3f-4f3a-b328-3ed4bd916953)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/fbe71ca3-536e-46bb-a4da-af65c105a1d3)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/10e87a77-622c-433f-b3bf-d1fe299fbc77)
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/636834c7-0932-4259-a880-151eb38a0e51)
+
+
+## EVERYTHING BELOW IS WHAT YOU WOULD FIND ON THE PAGE OF GEGL EFFECTS CE
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
@@ -25,10 +38,9 @@ If you choose not to use prebuilt binaries. You must compile innerglow, glassove
 This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 
-You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
-In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
+You are expected to also download all 19 binaries in the zip folder for this plugin to work.
 
-This plugin will work alongside a special legacy version of GEGL Effects as seen here.
+This plugin will work alongside a special legacy version of GEGL Effects as seen here, but it will **NOT** co-exist with normal continual edition
 
 ![image preview](coexisting_plugins.jpg  )
 
@@ -108,8 +120,6 @@ ninja -C build
 6. You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
 7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. (WE NOW HAVE AN EXTRA OUTLINE TO DO FOUR OUTLINES)
-
-
 
 ### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
 ----------------
