@@ -34,11 +34,12 @@ Just click the build_everything for your OS. On Windows you will need MySys2. If
 
 ## GEGL Effects CE by Beaver
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
+GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. The many stand alone filters that GEGL Effects ships with do a lot more on their own then in GEGL Effects.
 
 ## Instructions 
 
-If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
+If you choose not to use prebuilt binaries. You must compile everything and this can be easily done by clicking on build_everything_Linux or build_everything_windows using mysys2.
+https://www.msys2.org/
 
 
 ## About CE
@@ -72,7 +73,9 @@ Linux (Flatpak) `/home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
 
 
-## Compiling and Installing
+## Compiling and Installing (EVEN MORE MANUALLY BY NOT USING THE CLICK TO INSTALLL)
+
+To compile manually without my script, visit each indiviudal filters folder and run these bash commands.
 
 ### Linux
 
