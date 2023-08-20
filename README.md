@@ -1,4 +1,4 @@
-**THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE** 
+**THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE it cannot co-exist with default GEGL Effects CE.** 
 
 It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text. This version of GEGL Effects needs to overwrite normal GEGL Effects CE, they cannot co-exist. This branch is assumed stable. 
 
