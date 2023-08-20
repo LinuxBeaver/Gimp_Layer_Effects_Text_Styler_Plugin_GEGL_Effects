@@ -28,7 +28,7 @@ Just click the build_everything for your OS. On Windows you will need MySys2. If
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/636834c7-0932-4259-a880-151eb38a0e51)
 
 
-## EVERYTHING BELOW IS WHAT YOU WOULD FIND ON THE PAGE OF GEGL EFFECTS CE
+## EVERYTHING BELOW IS WHAT YOU WOULD FIND ON THE PAGE OF GEGL EFFECTS CE AND IS STILL RELEVANT.
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
