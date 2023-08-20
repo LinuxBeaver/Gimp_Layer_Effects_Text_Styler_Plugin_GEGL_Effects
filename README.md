@@ -8,6 +8,9 @@ After putting the binaries in the instructed place restart Gimp and go to GEGL O
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c6874a65-d761-4994-96a4-2e46b996b07a)
+
+
 ## GEGL Effects CE by Beaver
 
 GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
@@ -19,7 +22,7 @@ If you choose not to use prebuilt binaries. You must compile innerglow, glassove
 
 ## About CE
 
-This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that i recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
+This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 
 You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
@@ -28,7 +31,6 @@ In total you should have, gegleffectspending, glassovertext, shinytext, zzstroke
 This plugin will work alongside a special legacy version of GEGL Effects as seen here.
 
 ![image preview](coexisting_plugins.jpg  )
-
 
 
 ## Directories to put binaries and info
@@ -46,6 +48,7 @@ Linux (Flatpak) `/home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
 *note - Windows users may need to create the plug-ins folder if it doesn't exist.
 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c1803c39-c55c-4c5c-8084-fcb01f29adf2)
 
 
 
@@ -94,13 +97,13 @@ ninja -C build
 
 2b. You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never present.
 
-2c. You must slide bevel depth up to use most of the bevel option. Sliding it down again hides it as if it were never present. (THIS IS NOT RELEVANT ANYMORE)
+2c. To use Bevel enable it from the "select blend or enable/disable bevel" from the drop down list.
 
 3. Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter.
 
-4. Bevel lighting angle is on 90 by default which is not an interesting option so consider tweaking it. (THIS IS NOT RELEVANT ANYMORE)
+4. Bevel has many blend modes that do many different things and a black/image bevel mode if the text is dark or has an image file overlay.
 
-5. Inner Glow and Gradient Overlay have checkboxes to enable them. Inner Glow will slow down GEGL Effects unless you have a really powerful machine.
+5. Inner Glow and Gradient Overlay have checkboxes to enable them.
 
 6. You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
 
@@ -116,7 +119,8 @@ ninja -C build
 
 ![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
 
-![image preview](/Image_previews/changes_bevel_outline_and_.image_overlay.png   )
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/095a8919-05e7-4453-95ed-647e885a1997)
+
 
 ![image preview](/Image_previews/continual_pink.png    )
 
