@@ -11,7 +11,6 @@ If you already have any or most of these binaries overide all of them with the l
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/45a13adb-d4b7-4af8-9d8f-5c334db37453)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/8fbde507-b0c7-4d8b-b79f-0adb6b721f77)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/9a28c803-459a-4ef5-b999-c90b6745d7b9)
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/73c1392e-6d3f-4f3a-b328-3ed4bd916953)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/fbe71ca3-536e-46bb-a4da-af65c105a1d3)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/10e87a77-622c-433f-b3bf-d1fe299fbc77)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/636834c7-0932-4259-a880-151eb38a0e51)
