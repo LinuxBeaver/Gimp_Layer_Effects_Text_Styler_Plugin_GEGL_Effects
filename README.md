@@ -1,6 +1,6 @@
 **THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE** 
 
-It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. This version of GEGL Effects needs to overwrite normal GEGL Effects CE, they cannot co-exist. This branch is assumed stable. 
+It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text. This version of GEGL Effects needs to overwrite normal GEGL Effects CE, they cannot co-exist. This branch is assumed stable. 
 
 To example things simple. GEGL Effects got an update that allows it to use most of my other individual text styling plugins. You can run plugins of mine like "Glossy Balloon" "Custom Bevel" and "Sharp Bevel " inside GEGL Effects.  After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. If you use Gimp 2.99 you will find it in the main menu under filters>text styling.
 
