@@ -138,8 +138,8 @@ ninja -C build
 
 ![image preview](/Image_previews/innerglow_promo.png    )
 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/b8db02a5-8e4c-4c5e-8068-1c4be09f9209)
 
-![image preview](/Image_previews/bevel.png    )
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
@@ -149,4 +149,10 @@ If you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enu
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
 presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a build of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing.
 
+## Experimental branch that is stable (but complicated)
 
+GEGL Effects CE has an experimental branch here with that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects or the experimental branch. 
+![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/08f27b9c-7282-4d68-9332-f11ab32950e6)
+
+
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual-Experimental-update
