@@ -2247,7 +2247,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "lsangle", extrusions, "angle");
   gegl_operation_meta_redirect (operation, "lslength", extrusions, "length"); 
   gegl_operation_meta_redirect (operation, "lslengthblur", extrusions, "lengthblur");
-  gegl_operation_meta_redirect (operation, "lsmidpoint", extrusions, "midpoint-rel");
+  gegl_operation_meta_redirect (operation, "lsmidpoint", extrusions, "midpoint");
   gegl_operation_meta_redirect (operation, "lscolor", extrusions, "color");
   /*End of Long Shadow Extrusion GUI asociations*/
 
@@ -2413,7 +2413,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "gegl:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. August 12th 2023 Stable (BUT EXPERIMENTAL) Build"
+    "description", _("GEGL text styling and specialty image outlining filter. August 20th 2023 Stable (BUT EXPERIMENTAL) Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
