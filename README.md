@@ -151,8 +151,10 @@ presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp wi
 
 ## Experimental branch that is stable (but complicated)
 
-GEGL Effects CE has an experimental branch here with that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects or the experimental branch. 
+GEGL Effects CE has an experimental branch here that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects CE or the experimental branch of CE. 
+
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual-Experimental-update
+
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/08f27b9c-7282-4d68-9332-f11ab32950e6)
 
 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual-Experimental-update
