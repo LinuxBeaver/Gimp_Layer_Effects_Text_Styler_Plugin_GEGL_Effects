@@ -285,7 +285,7 @@ enum_start (gegl_blend_mode_typeshinegeffects)
   enum_value (GEGL_BLEND_MODE_TYPE_REPLACESHINE, "Replace",
               N_("Multiply"))
 enum_end (GeglBlendModeTypeshinegeffects)
-ui_meta ("visible", "guichange {miscoptions}")
+
 
 /*This is the enum list of glass text's blend mode switcher.*/
 enum_start (gegl_blend_mode_type_glass)
@@ -300,8 +300,6 @@ enum_start (gegl_blend_mode_type_glass)
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYGLASS, "Overlay",
               N_("Overlay"))
 enum_end (geglblendmodetypeglass)
-ui_meta ("visible", "guichange {glasstextpartner}")
-
 
 
 /*This is the enum list for parts of GEGL Effects to be displayed (part of filter to be displayed)*/
@@ -1335,7 +1333,7 @@ typedef struct
   GeglNode *atopi;
   GeglNode *image;
   GeglNode *nopimage;
-  GeglNode *saturation;
+  GeglNode *saturationvalue;
   GeglNode *grainmergeimage;
   GeglNode *additionimage;
   GeglNode *overlayimage;
@@ -1501,8 +1499,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
       gegl_node_connect_from (atopg, "aux", state->opacitygradient, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturationvalue, NULL);
+      gegl_node_connect_from (atopi, "aux", state->saturationvalue, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1533,8 +1531,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_connect_from (over, "aux", state->innerglow, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturationvalue, NULL);
+      gegl_node_connect_from (atopi, "aux", state->saturationvalue, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1568,8 +1566,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_connect_from (atopg, "aux", state->opacitygradient, "output");
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturationvalue, NULL);
+      gegl_node_connect_from (atopi, "aux", state->saturationvalue, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1597,8 +1595,8 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturationvalue, NULL);
+      gegl_node_connect_from (atopi, "aux", state->saturationvalue, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg,  NULL);
       gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1628,7 +1626,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *mbdopacity, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *hardlight, *screen, *shiny, *microblur, *thinbold, *opacityinput, *xor, *knockoutidref, *beveloff, *extrassg, *nopextrassg, *behindextrassg, *grainmergeimage, *additionimage, *overlayimage, *multiplyimage, *screenimage, *hslcolorimage, *softlightimage, *linearlightimage, *hardlightimage, *lchcolorimage, *hsvhueimage, *grainmergecolor, *additioncolor, *overlaycolor,  *screencolor, *hslcolorcolor, *softlightcolor, *linearlightcolor, *hardlightcolor, *lchcolorcolor, *hsvhuecolor, *nocolor, *solidcolor, *coloropacity, *strokebehind, *nopstrokebehind, *nopdsbehind, *dsbehind, *opacitygradient, *cropcolor, *glassovertext, *glassover, *nopglass, *repairgeglgraph, *hueig, *extrusions, *anythinggraph, *amazing;
+  GeglNode *input, *output, *image, *mbd, *mbdopacity, *nopig, *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturationvalue, *hardlightg, *hardlightig, *burnig, *burng, *lchcolorg, *lchcolorig, *shinygm, *colordodge, *hardlight, *screen, *shiny, *microblur, *thinbold, *opacityinput, *xor, *knockoutidref, *beveloff, *extrassg, *nopextrassg, *behindextrassg, *grainmergeimage, *additionimage, *overlayimage, *multiplyimage, *screenimage, *hslcolorimage, *softlightimage, *linearlightimage, *hardlightimage, *lchcolorimage, *hsvhueimage, *grainmergecolor, *additioncolor, *overlaycolor,  *screencolor, *hslcolorcolor, *softlightcolor, *linearlightcolor, *hardlightcolor, *lchcolorcolor, *hsvhuecolor, *nocolor, *solidcolor, *coloropacity, *strokebehind, *nopstrokebehind, *nopdsbehind, *dsbehind, *opacitygradient, *cropcolor, *glassovertext, *glassover, *nopglass, *repairgeglgraph, *hueig, *extrusions, *anythinggraph, *amazing;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -1978,7 +1976,7 @@ behindextrassg = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
 
-  saturation = gegl_node_new_child (gegl,
+  saturationvalue = gegl_node_new_child (gegl,
                                   "operation", "gegl:hue-chroma",
                                   NULL);
 
@@ -2133,9 +2131,9 @@ drop shadow is applied in a gegl graph below them.*/
   /*Beginning of Image file Overlay's GUI asociations*/
   gegl_operation_meta_redirect (operation, "string", image, "string");
   gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
-  gegl_operation_meta_redirect (operation, "hue", saturation, "hue");
-  gegl_operation_meta_redirect (operation, "chroma", saturation, "chroma");
-  gegl_operation_meta_redirect (operation, "lightness", saturation, "lightness");
+  gegl_operation_meta_redirect (operation, "hue", saturationvalue, "hue");
+  gegl_operation_meta_redirect (operation, "chroma", saturationvalue, "chroma");
+  gegl_operation_meta_redirect (operation, "lightness", saturationvalue, "lightness");
   gegl_operation_meta_redirect (operation, "src", image, "src");
   /*End of of Image file Overlay's GUI asociations*/
 
@@ -2317,7 +2315,7 @@ drop shadow is applied in a gegl graph below them.*/
   /*All Nodes relating to Gradient end here*/
 
   /*All Nodes relating to Image File Overlay start here*/
-  state->saturation = saturation;
+  state->saturationvalue = saturationvalue;
   state->nopimage = nopimage;
   state->image = image;
   state->grainmergeimage = grainmergeimage;
@@ -2413,7 +2411,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "gegl:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. August 20th 2023 Stable (BUT EXPERIMENTAL) Build"
+    "description", _("GEGL text styling and specialty image outlining filter. August 26th 2023 Stable (BUT EXPERIMENTAL) Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
