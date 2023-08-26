@@ -7,11 +7,12 @@ To example things simple. GEGL Effects got an update that allows it to use most 
 If you already have any or most of these binaries overide all of them with the latest version.
 
 **Preconfigured Windows Binaries can be found here** (over write anything that you already have)
+
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_26_2023_Windows_Binaries.zip
 
 
-
 **Preconfigured Linux Binaries can be found here** (over write anything that you already have)
+
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_26_2023_Linux_Binaries.zip
 
 
