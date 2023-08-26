@@ -287,7 +287,6 @@ enum_start (gegl_blend_mode_typeshinegeffects)
   enum_value (GEGL_BLEND_MODE_TYPE_REPLACESHINE, "Replace",
               N_("Multiply"))
 enum_end (GeglBlendModeTypeshinegeffects)
-ui_meta ("visible", "guichange {miscoptions}")
 
 /*This is the enum list of glass text's blend mode switcher.*/
 enum_start (gegl_blend_mode_type_glass)
@@ -302,10 +301,7 @@ enum_start (gegl_blend_mode_type_glass)
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYGLASS, "Overlay",
               N_("Overlay"))
 enum_end (geglblendmodetypeglass)
-ui_meta ("visible", "guichange {glasstextpartner}")
 
-
-   
 
 
 
