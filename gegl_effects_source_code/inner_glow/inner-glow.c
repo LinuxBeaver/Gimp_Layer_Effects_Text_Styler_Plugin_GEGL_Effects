@@ -113,7 +113,7 @@ property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 6
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *it, *shadow,   *color, *color2,  *atop, *median2, *in,  *output;
+  GeglNode *input, *it, *shadow,   *color, *color2, *median2, *in,  *output;
   GeglColor *hidden_color = gegl_color_new ("#00ffffAA");
 /*This is a trick to bake in color nodes*/
 
@@ -148,12 +148,6 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
-
-  atop    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-atop",
-                                  NULL);
-
-
   median2     = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
                                          "radius",       1,
                                          NULL);
@@ -168,9 +162,9 @@ gegl_operation_meta_redirect (operation, "y", shadow, "y");
 gegl_operation_meta_redirect (operation, "fixoutline", median2, "alpha-percentile");
 gegl_operation_meta_redirect (operation, "string", it, "string");
 
-  gegl_node_link_many (input, it,  shadow, color, atop, in, median2, color2, output, NULL);
+  gegl_node_link_many (input, it,  shadow, color, in, median2, color2, output, NULL);
  gegl_node_connect_from (in, "aux", input, "output");
-/*This is telling GEGL to put everything from input to atop inside the gegl:src-in blend mode. Src-In is like a combination between Gimp's alpha lock and replace blend mode.*/
+/*This is telling GEGL to put everything from input to color inside the gegl:src-in blend mode. Src-In is like a combination between Gimp's alpha lock and replace blend mode.*/
 /*Out of all the operations that ship with GEGL Effects. Inner Glow is the only one that has a simple GEGL Graph and it is the only one that is pure GEGL. As of June 7th 2023 */
 
 }
