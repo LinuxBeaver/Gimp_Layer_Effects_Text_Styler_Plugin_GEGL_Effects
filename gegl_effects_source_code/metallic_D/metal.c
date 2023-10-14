@@ -35,6 +35,12 @@ gimp:layer-mode layer-mode=addition opacity=0.3 aux=[ ref=darken ]
 #addition graimerge linearburn multiply
 
 Also, Syntax7 is a unique GEGL Graph that makes an amazing even better gold effect.
+
+October 2 2023, This filter got a update that gives it new metal effects. This is an example of me updating a plugin without breaking presets by adding all the new 
+options in a drop down list. I, (Beaver) am doing things with GEGL that gimp's team or anyone has ever done. It is so fun to pioneer this software.
+
+
+Below is a list of all the GEGL Graph strings being called by this filter. they are NOT all called together and some do radically different things.
  */
 
 #include "config.h"
@@ -63,6 +69,10 @@ Also, Syntax7 is a unique GEGL Graph that makes an amazing even better gold effe
 #define syntax7 \
 " id=dv gimp:layer-mode layer-mode=normal opacity=0 aux=[ ref=dv  emboss depth=3 elevation=25  id=divcall ] unsharp-mask scale=0.3 denoise-dct sigma=7 id=1 gimp:layer-mode layer-mode=hsl-color aux=[ ref=1 color-overlay value=#ffbb00 ]  alien-map cpn-1-frequency=6 cpn-2-frequency=6 cpn-3-frequency=49 saturation scale=0 bloom strength=95 levels in-high=1.87  in-low=0.02 noise-reduction iterations=5 id=color  gimp:layer-mode layer-mode=hsl-color opacity=0.84 composite-mode=clip-to-backdrop aux=[ color value=#f4cd62] unsharp-mask scale=0.9 median-blur radius=0  gimp:layer-mode layer-mode=divide opacity=0.03 aux=[ ref=divcall gaussian-blur std-dev-x=0.5 std-dev-y=0.7 noise-reduction ] "\
 
+#define syntax8 \
+" gimp:desaturate mode=value invert value-invert "\
+
+
 
 property_enum(guichange, _("Policy"),
     guiendmetalcolor, guichangemetalcolor,
@@ -74,6 +84,8 @@ enum_value   (METAL_NO_COLOR, "metal", N_("Metal Without Color Overlay"))
 enum_value   (METAL_COLOR, "colormetal", N_("Metal With Color Overlay"))
 enum_value   (FIXED_GOLD, "goldfixed", N_("Uneditable Gold Graph"))
 enum_value   (FIXED_GOLD2, "goldfixed2", N_("Uneditable Gold Graph 2"))
+enum_value   (OCT_2023_METAL, "oct2023metal", N_("Oct 2023 Metal"))
+enum_value   (OCT_2023_METAL_COLOR, "oct2023metalcolor", N_("Oct 2023 Metal (with color)"))
   enum_end (guiendmetalcolor)
 
 property_double (liquid, _("Liquidify Metal"), 0.0)
@@ -119,15 +131,41 @@ property_double (value, _("Slide to invert colors on original image"), 0)
     value_range (0, 1)
   ui_steps      (1.00, 1.00)
                  ui_meta ("visible", "guichange {metal, colormetal}")
+
+
+
+property_double (altsolar1, _("Alt Solar Red Channel"), 276)
+   description  (_("Alien Map's red channel phase shift"))
+   value_range  (240, 290)
+                 ui_meta ("visible", "guichange {oct2023metal, oct2023metalcolor}")
+
+property_double (altsolar2, _("Alt Solar Green Channel"), 145)
+   description  (_("Alien Map's green channel phase shift"))
+   value_range  (120, 180)
+                 ui_meta ("visible", "guichange {oct2023metal, oct2023metalcolor}")
+
+property_double (altsolar3, _("Alt Solar Blue Channel"), 13)
+   description  (_("Alien Map's blue channel phase shift"))
+   value_range  (8, 19)
+                 ui_meta ("visible", "guichange {oct2023metal, oct2023metalcolor}")
+
+property_double (altsmooth, _("Smooth alt metal"), 3)
+   description  (_("Smooth the alt metal with dct denoise."))
+   value_range  (1, 45)
+                 ui_meta ("visible", "guichange {oct2023metal, oct2023metalcolor}")
 	
 
 property_color (color, _("Color Overlay of Metal"), "#fcf9eb")
                  ui_meta ("visible", "guichange {colormetal}")
 
+property_color (color2, _("Color Overlay of Metal"), "#f3d758")
+                 ui_meta ("visible", "guichange {oct2023metalcolor}")
+
+
 property_double (coloropacity, _("Opacity of Color"), 0.90)
    description  (_("Opacity of Color"))
    value_range  (0.00, 0.90)
-                 ui_meta ("visible", "guichange {colormetal}")
+                 ui_meta ("visible", "guichange {colormetal, oct2023metalcolor}")
 
 
 
@@ -142,6 +180,11 @@ property_double (hue, _("Hue Rotation (0 resets)"),  0.0)
    description  (_("Hue adjustment for graphs with no other editable properties"))
    value_range  (-180.0, 180.0)
                  ui_meta ("visible", "guichange {goldfixed, goldfixed2}")
+
+
+
+
+
 
 enum_start (metallic_clownworld)
   enum_value (GRAPH_BLEND_MODE_TYPE_NONE, "none",
@@ -180,6 +223,7 @@ GeglNode *opacity;
 GeglNode *hslcolor;
 GeglNode *nop;
 GeglNode *color;
+GeglNode *color2;
 GeglNode *over;
 GeglNode *idref;
 GeglNode *graph1;
@@ -191,9 +235,14 @@ GeglNode *repair;
 GeglNode *repair2;
 GeglNode *smooth08;
 GeglNode *none;
+GeglNode *sl;
 GeglNode *fixedgold;
 GeglNode *fixedgold2;
 GeglNode *huerotate;
+GeglNode *solar2;
+GeglNode *desatinverts;
+GeglNode *dctsmooth2;
+GeglNode *idref2;
 } State; 
 
 static void attach (GeglOperation *operation)
@@ -219,6 +268,10 @@ static void update_graph (GeglOperation *operation)
 
   state->solar = gegl_node_new_child (gegl,
                                   "operation", "gegl:alien-map",
+                                  NULL);
+
+  state->solar2 = gegl_node_new_child (gegl,
+                                  "operation", "gegl:alien-map", "cpn-1-frequency", 1.0, "cpn-2-frequency", 1.0, "cpn-3-frequency", 1.0,
                                   NULL);
 
 
@@ -256,6 +309,12 @@ static void update_graph (GeglOperation *operation)
 state->hslcolor = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, "opacity", 0.90, NULL);
 
+state->sl = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, "opacity", 1.00, "blend-space", 2, NULL);
+
+
+
+
    state->gaussian = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur",
                                   NULL);
@@ -264,7 +323,12 @@ state->hslcolor = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
 
+
    state->none = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+   state->idref2 = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
 
@@ -276,6 +340,19 @@ state->hslcolor = gegl_node_new_child (gegl,
   state->color = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay", 
                                   NULL);
+
+
+  state->color2 = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color-overlay", 
+                                  NULL);
+
+
+
+
+  state->dctsmooth2 = gegl_node_new_child (gegl,
+                                  "operation", "gegl:denoise-dct", 
+                                  NULL);
+
 
   state->graph1 = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", syntax1, 
@@ -299,6 +376,10 @@ state->hslcolor = gegl_node_new_child (gegl,
 
   state->fixedgold2 = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", syntax7, 
+                                  NULL);
+
+  state->desatinverts = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gegl", "string", syntax8, 
                                   NULL);
 
   state->smooth08 = gegl_node_new_child (gegl,
@@ -344,13 +425,21 @@ switch (o->guichange) {
   gegl_node_connect_from (state->over, "aux", state->opacity, "output");
   gegl_node_connect_from (state->hslcolor, "aux", state->color, "output");
   gegl_node_link_many (state->input, state->invert, state->opacity, NULL);
-  gegl_node_link_many (state->idref, state->color, NULL);
+  gegl_node_link_many (state->idref,  state->color, NULL);
         break;
     case FIXED_GOLD:
     gegl_node_link_many (state->input, state->gaussian, state->fixedgold, state->huerotate, state->output, NULL);
         break;
     case FIXED_GOLD2:
     gegl_node_link_many (state->input, state->gaussian, state->fixedgold2, state->huerotate, state->output, NULL);
+        break;
+    case OCT_2023_METAL:
+    gegl_node_link_many (state->input, state->gaussian, state->dctsmooth2, state->solar2, state->desatinverts, state->output, NULL);
+        break;
+    case OCT_2023_METAL_COLOR:
+    gegl_node_link_many (state->input, state->gaussian, state->dctsmooth2, state->solar2, state->desatinverts,  state->idref, state->sl, state->output, NULL);
+  gegl_node_connect_from (state->sl, "aux", state->color2, "output");
+  gegl_node_link_many (state->idref,  state->color2,  NULL);
     }
 
 else 
@@ -374,20 +463,34 @@ switch (o->guichange) {
         break;
     case FIXED_GOLD2:
     gegl_node_link_many (state->input, state->gaussian, state->fixedgold2, state->huerotate, state->output, NULL);
+        break;
+    case OCT_2023_METAL:
+    gegl_node_link_many (state->input, state->gaussian, state->dctsmooth2, state->solar2, state->desatinverts, state->output, NULL);
+        break;
+    case OCT_2023_METAL_COLOR:
+    gegl_node_link_many (state->input, state->gaussian, state->dctsmooth2, state->solar2, state->desatinverts, state->idref, state->sl, state->output, NULL);
+  gegl_node_connect_from (state->sl, "aux", state->color2, "output");
+  gegl_node_link_many (state->idref, state->color2,  NULL);
 }
 
       
   gegl_operation_meta_redirect (operation, "solar1", state->solar, "cpn-1-frequency");
   gegl_operation_meta_redirect (operation, "solar2", state->solar, "cpn-2-frequency");
   gegl_operation_meta_redirect (operation, "solar3", state->solar, "cpn-3-frequency");
+  gegl_operation_meta_redirect (operation, "altsolar1", state->solar2, "cpn-1-phaseshift");
+  gegl_operation_meta_redirect (operation, "altsolar2", state->solar2, "cpn-2-phaseshift");
+  gegl_operation_meta_redirect (operation, "altsolar3", state->solar2, "cpn-3-phaseshift");
   gegl_operation_meta_redirect (operation, "light", state->light, "lightness");
   gegl_operation_meta_redirect (operation, "smooth", state->smooth, "iterations");
+  gegl_operation_meta_redirect (operation, "altsmooth", state->dctsmooth2, "sigma");
   gegl_operation_meta_redirect (operation, "value", state->opacity, "value");
   gegl_operation_meta_redirect (operation, "color", state->color, "value");
+  gegl_operation_meta_redirect (operation, "color2", state->color2, "value");
   gegl_operation_meta_redirect (operation, "hue", state->huerotate, "hue");
   gegl_operation_meta_redirect (operation, "liquid", state->gaussian, "std-dev-x");
   gegl_operation_meta_redirect (operation, "liquid", state->gaussian, "std-dev-y");
   gegl_operation_meta_redirect (operation, "coloropacity", state->hslcolor, "opacity");
+  gegl_operation_meta_redirect (operation, "coloropacity", state->sl, "opacity");
 
 }
 
