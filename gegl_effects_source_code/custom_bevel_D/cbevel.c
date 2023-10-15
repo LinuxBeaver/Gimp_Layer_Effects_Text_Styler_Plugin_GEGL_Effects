@@ -52,6 +52,11 @@ enum_value   (CUSTOMBEVEL_SHOW_ADVANCE, "advancecustombevel", N_("Advance Slider
 #define GEGLGRAPHSTRING \
 " id=graph src-in aux=[ ref=graph ] id=graph src-in aux=[ ref=graph ]  "\
 
+
+#define GEGLGRAPHSTRING2 \
+"  id=0 dst-out aux=[ ref=0  component-extract component=alpha   levels in-low=0.15  color-to-alpha opacity-threshold=0.6 ] median-blur radius=0    "\
+
+
 enum_start (gegl_blend_mode_typecbevel)
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHT, "Hardlight",
               N_("HardLight"))
@@ -101,10 +106,6 @@ property_double (opacity, _("Make bevel wider"), 3.5)
 ui_meta ("visible", "guichange {advancecustombevel}")
 
 
-property_boolean (switchbevel, _("Enable/Disable Custom Bevel for potential plugins. True means custom bevel is enabled"), TRUE)
-  description    (_("This option is only useful for GEGL Plugin developers who wish to call custom bevel and disable it at will (with a checkbox). It saves time to do this"))
-    ui_meta    ("role", "output-extent")
-/*This "output-extent" means this option is entirely hidden from the GUI, as of July 2023 no GEGL Plugin or anything in Gimp needs to disable custom bevel*/ 
 
 property_double (azimuth, _("Azimuth"), 67.0)
     description (_("Light angle (degrees)"))
@@ -144,8 +145,8 @@ property_double (gaus, _("Internal Gaussian Blur for a normal bevel"), 2)
    description (_("Makes a normal bevel by calling an internal gaussian blur"))
    value_range (0.0, 9.0)
 
-property_int (box, _("Internal Box Blur for a sharp bevel"), 3)
-   description(_("Makes a sharp bevel by calling an internal box blur"))
+property_int (box, _("Internal Box Blur for a box bevel"), 3)
+   description(_("Makes a box bevel by calling an internal box blur"))
    value_range (0, 10)
    ui_range    (0, 10)
    ui_gamma   (1.5)
@@ -169,23 +170,50 @@ property_file_path(src, _("Image file Overlay - Desaturate and lighten for best 
     description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...) You can remove an image file overlay by going back to the image file select window, removing all text from --location-- then click open. Image file overlay will then go back to its default (None)"))
 
 
+property_double (slideupblack, _("Dark Text mode"), 0.0)
+   description  (_("For dark bevels and bevels with images under them. Use 1. Slide up if text color is dark or black and this will allow the bevel to significantly better on dark and black text. Dark bevels seem to work best on the multiply blend mode."))
+   value_range  (0.0, 0.050)
+
 property_double (desat, _("Desaturate for image file and color overlay"), 1.0)
     description(_("Desaturates the bevel to prepare it for a image file overlay"))
     value_range (0.0, 1.3)
     ui_range (0.0, 1.3)
+ui_meta ("visible", "guichange {advancecustombevel}")
 
 
 property_double (lightness, _("Lightness that can help image file and color overlay"), 0.0)
    description  (_("Lightness adjustment, lightness adjustment can add imagefile overlay"))
    value_range  (-12, 26.0)
+ui_meta ("visible", "guichange {advancecustombevel}")
 
 property_double (hue, _("Hue Rotation -0 resets"),  0.0)
    description  (_("Hue adjustment -  0 resets. This will hue rotate everything in the bevel and is useful if you want to maintain a shine associated with a certain color. Rotating the hue on a shiny inducing color (like pink on color dodge) is a good idea."))
    value_range  (-180.0, 180.0)
 ui_meta ("visible", "guichange {advancecustombevel}")
 
-property_color (coloroverlay, _("Forced Color Overlay (requires white text/shape)"), "#ffffff")
-    description (_("The color to paint over a white bevel. If the text is white the bevel will become any color. If it is not white it could distort things as it will behave as if you are applying a multiply blend mode color overlay on the bevel. White makes transparent. This is literally a multiply blend mode color overlay."))
+property_enum (switchbevel, _("Custom Bevel mode/version select"),
+    custombevelmodes, custom_bevel_modes,
+    CLASSIC)
+    description (_("The new version of Custom Bevel that is not default has an easier recolor and does not conform to image file overlays via dark bevel mode. "))
+
+
+property_color (coloroverlay, _("Color Overlay (requires white text/shape on non recolor modes"), "#ffffff")
+    description (_("The color to paint over a white bevel. If the text is white the bevel will become any color. If it is not white it could distort things as it will behave as if you are applying a multiply blend mode color overlay on the bevel. White makes transparent. This is literally a multiply blend mode color overlay. This does not apply to Modern Recolor mode where it will force the color to be anything."))
+ui_meta ("visible", "!switchbevel {modernnocolor}")
+
+
+
+enum_start (custom_bevel_modes)
+  enum_value (CLASSIC, "classic",
+              N_("Classic Custom Bevel"))
+  enum_value (NO_COLOR_MODERN, "modernnocolor",
+              N_("Modern Custom Bevel"))
+  enum_value (COLOR_MODERN,      "moderncolor",
+              N_("Modern Custom Bevel (recolor mode)"))
+enum_end (custombevelmodes)
+
+/*In theory one day I could make plugins "bevel", "sharpbevel", "ringbevel" and my unreleased "exotic bevel collection plugin" all part of custom bevel as one super bevel plugin
+or just make another super bevel plugin that contains everything bevel related and put it on custom bevels repo. But this would be very difficult  - Oct 15 2023 note by Beaver*/
 
 #else
 
@@ -225,7 +253,13 @@ typedef struct
   GeglNode *addition;
   GeglNode *embossblend;
   GeglNode *killpuff;
+  GeglNode *killpuff2;
   GeglNode *repairgeglgraph;
+  GeglNode *medianbookmark;
+  GeglNode *bookmark;
+  GeglNode *multiplybookmark;
+  GeglNode *darkbevel;
+  GeglNode *white;
   GeglNode *output;
 }State;
 
@@ -253,9 +287,11 @@ default: usethis = state->hardlight;
 
 }
 
-  if (o->switchbevel)
-  {
-  gegl_node_link_many (state->input, state->nop, state->mcol, state->median, state->box, state->gaussian, usethis, state->opacity, state->mcb, state->sharpen, state->desat, state->multiply2,  state->lightness, state->killpuff, state->repairgeglgraph, state->output,  NULL);
+
+switch (o->switchbevel) {
+        break;
+    case CLASSIC:
+  gegl_node_link_many (state->input,  state->darkbevel, state->nop, state->mcol, state->median, state->box, state->gaussian, usethis, state->opacity, state->mcb, state->sharpen, state->desat, state->multiply2,  state->lightness, state->killpuff, state->repairgeglgraph, state->output,  NULL);
 /* Blend emboss with one of many blend modes*/
   gegl_node_connect_from (usethis, "aux", state->emboss, "output");
   gegl_node_link_many (state->gaussian, state->emboss,  NULL);
@@ -264,31 +300,73 @@ default: usethis = state->hardlight;
   gegl_node_link_many (state->nop, state->col,  NULL);
 /* Blend multiply with image file overlay*/
   gegl_node_connect_from (state->multiply2, "aux", state->imagefileoverlay, "output");
-  }
-else
-
-  gegl_node_link_many (state->input, state->output,  NULL);
-
+        break;
+    case NO_COLOR_MODERN:
+  gegl_node_link_many (state->input, state->bookmark,  state->white, state->multiplybookmark, state->darkbevel, state->median, state->box, state->gaussian, usethis, state->opacity, state->mcb, state->sharpen, state->desat, state->multiply2,  state->lightness,  state->repairgeglgraph, state->killpuff2, state->output,  NULL);
+/* Blend emboss with one of many blend modes*/
+  gegl_node_connect_from (usethis, "aux", state->emboss, "output");
+  gegl_node_link_many (state->gaussian, state->emboss,  NULL);
+/* Blend multiply with image file overlay*/
+  gegl_node_connect_from (state->multiply2, "aux", state->imagefileoverlay, "output");
+/* Blend multiply with original image color*/
+  gegl_node_connect_from (state->multiplybookmark, "aux", state->medianbookmark, "output");
+  gegl_node_link_many (state->bookmark, state->medianbookmark,  NULL);
+        break;
+    case COLOR_MODERN:
+  gegl_node_link_many (state->input, state->col,  state->darkbevel, state->median, state->box, state->gaussian, usethis, state->opacity, state->mcb, state->sharpen, state->desat, state->multiply2,  state->lightness, state->repairgeglgraph, state->killpuff2,  state->output,  NULL);
+/* Blend emboss with one of many blend modes*/
+  gegl_node_connect_from (usethis, "aux", state->emboss, "output");
+  gegl_node_link_many (state->gaussian, state->emboss,  NULL);
+/* Blend multiply with image file overlay*/
+  gegl_node_connect_from (state->multiply2, "aux", state->imagefileoverlay, "output");
 }
+ }
 
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
 GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *median, *multiply, *hardlight, *killpuff,  *embossblend, *addition, *colordodge, *grainmerge, *nop2, *softlight, *overlay, *darken, *desat, *multiply2, *lighten, *mcol, *col, *nop, *plus, *opacity, *gaussian, *emboss, *box, *lightness, *imagefileoverlay, *mcb, *sharpen, *repairgeglgraph;
+  GeglNode *input, *output, *median, *multiply, *hardlight, *white, *killpuff, *killpuff2,  *embossblend, *addition, *colordodge, *grainmerge, *nop2, *softlight, *overlay, *darken, *darkbevel, *desat, *multiply2, *lighten, *mcol, *col, *nop, *plus, *opacity, *gaussian, *emboss, *box, *lightness, *imagefileoverlay, *mcb, *sharpen, *bookmark, *medianbookmark, *multiplybookmark, *repairgeglgraph;
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
 
+
+  darkbevel    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:levels",
+                                  NULL);
+
+  white    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:levels", "out-low", 1.0,
+                                  NULL);
+
+
+
+ bookmark    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+  multiplybookmark    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:multiply",
+                                  NULL);
+
+
+  medianbookmark    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:median-blur", "radius", 30, 100.0,
+                                  NULL);
 
 
   median    = gegl_node_new_child (gegl,
                                   "operation", "gegl:median-blur",
                                   NULL);
 
- /*This is a GEGL Graph string*/
+ /*This is a GEGL Graph string to kill transparency on edges*/
   killpuff    = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", GEGLGRAPHSTRING,
+                                  NULL);
+
+  killpuff2    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gegl", "string", GEGLGRAPHSTRING2,
                                   NULL);
 
 
@@ -443,6 +521,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "type", median, "neighborhood");
   gegl_operation_meta_redirect (operation, "desat", desat, "scale");
   gegl_operation_meta_redirect (operation, "coloroverlay", col, "value");
+  gegl_operation_meta_redirect (operation, "slideupblack", darkbevel, "out-low");
 
 
   /* now save references to the gegl nodes so we can use them
@@ -450,6 +529,7 @@ drop shadow is applied in a gegl graph below them.*/
    */
   State *state = g_malloc0 (sizeof (State));
   state->input = input;
+  state->white = white;
   state->median = median;
   state->box = box;
   state->gaussian = gaussian;
@@ -470,6 +550,7 @@ drop shadow is applied in a gegl graph below them.*/
   state->nop = nop;
   state->nop2 = nop2;
   state->killpuff = killpuff;
+  state->killpuff2 = killpuff2;
   state->mcol = mcol;
   state->col = col;
   state->imagefileoverlay = imagefileoverlay;
@@ -478,6 +559,10 @@ drop shadow is applied in a gegl graph below them.*/
   state->overlay = overlay;
   state->softlight = softlight;
   state->repairgeglgraph = repairgeglgraph;
+  state->medianbookmark = medianbookmark;
+  state->multiplybookmark = multiplybookmark;
+  state->bookmark = bookmark;
+  state->darkbevel = darkbevel;
   state->output = output;
 
   o->user_data = state;
@@ -498,7 +583,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "title",       _("Custom Bevel"),
     "categories",  "Artistic",
     "reference-hash", "h3do6akv00vyeefjf25sb2ac",
-    "description", _("GEGL makes a bevel with high customization allowing choice of bevel size, internal blend modes and internal blur types. Different blend modes do different things regarding detail, depth or presence of a shine effect. Options exist to make the bevel sharp, thick, or tubular."
+    "description", _("A bevel with high customization allowing choice of bevel size, internal blend modes and internal blur types. Different blend modes do different things regarding detail, depth or presence of a shine effect. Options exist to make the bevel box type, thick, or tubular."
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Custom Bevel..."),
