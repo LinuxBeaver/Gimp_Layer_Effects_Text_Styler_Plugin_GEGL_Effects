@@ -352,7 +352,7 @@ GeglProperties *o = GEGL_PROPERTIES (operation);
 
 
   medianbookmark    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "radius", 30, 100.0,
+                                  "operation", "gegl:median-blur", "radius", 30, "alpha-percentile", 100.0,
                                   NULL);
 
 
