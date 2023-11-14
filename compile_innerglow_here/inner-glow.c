@@ -160,7 +160,7 @@ gegl_operation_meta_redirect (operation, "value2", color2, "value");
 gegl_operation_meta_redirect (operation, "x", shadow, "x");
 gegl_operation_meta_redirect (operation, "y", shadow, "y");
 gegl_operation_meta_redirect (operation, "fixoutline", median2, "alpha-percentile");
-gegl_operation_meta_redirect (operation, "string", it, "string");
+
 
   gegl_node_link_many (input, it,  shadow, color, in, median2, color2, output, NULL);
  gegl_node_connect_from (in, "aux", input, "output");
