@@ -15,6 +15,10 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/r
 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_26_2023_Linux_Binaries.zip
 
+**Special Linux Build with bash for calling AI is here**
+
+https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/raw/GEGL-Effects-Continual-Experimental-update/AI_BASH_GEGL_EFFECTS_Linux_only_binaries_code.zip
+![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/d081fe2e-82aa-4c25-b599-99911cad9056)
 
 
 **Building From Source is easy** 
