@@ -147,6 +147,7 @@ https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effect
 
 **For Flatpak Linux (requires compiling)**
 
+https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/raw/GEGL-Effects-Continual-Experimental-update/AI_BASH_GEGL_EFFECTS_Flatpak_Linux_only_binaries_code.zip
 http://gimpchat.com/viewtopic.php?f=9&t=20652&p=286240#p286240
 
 --
