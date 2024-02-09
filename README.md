@@ -1,5 +1,5 @@
 ## Downloadable binaries for Windows and Linux is here 
-[https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/Continual_July22_2023](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases)
+https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
 
 ### Image Previews
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
