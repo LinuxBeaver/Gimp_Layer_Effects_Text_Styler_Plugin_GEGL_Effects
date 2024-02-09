@@ -88,25 +88,27 @@ ninja -C build
 ```
 
 ## Quick Guide 
-0. This is meant to be applied on text layers or raster text/image. It does live previews but does NOT actively apply when typing text.  Lots of people are let down by this but that is just the way it is. In the future when Gimp gets non-destructive editing and a GEGL text plugin then it will in theory be possible. 
+**0.** This is meant to be applied on text layers or raster text/image. It does live previews but does NOT actively apply when typing text.  Lots of people are let down by this but that is just the way it is. Though in CMYK Student's build of Gimp it does live preview edit non-destructively. 
 
-1. Color change will only work correctly if the text is white. This is because it uses a color overlay operation on the multiply blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color. (THIS IS STILL COMPLETELY RELEVANT BUT WE NOW HAVE A SOLID COLOR OPTION FOR COLOR OVERLAY)
+**1.** Please right click a text layer and select "layer to image size" before applying this filter. This way it prevents clipping as discussed here. Consider making a back up text layer before applying "layer to image size".  
+https://github.com/LinuxBeaver/LinuxBeaver/issues/8
 
-2. You must enable the checkbox to use the outline but it also has an opacity slider that hides it.
+**2.** In default color change will only work correctly if the text is white. This is because it uses a color overlay operation on the 'multiply' blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color. During the Summer of 2023 GEGL Effects got an update that gave it the ability to change blend modes to "Solid Color" to override any color regardless if it is white.
 
-2b. You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again hides it as if it were never present.
+**3.** You must enable the checkbox to use the outline but it also has an opacity slider that hides it when it reaches 0%.
 
-2c. To use Bevel enable it from the "select blend or enable/disable bevel" from the drop down list.
+**3b.** You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again to 0% opacity hides it as if it were never present.
 
-3. Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter.
+**3c.** To use Bevel enable it from the "select blend or enable/disable bevel" from the drop down list.
 
-4. Bevel has many blend modes that do many different things and a black/image bevel mode if the text is dark or has an image file overlay.
+**4.** Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter. Glow, Shadow and Stroke in Adobe are technically the same thing and my plugins make that even more obvious.
 
-5. Inner Glow and Gradient Overlay have checkboxes to enable them.
+**5.** Bevel has many blend modes that do many different things, so try them out. It also has a black/image bevel mode that allows a bevel even if the text color is dark or text has an image file overlay. The Black bevel slider is meant for dark colored text and image uploads over text.
 
-6. You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas.
+**6.** Inner Glow, Gradient Overlay, Bevel on outline and other things have checkboxes to enable them because if I just made them invisible they would make GEGL Effects more resource intensive.
 
-7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. (WE NOW HAVE AN EXTRA OUTLINE TO DO FOUR OUTLINES)
+**7.** You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas. Though beware the shadow might clip.
+
 
 
 
@@ -147,9 +149,9 @@ If you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enu
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
 presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a build of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing.
 
-## Experimental branch that is stable (but complicated)
+## Experimental branch that is stable (but incompatible with this build)
 
-GEGL Effects CE has an experimental branch here that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects CE or the experimental branch of CE. 
+GEGL Effects CE has an experimental branch here that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects CE or the experimental branch of CE not both. 
 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual-Experimental-update
 
