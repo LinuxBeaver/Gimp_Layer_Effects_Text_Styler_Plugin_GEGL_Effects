@@ -1,10 +1,8 @@
-If you want this plugin in Gimp officially show support here.
-https://gitlab.gnome.org/GNOME/gimp/-/issues/9327
+## Download is here
+[https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/Continual_July22_2023](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases)
 
-Ready to use Binaries for Windows and Linux are avalible in the "Releases" Section. 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/Continual_July22_2023
+![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
 
-After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. 
 
 ![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
@@ -136,7 +134,8 @@ ninja -C build
 ### Inner Glow Bevel and Glass Over text, the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
 
-![image preview](/Image_previews/innerglow_promo.png    )
+![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/ee3949f1-382e-4a28-8da4-e31bb82d5f77)
+
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/b8db02a5-8e4c-4c5e-8068-1c4be09f9209)
 
