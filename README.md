@@ -1,6 +1,7 @@
-## Download is here
+## Download is here 
 [https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/tag/Continual_July22_2023](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases)
 
+### Image Previews
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
 
 
@@ -110,8 +111,6 @@ ninja -C build
 
 
 ### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
-----------------
-  CE can do everything the normal version can do and more.
 
 ![image preview](/Image_previews/generated_text_style.png  )
 
@@ -142,7 +141,7 @@ ninja -C build
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
-### Downgrading to older versions of my plugins
+## Downgrading to older versions of my plugins
 
 If you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enum List (blend mode switchers) to an earlier version, you must go to `/config/GIMP/2.10/filters` and delete the
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
