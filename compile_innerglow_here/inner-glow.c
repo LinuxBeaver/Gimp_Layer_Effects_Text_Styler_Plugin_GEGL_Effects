@@ -246,23 +246,23 @@ switch (o->mode) {
         break;
     case DEFAULT_IG:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->crop, state->output, NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
   gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, state->crop, state->output, NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
         break;
     case DEFAULT_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->idref, state->atop, state->crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
- gegl_node_connect_from (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->atop, "aux", state->blurimage, "output");
         break;
     case INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->it2,  state->color, state->in, state->median2, state->color2,  state->idref, state->atop, state->crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
- gegl_node_connect_from (state->in, "aux", state->input, "output");
- gegl_node_connect_from (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->atop, "aux", state->blurimage, "output");
     }
   }
 

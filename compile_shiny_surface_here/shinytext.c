@@ -171,7 +171,7 @@ default: blendchoice = state->replace;
   {
   gegl_node_link_many (state->input, blendchoice, state->crop2, state->output,  NULL);
   gegl_node_link_many (state->sinus, state->opacity, state->crop, NULL);
-  gegl_node_connect_from (blendchoice, "aux", state->crop, "output");
+  gegl_node_connect (blendchoice, "aux", state->crop, "output");
   }
 else
   gegl_node_link_many (state->input, state->output,  NULL);

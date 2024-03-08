@@ -445,26 +445,26 @@ update_graph (GeglOperation *operation)
     gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge, state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
-    gegl_node_connect_from (multiplyge, "aux", state->opacitybevel, "output");
-    gegl_node_connect_from (state->atop, "aux", state->huelight, "output");
+    gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
+    gegl_node_connect (state->atop, "aux", state->huelight, "output");
       gegl_node_link_many (state->color, state->nop2, state->opacity, NULL);
-      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
+      gegl_node_connect (state->ontop, "aux", state->opacity, "output");
   }
 else
   {
     gegl_node_link_many (state->input, state->median, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge,  state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
-    gegl_node_connect_from (multiplyge, "aux", state->opacitybevel, "output");
-    gegl_node_connect_from (state->atop, "aux", state->huelight, "output");
+    gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
+    gegl_node_connect (state->atop, "aux", state->huelight, "output");
       gegl_node_link_many (state->color, state->nop2,  state->opacity, NULL);
-      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
+      gegl_node_connect (state->ontop, "aux", state->opacity, "output");
   }
 else
   {
     gegl_node_link_many (state->input, state->median, state->gaussian,  state->move, state->ontop, state->crop, state->output, NULL);
       gegl_node_link_many (state->color, state->nop2, state->opacity, NULL);
-      gegl_node_connect_from (state->ontop, "aux", state->opacity, "output");
+      gegl_node_connect (state->ontop, "aux", state->opacity, "output");
   }
 else
   {

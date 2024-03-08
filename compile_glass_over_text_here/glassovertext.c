@@ -171,7 +171,7 @@ default: blendglass = state->glassover;
   {
   gegl_node_link_many (state->input, blendglass, state->output,  NULL);
   gegl_node_link_many (state->input, state->white, state->retract, state->emboss, state->string, state->color, state->hyperopacity, state->gaussian, NULL);
-  gegl_node_connect_from (blendglass, "aux", state->gaussian, "output");
+  gegl_node_connect (blendglass, "aux", state->gaussian, "output");
   }
 else
   gegl_node_link_many (state->input, state->output,  NULL);

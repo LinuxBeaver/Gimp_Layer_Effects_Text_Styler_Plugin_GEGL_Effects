@@ -522,30 +522,30 @@ switch (o->type) {
     case GEGL_BEVEL_NORMAL:
             gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->th, state->fix, state->output, NULL);
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
-    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
+    gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
         break;
     case GEGL_BEVEL_SHARP:
     gegl_node_link_many (state->input, state->normallayer, state->median, state->nop, state->replace, state->levels, state->bilateral, state->lowersharpopacity, state->output, NULL);
     gegl_node_link_many (state->nop, state->median2,  state->dt, state->c2a, state->emb,  NULL);
-    gegl_node_connect_from (state->replace, "aux", state->emb, "output"); 
+    gegl_node_connect (state->replace, "aux", state->emb, "output"); 
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
-    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
+    gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
         break;
     case GEGL_BEVEL_EMBOSS_MODE:
     gegl_node_link_many (state->input, state->normallayer, state->blur, state->boxblur,  state->emb, state->fix, state->output, NULL);
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
-    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
+    gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
         break;
     case GEGL_BEVEL_COVE_DEEP_MODE:
     gegl_node_link_many (state->input, state->normallayer, state->blurcove, state->boxblurcove,  state->embcovefix,  state->embcovemove, state->fix, state->output, NULL);
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
-    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
+    gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
         break;
     case GEGL_BEVEL_EMBOSS_STACK_MODE:
     gegl_node_link_many (state->input, state->startmedian, state->normallayer, state->blursb, state->boxblurcove,  state->emgsb, state->nop, state->invert, embosschoice, state->hyperopacity, state->mcb, state->output, NULL);
     gegl_node_link_many (state->nop, state->invert,  NULL);
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
-    gegl_node_connect_from (state->normallayer, "aux", state->slideupblack, "output");
+    gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
     }
 }
 

@@ -1274,34 +1274,34 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
          gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->cropcolor,  state->nopg, atopg,  state->crop, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
-      gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
+      gegl_node_connect (multiply, "aux", state->coloropacity, "output");
       /* Nodes relating to knockout text */
       gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
-      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
-      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
+      gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       /* Nodes relating to inner glow */
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_connect_from (over, "aux", state->innerglow, "output");
+      gegl_node_connect (over, "aux", state->innerglow, "output");
       /* Nodes relating to gradient */
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
-      gegl_node_connect_from (atopg, "aux", state->opacitygradient, "output");
+      gegl_node_connect (atopg, "aux", state->opacitygradient, "output");
       /* Nodes relating to image file overlay */
       gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_connect (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
+      gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
-      gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
+      gegl_node_connect (state->strokebehind, "aux", state->stroke, "output");
       /* Nodes relating to shadow */
       gegl_node_link_many (state->nopdsbehind, state->ds, NULL);
-      gegl_node_connect_from (state->dsbehind, "aux", state->ds, "output");
+      gegl_node_connect (state->dsbehind, "aux", state->ds, "output");
       /* Nodes relating to Glass Over Text start here */
       gegl_node_link_many (state->nopglass, state->glassovertext, NULL);
-      gegl_node_connect_from (state->glassover, "aux", state->glassovertext, "output");
+      gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
     }
     else
     {
@@ -1309,31 +1309,31 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
          gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
-      gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
+      gegl_node_connect (multiply, "aux", state->coloropacity, "output");
       /* Nodes relating to knockout text */
       gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
-      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity,  NULL);
-      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
+      gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to inner glow */
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_connect_from (over, "aux", state->innerglow, "output");
+      gegl_node_connect (over, "aux", state->innerglow, "output");
       /* Nodes relating to image file overlay */
       gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_connect (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
+      gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
-      gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
+      gegl_node_connect (state->strokebehind, "aux", state->stroke, "output");
       /* Nodes relating to shadow */
       gegl_node_link_many (state->nopdsbehind, state->ds, NULL);
-      gegl_node_connect_from (state->dsbehind, "aux", state->ds, "output");
+      gegl_node_connect (state->dsbehind, "aux", state->ds, "output");
       /* Nodes relating to Glass Over Text start here */
       gegl_node_link_many (state->nopglass, state->glassovertext, NULL);
-      gegl_node_connect_from (state->glassover, "aux", state->glassovertext, "output");
+      gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
     }
   }
   else
@@ -1344,31 +1344,31 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
          gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->cropcolor,  state->nopg, atopg, state->crop, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
-      gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
+      gegl_node_connect (multiply, "aux", state->coloropacity, "output");
       /* Nodes relating to knockout text */
       gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
-      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
-      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
+      gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to gradient */
-      gegl_node_connect_from (atopg, "aux", state->opacitygradient, "output");
+      gegl_node_connect (atopg, "aux", state->opacitygradient, "output");
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
       /* Nodes relating to image file overlay */
       gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_connect (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
+      gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
-      gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
+      gegl_node_connect (state->strokebehind, "aux", state->stroke, "output");
       /* Nodes relating to shadow */
       gegl_node_link_many (state->nopdsbehind, state->ds, NULL);
-      gegl_node_connect_from (state->dsbehind, "aux", state->ds, "output");
+      gegl_node_connect (state->dsbehind, "aux", state->ds, "output");
       /* Nodes relating to Glass Over Text start here */
       gegl_node_link_many (state->nopglass, state->glassovertext, NULL);
-      gegl_node_connect_from (state->glassover, "aux", state->glassovertext, "output");
+      gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
 
 
 
@@ -1379,28 +1379,28 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
    gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
-      gegl_node_connect_from (multiply, "aux", state->coloropacity, "output");
+      gegl_node_connect (multiply, "aux", state->coloropacity, "output");
       /* Nodes relating to knockout text */
       gegl_node_link_many (state->knockoutidref, state->opacityinput, NULL);
-      gegl_node_connect_from (state->xor, "aux", state->opacityinput, "output");
+      gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
-      gegl_node_connect_from (bevelmode, "aux", state->mbdopacity, "output");
+      gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to image file overlay */
       gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect_from (atopi, "aux", state->saturation, "output");
+      gegl_node_connect (atopi, "aux", state->saturation, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg,  NULL);
-      gegl_node_connect_from (state->behindextrassg, "aux", state->extrassg, "output");
+      gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
       /* Nodes relating to outline */
       gegl_node_link_many (state->nopstrokebehind, state->stroke, NULL);
-      gegl_node_connect_from (state->strokebehind, "aux", state->stroke, "output");
+      gegl_node_connect (state->strokebehind, "aux", state->stroke, "output");
       /* Nodes relating to shadow */
       gegl_node_link_many (state->nopdsbehind, state->ds, NULL);
-      gegl_node_connect_from (state->dsbehind, "aux", state->ds, "output");
+      gegl_node_connect (state->dsbehind, "aux", state->ds, "output");
       /* Nodes relating to Glass Over Text start here */
       gegl_node_link_many (state->nopglass, state->glassovertext, NULL);
-      gegl_node_connect_from (state->glassover, "aux", state->glassovertext, "output");
+      gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
 
     }
   }
@@ -2157,7 +2157,7 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
  /*btw, if GEGL Effects (or any of my plugins) ever breaks try changing the name space from gegl: or lb: to something else.*/
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:layereffectscontinual",
+    "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
     "description", _("GEGL text styling and specialty image outlining filter. August 1st 2023 Stable Build"
