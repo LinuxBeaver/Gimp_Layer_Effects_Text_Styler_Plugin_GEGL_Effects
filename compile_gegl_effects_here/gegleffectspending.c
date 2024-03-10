@@ -440,6 +440,11 @@ property_double (radius, _("Shadow/Glow Blur intensity"), 12.0)
   ui_meta       ("unit", "pixel-distance")
   ui_meta ("visible", "guichange {strokeshadow}")
 
+property_boolean (clippolicy, _("Disable Shadow Clipping (delayed color bug trade off)"), FALSE)
+  description    (_("This checkbox removes the shadow clip bug for compliance with Gimp 3's non-destructive text editing. If enabled this will triger another bug only seen after using GEGL Effects heavily, said bug appears usually after a few minutes of usage and will cause GEGL Effects to delay a selected color update until another slider is moved. It is suggested to enable this once one applies the filter. But keep it disabled while editing GEGL Effects unless you can tolerate a delayed color update."))
+  ui_meta ("visible", "guichange {strokeshadow}")
+
+
 /* End of Color Overlay, Outline and Shadow GUI options*/
 
 /* Beginning of Bevel and Inner Glow GUI Options */
@@ -1817,7 +1822,7 @@ additionimage = gegl_node_new_child (gegl,
 
   /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them go here  */
   thinbold = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur",
+                                  "operation", "gegl:median-blur", "abyss-policy",     GEGL_ABYSS_NONE,
                                   NULL);
 
   /*This is the hidden operation shiny text. Which is literally gegl:sinus on a specific setting, with a blend mode switcher and checkbox. */
@@ -1826,11 +1831,11 @@ additionimage = gegl_node_new_child (gegl,
                                   NULL);
 
   microblur = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur", "clip-extent", FALSE,  "abyss-policy", 0,
                                   NULL);
 
 
-  repairgeglgraph      = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
+  repairgeglgraph      = gegl_node_new_child (gegl, "operation", "gegl:median-blur", "abyss-policy",     GEGL_ABYSS_NONE,
                                          "radius",       0,
                                          NULL);
 
@@ -1878,6 +1883,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "shadowimage", ds, "src");
   gegl_operation_meta_redirect (operation, "specialshadowoptions", ds, "specialoutline"); 
   gegl_operation_meta_redirect (operation, "blurshadowimage", ds, "blurshadowimage");
+  gegl_operation_meta_redirect (operation, "clippolicy", ds, "clipbugpolicy");
   /*End of Shadow's GUI asociations*/
 
   /*Beginning of Outline's GUI asociations*/
@@ -1898,6 +1904,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "enableoutline", stroke, "enableoutline");
   gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");  
   gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline"); 
+  gegl_operation_meta_redirect (operation, "clippolicy", stroke, "clipbugpolicy");
   /*End of Outline's GUI asociations*/
 
   /*Beginning of Bevel's GUI asociations*/
@@ -1982,6 +1989,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "osdepthextra", extrassg, "bevel2");
   gegl_operation_meta_redirect (operation, "osradiusextra", extrassg, "radius1");
   gegl_operation_meta_redirect (operation, "osbevelextra", extrassg, "bevel1");
+  gegl_operation_meta_redirect (operation, "clippolicy", extrassg, "clipbugpolicy");
   /*End of Extra Outline Shadow Glow's GUI asociations*/
 
   /*Beginning of Knock Out Text's GUI asociations*/
@@ -2160,7 +2168,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. August 1st 2023 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. March 10th 2024 Gimp NDE compliant Dev Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
