@@ -79,6 +79,10 @@ property_boolean (specialoutline, _("Special Outline Switch"), FALSE)
 property_boolean (enableoutline, _("Enable normal outline switch"), FALSE)
   description    (_("Enable Outline"))
 
+property_boolean (clipbugpolicy, _("Disable Clipping Compromise"), FALSE)
+  description    (_("This checkbox removes the shadow clip bug for compliance with Gimp 3's non-destructive text editing. If enabled this will triger another bug only seen after using GEGL Effects heavily, said bug appears usually after a few minutes of usage and will cause GEGL Effects to delay a selected color update until another slider is moved. It is suggested to enable this once one applies the filter. But keep it disabled while editing GEGL Effects unless you can tolerate a delayed color update."))
+
+
 /*ENUM list of blend modes for Base Outline Shape*/
 enum_start (gegl_stroke_grow_shapeszz2)
   enum_value (GEGL_stroke_GROW_SHAPE_SQUAREzz,  "square",  N_("Square"))
@@ -211,6 +215,7 @@ typedef struct
   GeglNode *stroke;
   GeglNode *color;
   GeglNode *nop;
+  GeglNode *newnop;
   GeglNode *huelight;
   GeglNode *hardlightge;
   GeglNode *colordodgege;
@@ -235,7 +240,7 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node; 
   GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *behind, *median, *cubismglow, *gaussian, *crop, *nop2, *move,   *nop, *opacity, *huelight, *graph, *opacitybevel, *bevel, *multiplyge, *disablebevel, *blurshadowimage, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color,  *ontop;
+  GeglNode *input, *output, *behind, *median, *cubismglow, *gaussian, *crop, *nop2, *move,  *newnop,  *nop, *opacity, *huelight, *graph, *opacitybevel, *bevel, *multiplyge, *disablebevel, *blurshadowimage, *atop, *layer, *stroke, *hardlightge, *shinygmge, *grainmergege, *colordodgege,  *color,  *ontop;
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
@@ -281,6 +286,8 @@ static void attach (GeglOperation *operation)
 
   blurshadowimage   = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur",
+                                         "clip-extent", FALSE,
+                                         "abyss-policy", 0,
                                   NULL);
 
 
@@ -288,6 +295,11 @@ static void attach (GeglOperation *operation)
   nop2   = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
+
+  newnop   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
 
 
   nop   = gegl_node_new_child (gegl,
@@ -400,6 +412,7 @@ hardlightge = gegl_node_new_child (gegl,
   state->stroke = stroke;
   state->color = color;
   state->nop = nop;
+  state->newnop = newnop;
   state->huelight = huelight;
   state->hardlightge = hardlightge;
   state->shinygmge = shinygmge;
@@ -423,7 +436,12 @@ update_graph (GeglOperation *operation)
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
   GeglNode *multiplyge;
+  GeglNode *crop;
   if (!state) return;
+
+  if (o->clipbugpolicy) crop = state->newnop;
+  if (!o->clipbugpolicy) crop = state->crop;
+
 
   multiplyge = state->multiplyge; /* the default outline bevel that is meant to be switched into other blend modes.  */
   switch (o->blendmodebeveloutline) {
@@ -434,6 +452,8 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTGE: multiplyge = state->hardlightge; break;
     case GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE: multiplyge = state->disablebevel; break;
 
+
+
  /* This is a really complex if else scenario Beaver did all by themselves. Beaver wishes in the future that this will become more simple.  */
  }
 
@@ -442,7 +462,7 @@ update_graph (GeglOperation *operation)
  if (o->specialoutline)
  if (o->enableaura)
   {
-    gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge, state->output, NULL);
+    gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, crop, state->atop, multiplyge, state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
     gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
@@ -452,7 +472,7 @@ update_graph (GeglOperation *operation)
   }
 else
   {
-    gegl_node_link_many (state->input, state->median, state->gaussian, state->move,  state->ontop, state->crop, state->atop, multiplyge,  state->output, NULL);
+    gegl_node_link_many (state->input, state->median, state->gaussian, state->move,  state->ontop, crop, state->atop, multiplyge,  state->output, NULL);
     gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL); 
     gegl_node_link_many (state->atop, state->bevel, state->opacitybevel,  NULL);
     gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
@@ -462,7 +482,7 @@ else
   }
 else
   {
-    gegl_node_link_many (state->input, state->median, state->gaussian,  state->move, state->ontop, state->crop, state->output, NULL);
+    gegl_node_link_many (state->input, state->median, state->gaussian,  state->move, state->ontop, crop, state->output, NULL);
       gegl_node_link_many (state->color, state->nop2, state->opacity, NULL);
       gegl_node_connect (state->ontop, "aux", state->opacity, "output");
   }
