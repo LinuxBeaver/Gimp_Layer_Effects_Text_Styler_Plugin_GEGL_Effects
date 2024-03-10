@@ -295,16 +295,16 @@ static void attach (GeglOperation *operation)
   output   = gegl_node_get_output_proxy (gegl, "output");
 
    blur = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur",  "clip-extent", FALSE, "abyss-policy", 0,
                                   NULL);
 
    blurcove = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur", "clip-extent", FALSE, "abyss-policy", 0,
                                   NULL);
 
 
    blursb = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur", "std-dev-x", 1.0, "std-dev-y", 1.0,
+                                  "operation", "gegl:gaussian-blur", "std-dev-x", 1.0, "std-dev-y", 1.0,  "clip-extent", FALSE, "abyss-policy", 0,
                                   NULL);
 
 
@@ -368,25 +368,25 @@ normallayer2 = gegl_node_new_child (gegl,
 
 
  fix   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:crop",
+                                  "operation", "gegl:nop",
                                   NULL);
 
 #define three \
-" emboss depth=3 elevation=90 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 "\
+" emboss depth=3 elevation=90 gaussian-blur abyss-policy=none clip-extent=false std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 gaussian-blur abyss-policy=none  clip-extent=false std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 "\
 
  threeembosses   = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", three,
                                   NULL);
 
 #define four \
-" emboss depth=3 elevation=90 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 "\
+" emboss depth=3 elevation=90 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=90 "\
 
  fourembosses   = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", four,
                                   NULL);
 
 #define five \
-" emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur std-dev-x=0.5  std-dev-y=0.5  "\
+" emboss depth=3 elevation=60 gaussian-blur  clip-extent=false std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur abyss-policy=none clip-extent=false std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5 emboss depth=3 elevation=60 gaussian-blur abyss-policy=none clip-extent=false  std-dev-x=0.5  std-dev-y=0.5  "\
 
  fiveembosses   = gegl_node_new_child (gegl,
                                   "operation", "gegl:gegl", "string", five,
@@ -421,11 +421,11 @@ replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
                                   NULL);
 
  median   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "radius", 3, "alpha-percentile", 100.0,
+                                  "operation", "gegl:median-blur", "radius", 3, "alpha-percentile", 100.0, "abyss-policy",     GEGL_ABYSS_NONE,
                                   NULL);
 
  median2   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "radius", 0,
+                                  "operation", "gegl:median-blur", "radius", 0, "abyss-policy",     GEGL_ABYSS_NONE,
                                   NULL);
 
    mcb = gegl_node_new_child (gegl,
@@ -433,7 +433,7 @@ replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
                                   NULL);
 
  startmedian   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "radius", 2, "alpha-percentile", 100.0, "neighborhood", 0,
+                                  "operation", "gegl:median-blur", "radius", 2, "alpha-percentile", 100.0, "neighborhood", 0, "abyss-policy",     GEGL_ABYSS_NONE,
                                   NULL);
 
 
