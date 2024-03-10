@@ -75,7 +75,7 @@ property_boolean (enableglasstext, _("Enable Glass on Text for GEGL Effects"), T
 
 
 #define TUTORIALGLASSTEXT \
-" id=1 gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]  crop  color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]  "\
+" id=1 gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]   color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]  "\
 
 property_double (azimuth, _("Azimuth"), 30.0)
     description (_("Light angle (degrees)"))
@@ -203,11 +203,11 @@ GeglProperties *o = GEGL_PROPERTIES (operation);
                                   NULL);
 
   retract    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur", "clip-extent", FALSE,  "abyss-policy", 0,
                                   NULL);
 
   gaussian    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur", "clip-extent", FALSE,  "abyss-policy", 0,
                                   NULL);
 
 
