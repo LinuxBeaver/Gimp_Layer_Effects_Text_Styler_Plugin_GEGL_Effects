@@ -194,13 +194,13 @@ At Nov 20 2023 I learned that two nodes can call the same graph, also this graph
                                   NULL);
 
   state->crop    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:crop",
+                                  "operation", "gegl:nop",
                                   NULL);
 /*This node was added November 20 2023 to fix another border bug that happens with layer to image size, where inner glow goes OUTSIDE the selection some how. This is a bug with Gimp internally
 but somehow crop fixes it.*/
 
   state->blurimage    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:gaussian-blur",
+                                  "operation", "gegl:gaussian-blur", "clip-extent", FALSE,    "abyss-policy", 0,                                      
                                   NULL);
 
 
@@ -218,7 +218,7 @@ but somehow crop fixes it.*/
                                   NULL);
 
 
-  state->median2     = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
+  state->median2     = gegl_node_new_child (gegl, "operation", "gegl:median-blur", "abyss-policy",     GEGL_ABYSS_NONE,
                                          "radius",       1,
                                          NULL);
 
