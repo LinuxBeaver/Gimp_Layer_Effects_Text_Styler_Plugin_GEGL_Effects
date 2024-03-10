@@ -382,7 +382,7 @@ property_double (grow_radiusstroke, _("Outline's Size"), 12.0)
 
 property_color  (colorstroke, _("Outline's Color"), "#000000")
   description   (_("The outline's color"))
-    ui_meta     ("role", "color-primary")
+  ui_meta     ("role", "color-secondary")
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
