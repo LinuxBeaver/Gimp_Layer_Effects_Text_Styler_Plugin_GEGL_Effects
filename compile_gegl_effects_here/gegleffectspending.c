@@ -382,7 +382,6 @@ property_double (grow_radiusstroke, _("Outline's Size"), 12.0)
 
 property_color  (colorstroke, _("Outline's Color"), "#000000")
   description   (_("The outline's color"))
-  ui_meta     ("role", "color-secondary")
   ui_meta ("visible", "guichange {strokeshadow}")
 
 
@@ -2168,7 +2167,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. March 10th 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. March 11th 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
