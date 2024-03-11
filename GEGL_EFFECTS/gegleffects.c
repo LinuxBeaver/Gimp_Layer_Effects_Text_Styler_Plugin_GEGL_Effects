@@ -225,7 +225,6 @@ property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
 property_color  (colorstroke, _("Outline's Color"), "#000000")
     /* TRANSLATORS: the string 'black' should not be translated */
   description   (_("The shadow's color (defaults to 'black')"))
-  ui_meta     ("role", "color-secondary")
   ui_meta ("visible", "guichange {strokeshadow}")
 
 property_double (opacity, _("Shadow/Glow Opacity --ENABLE SHADOW/GLOW"), 0.0)
