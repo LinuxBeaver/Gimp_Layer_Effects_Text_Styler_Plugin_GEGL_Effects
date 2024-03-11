@@ -225,7 +225,7 @@ property_double (grow_radiusstroke, _("Outline's Grow radius"), 12.0)
 property_color  (colorstroke, _("Outline's Color"), "#000000")
     /* TRANSLATORS: the string 'black' should not be translated */
   description   (_("The shadow's color (defaults to 'black')"))
-    ui_meta     ("role", "color-primary")
+  ui_meta     ("role", "color-secondary")
   ui_meta ("visible", "guichange {strokeshadow}")
 
 property_double (opacity, _("Shadow/Glow Opacity --ENABLE SHADOW/GLOW"), 0.0)
@@ -516,11 +516,11 @@ update_graph (GeglOperation *operation)
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
-      gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
-      gegl_node_connect_from (over, "aux", state->innerglow, "output");
-      gegl_node_connect_from (atopg, "aux", state->gradient, "output");
-      gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
+      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (state->multiply, "aux", state->mcol, "output");
+      gegl_node_connect (over, "aux", state->innerglow, "output");
+      gegl_node_connect (atopg, "aux", state->gradient, "output");
+      gegl_node_connect (state->atopi, "aux", state->saturation, "output");
     }
     else
     {
@@ -530,10 +530,10 @@ update_graph (GeglOperation *operation)
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
-      gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
-      gegl_node_connect_from (over, "aux", state->innerglow, "output");
-      gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
+      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (state->multiply, "aux", state->mcol, "output");
+      gegl_node_connect (over, "aux", state->innerglow, "output");
+      gegl_node_connect (state->atopi, "aux", state->saturation, "output");
     }
   }
   else
@@ -545,10 +545,10 @@ update_graph (GeglOperation *operation)
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
-      gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
-      gegl_node_connect_from (atopg, "aux", state->gradient, "output");
-      gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
+      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (state->multiply, "aux", state->mcol, "output");
+      gegl_node_connect (atopg, "aux", state->gradient, "output");
+      gegl_node_connect (state->atopi, "aux", state->saturation, "output");
     }
     else
     {
@@ -557,9 +557,9 @@ update_graph (GeglOperation *operation)
       gegl_node_link_many (state->nopimage, state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect_from (multiplyb, "aux", state->mbd, "output");
-      gegl_node_connect_from (state->multiply, "aux", state->mcol, "output");
-      gegl_node_connect_from (state->atopi, "aux", state->saturation, "output");
+      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (state->multiply, "aux", state->mcol, "output");
+      gegl_node_connect (state->atopi, "aux", state->saturation, "output");
     }
   }
 }
@@ -781,11 +781,11 @@ lchcolorig = gegl_node_new_child (gegl,
  gegl_node_link_many (nopig, innerglow, NULL);
  gegl_node_link_many (nopb, mbd, NULL);
  gegl_node_link_many (nopm, mcol, NULL);
-  gegl_node_connect_from (multiplyb, "aux", mbd, "output");
-  gegl_node_connect_from (multiply, "aux", mcol, "output");
-  gegl_node_connect_from (over, "aux", innerglow, "output");
-  gegl_node_connect_from (atopi, "aux", image, "output");
-  gegl_node_connect_from (atopg, "aux", gradient, "output");
+  gegl_node_connect (multiplyb, "aux", mbd, "output");
+  gegl_node_connect (multiply, "aux", mcol, "output");
+  gegl_node_connect (over, "aux", innerglow, "output");
+  gegl_node_connect (atopi, "aux", image, "output");
+  gegl_node_connect (atopg, "aux", gradient, "output");
 
   gegl_operation_meta_redirect (operation, "string", image, "string");
   gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
@@ -893,8 +893,8 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
 
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:layereffects",
-    "title",       _("GEGL Effects"),
+    "name",        "lb:layereffects",
+    "title",       _("GEGL Effects Classic"),
     "categories",  "Generic",
     "reference-hash", "45ed565h8500fca01b2ac",
     "description", _("GEGL text styling and speciality image outlining filter. Text recoloring only works if the color is white "
