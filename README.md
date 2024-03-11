@@ -147,11 +147,11 @@ https://github.com/LinuxBeaver/LinuxBeaver/issues/8
 
 If you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enum List (blend mode switchers) to an earlier version, you must go to `/config/GIMP/2.10/filters` and delete the
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
-presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a build of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing.
+presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a build of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing. Downgrading plugins can break .xcf files in 2.99.18+
 
-## Experimental branch that is stable (but incompatible with this build)
+## Special branch only recommended for Gimp 2.10 users.
 
-GEGL Effects CE has an experimental branch here that includes many major text styling plugins of mine. It is stable to use but I feel uneasy to make it the default branch as it has a ton of new features. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects CE or the experimental branch of CE not both. 
+GEGL Effects CE has a silly testing branch here that includes many major text styling plugins of mine all in one place.  It is stable to use but I feel uneasy to make it the default branch as it has a ton of sliders and many other plugins built in. If you want to try it go here. This branch will over ride default GEGL Effects CE and cannot co-exist with it. So it is either normal GEGL Effects CE or the experimental branch of CE not both. This isn't as useful for Gimp 2.99.18+ because of non-destructive editing.
 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/GEGL-Effects-Continual-Experimental-update
 
