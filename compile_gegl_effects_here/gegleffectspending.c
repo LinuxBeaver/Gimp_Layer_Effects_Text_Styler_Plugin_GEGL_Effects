@@ -15,12 +15,12 @@
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
  *2022 Beaver GEGL Effects  *2023 Beaver GEGL Effects CE with new features like bevel outlines, thin/bold text mode and shines and so much more.
- * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox) 
+ * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox)
  */
 
 /*
 
-To help future devs I will list predicted scenarios that I believe will lead to GEGL effects or any of my plugins breaking compatibility with future versions of Gimp. 
+To help future devs I will list predicted scenarios that I believe will lead to GEGL effects or any of my plugins breaking compatibility with future versions of Gimp.
 --
 1st example of how GEGL effects can and eventually break is if Gimp team adds new blend modes that will over ride "operation", "gimp:layer-mode", "layer-mode", #,
 
@@ -30,7 +30,7 @@ split = gegl_node_new_child (gegl,
 "operation", "gimp:layer-mode", "layer-mode", 60,
 "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
 
-If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number. 
+If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number.
 
 Resulting in a scenario where all my plugins will not work (by using the wrong blend mode) until the number 60 is changed to 61 or 59. (we'll have to figure it out when it happens) but I'll guess 61.
 All Gimp exclusive blend modes will have to be updated when this happens. That will break a ton of my plugins but the fix should be trivial.
@@ -50,19 +50,19 @@ Until std-dev-x and std-dev-y are replaced with x and y. all plugins of mine tha
 The third most common reason GEGL Effects will break is if a operation is removed or renamed. It will then have to be rebuilt and shipped with GEGL Effects
 hypothetical scenario would be  if gegl:emboss got renamed to gegl:embosser; we'd have to udpate all my filters that call emboss.
 
-The fourth most common scenario is if Gimp's team adds a new filter that has the exact same name as one of mine in both the title and operation name. 
+The fourth most common scenario is if Gimp's team adds a new filter that has the exact same name as one of mine in both the title and operation name.
 then the title and or gegl operation of name of one mf my plugins; example "gegl:bevel" would have to change to "bevel2" everywhere in my codebase
-where it is used. 
+where it is used.
 
 The fifth is if the namespace gegl: is blocked (for GEGL only) and the namespace lb: gets disallowed for being too short, changing it to a new namespace will fix things for sure.
 
 
-Crude recreation of parts of GEGL Effects graph. This just shows how the nodes are ordered. They are many things missing and I can't possibly list all the options. 
+Crude recreation of parts of GEGL Effects graph. This just shows how the nodes are ordered. They are many things missing and I can't possibly list all the options.
 DropShadow is used in place of the hidden operation. REQUIRES lb:bevel and lb:innerglow
 
 Remove the # to see a particular effect in action
 
-id=1 
+id=1
 #src-atop aux=[ ref=1 layer src=image_link_here.jpg ]
 id=2
 #gimp:layer-mode layer-mode=normal composite-mode=clip-to-backdrop aux=[ ref=2 color-overlay value=#0057ff  ]
@@ -756,7 +756,7 @@ property_seed (seedaura, _("Seed of Glow Aura"), randaura)
 /* Two rand commands can't co-exist but if it is renamed to "randaura" it appears to work just fine */
 
 /* End of Special Options for Outline and Shadow GUI Options*/
- 
+
 /* Beginning of Miscellaneous text options*/
 
 property_boolean (enableshine, _("Enable/Disable Shiny Text"), FALSE)
@@ -1130,12 +1130,12 @@ typedef struct
   GeglNode *additionimage;
   GeglNode *overlayimage;
   GeglNode *multiplyimage;
-  GeglNode *screenimage; 
-  GeglNode *hslcolorimage; 
-  GeglNode *softlightimage; 
-  GeglNode *linearlightimage; 
-  GeglNode *hardlightimage; 
-  GeglNode *lchcolorimage; 
+  GeglNode *screenimage;
+  GeglNode *hslcolorimage;
+  GeglNode *softlightimage;
+  GeglNode *linearlightimage;
+  GeglNode *hardlightimage;
+  GeglNode *lchcolorimage;
   GeglNode *hsvhueimage;
 /*All nodes relating to image file upload end here*/
 
@@ -1145,12 +1145,12 @@ typedef struct
   GeglNode *grainmergecolor;
   GeglNode *additioncolor;
   GeglNode *overlaycolor;
-  GeglNode *screencolor; 
-  GeglNode *hslcolorcolor; 
-  GeglNode *softlightcolor; 
-  GeglNode *linearlightcolor; 
-  GeglNode *hardlightcolor; 
-  GeglNode *lchcolorcolor; 
+  GeglNode *screencolor;
+  GeglNode *hslcolorcolor;
+  GeglNode *softlightcolor;
+  GeglNode *linearlightcolor;
+  GeglNode *hardlightcolor;
+  GeglNode *lchcolorcolor;
   GeglNode *hsvhuecolor;
   GeglNode *nocolor;
   GeglNode *solidcolor;
@@ -1172,7 +1172,7 @@ update_graph (GeglOperation *operation)
   GeglNode *atopi;
   GeglNode *multiply;
 
-/* These are the blend mode switchers 
+/* These are the blend mode switchers
 BevelMode is Bevel, Over is Inner Glow, atopG is Gradient, atopI is inner glow and multiply is color overlay.
 The two outline bevel mode switchers and shiny text blend mode switcher use their own .c files. As of June 7 2023 they are hidden operations. */
 
@@ -1192,7 +1192,7 @@ The two outline bevel mode switchers and shiny text blend mode switcher use thei
     case GEGL_BLEND_MODE_TYPE_OVERLAYCOLOR: multiply = state->overlaycolor; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTCOLOR: multiply = state->linearlightcolor; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTCOLOR: multiply = state->hardlightcolor; break;
-    case GEGL_BLEND_MODE_TYPE_LCHCOLORCOLOR: multiply = state->lchcolorcolor; break; 
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORCOLOR: multiply = state->lchcolorcolor; break;
     case GEGL_BLEND_MODE_TYPE_HSVHUECOLOR: multiply = state->hsvhuecolor; break;
     case GEGL_BLEND_MODE_TYPE_NOCOLOR: multiply = state->nocolor; break;
 
@@ -1210,7 +1210,7 @@ The two outline bevel mode switchers and shiny text blend mode switcher use thei
     case GEGL_BLEND_MODE_TYPE_OVERLAYIMAGE: atopi = state->overlayimage; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTIMAGE: atopi = state->linearlightimage; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTIMAGE: atopi = state->hardlightimage; break;
-    case GEGL_BLEND_MODE_TYPE_LCHCOLORIMAGE: atopi = state->lchcolorimage; break; 
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORIMAGE: atopi = state->lchcolorimage; break;
     case GEGL_BLEND_MODE_TYPE_HSVHUEIMAGE: atopi = state->hsvhueimage; break;
 
 
@@ -1218,7 +1218,7 @@ The two outline bevel mode switchers and shiny text blend mode switcher use thei
 /* Bevel's blend mode switcher.
 Bevel use to only work Multiply and Grain Merge until beaver solved a bug related to bad node connections. Bug solved in early April 2023. Bug caused the other blend modes to look bad.*/
 
-  bevelmode = state->beveloff; 
+  bevelmode = state->beveloff;
   switch (o->blendmodebevel2) {
     case GEGL_BLEND_MODE_TYPE_MULTIPLY: bevelmode = state->multiplyb; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGE: bevelmode = state->grainmerge; break;
@@ -1244,9 +1244,9 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     case GEGL_BLEND_MODE_TYPE_OVERLAYIG: over = state->overlayig; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG: over = state->linearlightig; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTIG: over = state->hardlightig; break;
-    case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break; 
-    case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break; 
-    case GEGL_BLEND_MODE_TYPE_HUEIG: over = state->hueig; break; 
+    case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break;
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break;
+    case GEGL_BLEND_MODE_TYPE_HUEIG: over = state->hueig; break;
 
   }
 /* atopg was named based on the gegl blend mode "src-atop  combined with gradient G hence the name "atopg*/
@@ -1428,7 +1428,7 @@ static void attach (GeglOperation *operation)
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
 
-  
+
 /* All nodes relating to outline begin here.
 
   zzstrokebevelimage is a hidden operation; recreation of gimp's drop shadow filter with heavy modification so it can do things like bevel outlines, aura seeds and image file overlays.
@@ -1439,7 +1439,7 @@ make a enhanced version of it. */
                                   NULL);
 
 strokebehind = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 2, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 29, "composite-mode", 0, NULL);
 
 
   nopstrokebehind = gegl_node_new_child (gegl,
@@ -1461,7 +1461,7 @@ make a enhanced version of it. */
                                   NULL);
 
 dsbehind = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 2, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 29, "composite-mode", 0, NULL);
 
   /* This nop acts as a ref and id for the placement of zzstrokebevelimage in the gegl graph. */
   nopdsbehind = gegl_node_new_child (gegl,
@@ -1563,7 +1563,7 @@ additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", "th", 0.100, 
+                                  "operation", "lb:bevel", "th", 0.100,
                                   NULL);
  /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
@@ -1743,7 +1743,7 @@ lchcolorg = gegl_node_new_child (gegl,
 
 /* All nodes relating to Extra Outline, Shadw Glow begin here*/
 
-  
+
   /* zzstrokebevelimage is a hidden operation; recreation of gimp's drop shadow filter with heavy modification so it can do things like bevel outlines, aura seeds and image file overlays.
 gegl effects use to use the default drop shadow until Beaver realized that the only way to give GEGL Effects styles seen in Adobe's layer effects was to abandon gegl:dropshadow and
 make a enhanced version of it. */
@@ -1752,7 +1752,7 @@ extrassg = gegl_node_new_child (gegl,
                                   NULL);
 
 behindextrassg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 2, "composite-mode", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 29, "composite-mode", 0, NULL);
 
 /*This nop functions as a ref and id for extra stroke shadow glows placement*/
   nopextrassg = gegl_node_new_child (gegl,
@@ -1821,7 +1821,7 @@ additionimage = gegl_node_new_child (gegl,
 
   /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them go here  */
   thinbold = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "abyss-policy",     GEGL_ABYSS_NONE,
+                                  "operation", "gegl:median-blur", "abyss-policy",     0,
                                   NULL);
 
   /*This is the hidden operation shiny text. Which is literally gegl:sinus on a specific setting, with a blend mode switcher and checkbox. */
@@ -1834,16 +1834,16 @@ additionimage = gegl_node_new_child (gegl,
                                   NULL);
 
 
-  repairgeglgraph      = gegl_node_new_child (gegl, "operation", "gegl:median-blur", "abyss-policy",     GEGL_ABYSS_NONE,
+  repairgeglgraph      = gegl_node_new_child (gegl, "operation", "gegl:median-blur", "abyss-policy",     0,
                                          "radius",       0,
                                          NULL);
 
  /*Repair GEGL Graph is a critical operation for Gimp's non-destructive future.
-A median blur at zero radius is confirmed to make no changes to an image. 
+A median blur at zero radius is confirmed to make no changes to an image.
 This option resets gegl:opacity's value to prevent a known bug where
 plugins like clay, glossy balloon and custom bevel glitch out when
 drop shadow is applied in a gegl graph below them.*/
- 
+
 
   /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them end here  */
 
@@ -1878,9 +1878,9 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "grow_radius", ds, "stroke");
   gegl_operation_meta_redirect (operation, "radius", ds, "blurstroke");
   gegl_operation_meta_redirect (operation, "color", ds, "color");
-  gegl_operation_meta_redirect (operation, "enableshadow", ds, "enableoutline"); 
+  gegl_operation_meta_redirect (operation, "enableshadow", ds, "enableoutline");
   gegl_operation_meta_redirect (operation, "shadowimage", ds, "src");
-  gegl_operation_meta_redirect (operation, "specialshadowoptions", ds, "specialoutline"); 
+  gegl_operation_meta_redirect (operation, "specialshadowoptions", ds, "specialoutline");
   gegl_operation_meta_redirect (operation, "blurshadowimage", ds, "blurshadowimage");
   gegl_operation_meta_redirect (operation, "clippolicy", ds, "clipbugpolicy");
   /*End of Shadow's GUI asociations*/
@@ -1901,8 +1901,8 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "oshue", stroke, "hue");
   gegl_operation_meta_redirect (operation, "oslightness", stroke, "lightness");
   gegl_operation_meta_redirect (operation, "enableoutline", stroke, "enableoutline");
-  gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");  
-  gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline"); 
+  gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");
+  gegl_operation_meta_redirect (operation, "blendmodebeveloutline", stroke, "blendmodebeveloutline");
   gegl_operation_meta_redirect (operation, "clippolicy", stroke, "clipbugpolicy");
   /*End of Outline's GUI asociations*/
 
@@ -1934,7 +1934,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "xinnerglow", innerglow, "x");
   gegl_operation_meta_redirect (operation, "yinnerglow", innerglow, "y");
   /*End of Inner Glow's GUI asociations*/
-  
+
 
   /*Beginning of Color Overlay's GUI asociations*/
   gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
@@ -1948,32 +1948,32 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "end_y", gradient, "end-y");
   gegl_operation_meta_redirect (operation, "start_color", gradient, "start-color");
   gegl_operation_meta_redirect (operation, "end_color", gradient, "end-color");
-  gegl_operation_meta_redirect (operation, "opacitygradient", opacitygradient, "value"); 
+  gegl_operation_meta_redirect (operation, "opacitygradient", opacitygradient, "value");
   /*End of Gradient's GUI asociations*/
 
   /*Beginning of Shiny Text's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "blend_power", shiny, "blend-power");  
-  gegl_operation_meta_redirect (operation, "opacityshine", shiny, "opacity");  
-  gegl_operation_meta_redirect (operation, "blendmodeshine", shiny, "blendmode");  
-  gegl_operation_meta_redirect (operation, "seedshine", shiny, "seed"); 
-  gegl_operation_meta_redirect (operation, "complexity", shiny, "complexity"); 
-  gegl_operation_meta_redirect (operation, "x_scaleshine", shiny, "x-scale"); 
-  gegl_operation_meta_redirect (operation, "y_scaleshine", shiny, "y-scale"); 
-  gegl_operation_meta_redirect (operation, "enableshine", shiny, "enable"); 
+  gegl_operation_meta_redirect (operation, "blend_power", shiny, "blend-power");
+  gegl_operation_meta_redirect (operation, "opacityshine", shiny, "opacity");
+  gegl_operation_meta_redirect (operation, "blendmodeshine", shiny, "blendmode");
+  gegl_operation_meta_redirect (operation, "seedshine", shiny, "seed");
+  gegl_operation_meta_redirect (operation, "complexity", shiny, "complexity");
+  gegl_operation_meta_redirect (operation, "x_scaleshine", shiny, "x-scale");
+  gegl_operation_meta_redirect (operation, "y_scaleshine", shiny, "y-scale");
+  gegl_operation_meta_redirect (operation, "enableshine", shiny, "enable");
   /*End of Shiny Text's GUI asociations*/
 
-  /*Beginning of Micro Blur's GUI asociations*/  
-  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-x"); 
-  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-y"); 
-  /*End of Micro Blur's GUI asociations*/  
+  /*Beginning of Micro Blur's GUI asociations*/
+  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-x");
+  gegl_operation_meta_redirect (operation, "microblur", microblur, "std-dev-y");
+  /*End of Micro Blur's GUI asociations*/
 
   /*Beginning of thin to thick text GUI asociations*/
-  gegl_operation_meta_redirect (operation, "thinboldenable", thinbold, "radius"); 
-  gegl_operation_meta_redirect (operation, "thinboldap", thinbold, "alpha-percentile");   
-  /*End of thin to thick text GUI asociations*/  
+  gegl_operation_meta_redirect (operation, "thinboldenable", thinbold, "radius");
+  gegl_operation_meta_redirect (operation, "thinboldap", thinbold, "alpha-percentile");
+  /*End of thin to thick text GUI asociations*/
 
   /*Beginning of Extra Outline Shadow Glow's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "enableextraoutline", extrassg, "enableoutline"); 
+  gegl_operation_meta_redirect (operation, "enableextraoutline", extrassg, "enableoutline");
   gegl_operation_meta_redirect (operation, "yextraoutline", extrassg, "y");
   gegl_operation_meta_redirect (operation, "xextraoutline", extrassg, "x");
   gegl_operation_meta_redirect (operation, "opacitystrokeextraoutline", extrassg, "opacity");
@@ -1983,7 +1983,7 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "grow_shapeextraoutline", extrassg, "grow-shape");
   gegl_operation_meta_redirect (operation, "specialoutlineextra", extrassg, "specialoutline");
   gegl_operation_meta_redirect (operation, "ossrcextra", extrassg, "src");
-  gegl_operation_meta_redirect (operation, "blendmodebeveloutlineextra", extrassg, "blendmodebeveloutline");  
+  gegl_operation_meta_redirect (operation, "blendmodebeveloutlineextra", extrassg, "blendmodebeveloutline");
   gegl_operation_meta_redirect (operation, "osbevelopacityextra", extrassg, "opacitybevel");
   gegl_operation_meta_redirect (operation, "osdepthextra", extrassg, "bevel2");
   gegl_operation_meta_redirect (operation, "osradiusextra", extrassg, "radius1");
@@ -1992,19 +1992,19 @@ drop shadow is applied in a gegl graph below them.*/
   /*End of Extra Outline Shadow Glow's GUI asociations*/
 
   /*Beginning of Knock Out Text's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "knockout", opacityinput, "value"); 
+  gegl_operation_meta_redirect (operation, "knockout", opacityinput, "value");
   /*End of Knock Out Text's GUI asociations*/
 
 
   /*Beginning of Glass Over Text's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "enableglasstext", glassovertext, "enableglasstext"); 
-  gegl_operation_meta_redirect (operation, "glassblendmode", glassovertext, "glassover"); 
-  gegl_operation_meta_redirect (operation, "glassazimuth", glassovertext, "azimuth"); 
-  gegl_operation_meta_redirect (operation, "glassdepth", glassovertext, "depth"); 
-  gegl_operation_meta_redirect (operation, "glasselevation", glassovertext, "elevation"); 
-  gegl_operation_meta_redirect (operation, "glassretract", glassovertext, "std-dev"); 
-  gegl_operation_meta_redirect (operation, "glassblur", glassovertext, "blur"); 
-  gegl_operation_meta_redirect (operation, "glasscolor", glassovertext, "color"); 
+  gegl_operation_meta_redirect (operation, "enableglasstext", glassovertext, "enableglasstext");
+  gegl_operation_meta_redirect (operation, "glassblendmode", glassovertext, "glassover");
+  gegl_operation_meta_redirect (operation, "glassazimuth", glassovertext, "azimuth");
+  gegl_operation_meta_redirect (operation, "glassdepth", glassovertext, "depth");
+  gegl_operation_meta_redirect (operation, "glasselevation", glassovertext, "elevation");
+  gegl_operation_meta_redirect (operation, "glassretract", glassovertext, "std-dev");
+  gegl_operation_meta_redirect (operation, "glassblur", glassovertext, "blur");
+  gegl_operation_meta_redirect (operation, "glasscolor", glassovertext, "color");
   gegl_operation_meta_redirect (operation, "glassopacity", glassovertext, "hyperopacity");
   /*Beginning of End of Glass Over Text's GUI asociations*/
 
@@ -2065,7 +2065,7 @@ drop shadow is applied in a gegl graph below them.*/
   state->screeng = screeng;
   state->multiplyg = multiplyg;
   state->softlightg = softlightg;
-  state->hslcolorg = hslcolorg; 
+  state->hslcolorg = hslcolorg;
   state->hsvhueg = hsvhueg;
   state->additiong = additiong;
   state->burng = burng;
