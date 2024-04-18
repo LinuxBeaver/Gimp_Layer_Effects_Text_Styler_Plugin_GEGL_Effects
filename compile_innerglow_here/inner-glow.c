@@ -57,11 +57,11 @@ enum_start (gegl_blend_mode_typeig)
               N_("Screen"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGE,      "grainmerge",
               N_("Grain Merge"))
- enum_end (GeglBlendModeTypeig)
+ enum_end (GeglBlendModeTypeig0)
 
 
 property_enum (bevelblendmode, _("Emboss blend mode:"),
-    GeglBlendModeTypeig, gegl_blend_mode_typeig,
+    GeglBlendModeTypeig0, gegl_blend_mode_typeig,
     GEGL_BLEND_MODE_TYPE_HARDLIGHT)
 ui_meta ("visible", "mode {beveled  }" )
 
@@ -72,7 +72,7 @@ nodes like "solid-noise, cell-noise, ect... but distance transform was the faste
 "   id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true aux=[ ref=1 ] color-overlay value=#000000  "\
 
 #define GRAPHUSEDBYINNERGLOW2 \
-"  src-out aux=[ color value=black]  crop "\
+"  id=1 src-out aux=[ color value=black]  crop aux=[ ref=1 ] "\
 
 /*On June 24 2023 I finally figured out how to bake in GEGL Graphs*/
 
@@ -317,9 +317,6 @@ but somehow crop fixes it.*/
                                   "operation", "gegl:color-overlay",
                                   NULL);
 
-  state->idref3    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
 
 
 
@@ -369,8 +366,9 @@ but somehow crop fixes it.*/
                                   NULL);
 
   state->nothing    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
+                                  "operation", "gegl:dst",
                                   NULL);
+
 
 gegl_operation_meta_redirect (operation, "grow_radius",  state->shadow, "grow-radius");
 gegl_operation_meta_redirect (operation, "radius",  state->shadow, "radius");
@@ -414,27 +412,32 @@ switch (o->mode) {
     case DEFAULT_IG:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
   gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case DEFAULT_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->idref, state->atop, crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->it2,  state->color, state->in, state->median2, state->color2,  state->idref, state->atop, crop, state->output, NULL);
  gegl_node_link_many (state->idref, state->image, state->blurimage,  NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->atop, "aux", state->blurimage, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case FEB_2024_IG:
  gegl_node_link_many (state->input, state->medianset, state->idref, state->in2, crop, state->output, NULL);
  gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->color2,   NULL);
  gegl_node_connect (state->in2, "aux", state->color2, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case GRAINY_IG:
 /*This is median blur followed by GEGL's src-in blend mode and a crop*/
@@ -445,11 +448,13 @@ gegl_node_link_many  (state->idref3, state->it2,  state->shadow,  state->color2,
 /*Inside the second src in blend mode with have the pick filter.*/
  gegl_node_connect (state->ingrainy, "aux", state->pick, "output");
  gegl_node_link_many (state->idref2, state->pick, NULL);
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case BEVEL_IG:
  gegl_node_link_many (state->input, state->medianset, state->idref, state->in4, crop, state->output, NULL);
  gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->color2, usethis,  NULL);
  gegl_node_connect (state->in4, "aux", usethis, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
     }
   }
 
