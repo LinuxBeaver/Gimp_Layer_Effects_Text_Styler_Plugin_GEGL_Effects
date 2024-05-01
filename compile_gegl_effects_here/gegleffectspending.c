@@ -334,8 +334,8 @@ property_enum (colorblendmode, _("Blend Mode of Color Overlay"),
     GEGL_BLEND_MODE_TYPE_MULTIPLY)
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double(coloropacity, _("Opacity of Color Overlay"), 0.999)
-    value_range (0.0, 0.999)
+property_double(coloropacity, _("Opacity of Color Overlay"), 1.0)
+    value_range (0.0, 1.0)
   ui_steps      (0.01, 0.50)
     ui_meta     ("role", "output-extent")
   ui_meta ("visible", "guichange {strokeshadow}")
@@ -346,8 +346,8 @@ property_boolean (enableoutline, _("Enable Outline"), FALSE)
   description    (_("Disable or Enable Outline"))
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (opacitystroke, _("Outline's Opacity"), 0.999)
-  value_range   (0.0, 0.999)
+property_double (opacitystroke, _("Outline's Opacity"), 1.0)
+  value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {strokeshadow}")
 
@@ -393,8 +393,8 @@ property_boolean (enableshadow, _("Enable Drop Shadow"), TRUE)
 I choose not to use this in GEGL Effects */
 
 property_double (opacity, _("Shadow/Glow Opacity --ENABLE SHADOW/GLOW"), 0.0)
-  value_range   (0.0, 0.999)
-  ui_range      (0.0, 0.999)
+  value_range   (0.0, 1.0)
+  ui_range      (0.0, 1.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {strokeshadow}")
 
@@ -473,14 +473,14 @@ property_double (radius1, _("Radius of Bevel"), 2.0)
 
 property_double (slideupblack, _("Black Bevel and Image Bevel mode. "), 0.00)
     description (_("When in use GEGL Bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
-  value_range   (0.00, 0.999)
+  value_range   (0.00, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
 
-property_double (bevelopacity, _("Bevel's Opacity"), 0.999)
-  value_range   (0.15, 0.999)
+property_double (bevelopacity, _("Bevel's Opacity"), 1.0)
+  value_range   (0.15, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
@@ -579,8 +579,8 @@ property_enum (imageblendmode, _("Blend Mode of Image File Overlay (For layer co
 
 
 
-property_double(layeropacity, _("Opacity of Image File Overlay"), 0.999)
-    value_range (0.0, 0.999)
+property_double(layeropacity, _("Opacity of Image File Overlay"), 1.0)
+    value_range (0.0, 1.0)
   ui_steps      (0.01, 0.50)
 ui_meta ("visible", "guichange {imagegradient}")
 
@@ -611,8 +611,8 @@ property_enum (blendmodegradient2, _("Blend Mode of Gradient"),
     GEGL_BLEND_MODE_TYPE_OVER)
   ui_meta ("visible", "guichange {imagegradient}")
 
-property_double(opacitygradient, _("Opacity of Gradient"), 0.999)
-    value_range (0.0, 0.999)
+property_double(opacitygradient, _("Opacity of Gradient"), 1.0)
+    value_range (0.0, 1.0)
   ui_steps      (0.01, 0.50)
 ui_meta ("visible", "guichange {imagegradient}")
 
@@ -700,8 +700,8 @@ property_double (osradius, _("Radius of Outline Bevel"), 3.0)
   ui_meta ("visible", "guichange {outlinespecial}")
 
 
-property_double (osbevelopacity, _("Outline Bevel's Opacity"), 0.999)
-  value_range   (0.15, 0.999)
+property_double (osbevelopacity, _("Outline Bevel's Opacity"), 1.0)
+  value_range   (0.15, 1.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {outlinespecial}")
 
@@ -772,7 +772,7 @@ ui_meta ("visible", "guichange {miscoptions}")
 
 property_double (opacityshine, _("Opacity of Gloss Shine"), 0.500)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
-    value_range (0.100, 0.999)
+    value_range (0.100, 1.0)
     ui_range    (0.100, 0.950)
   ui_gamma (1.5)
 ui_meta ("visible", "guichange {miscoptions}")
@@ -830,8 +830,8 @@ ui_meta ("visible", "guichange {miscoptions}")
 
 property_double (knockout, _("Knock out original text. (translucent text option)"), 0.0)
     description (_("Global opacity value that is always used on top of the optional auxiliary input buffer."))
-    value_range (0.0, 0.999)
-    ui_range    (0.0, 0.999)
+    value_range (0.0, 1.0)
+    ui_range    (0.0, 1.0)
   ui_steps      (0.01, 0.10)
 ui_meta ("visible", "guichange {miscoptions}")
 
@@ -843,8 +843,8 @@ property_boolean (enableextraoutline, _("Enable Second Outline/Shadow/Glow"), FA
   ui_meta ("visible", "guichange {extraosg}")
 
 
-property_double (opacitystrokeextraoutline, _("Extra Outline/Shadow/Glow's Opacity"), 0.999)
-  value_range   (0.0, 0.999)
+property_double (opacitystrokeextraoutline, _("Extra Outline/Shadow/Glow's Opacity"), 1.0)
+  value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {extraosg}")
     /* BUG SOLVED JUNE 5th 2023 -- IGNORE COMMENT-- This extra outline opacity slider is hidden via "output-extent" and the one below is to be used.
@@ -931,8 +931,8 @@ property_double (osradiusextra, _("Radius of Extra Outline Bevel"), 3.0)
 
 
 
-property_double (osbevelopacityextra, _("Extra Outline Bevel's Opacity"), 0.999)
-  value_range   (0.15, 0.999)
+property_double (osbevelopacityextra, _("Extra Outline Bevel's Opacity"), 1.0)
+  value_range   (0.15, 1.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {extraosg}")
 
@@ -1006,11 +1006,11 @@ property_color (glasscolor, _("Color"), "#ffffff")
   ui_meta ("visible", "guichange {glasstextpartner}")
 
 
-property_double (glassopacity, _("Opacity of Glass Text"), 0.999)
+property_double (glassopacity, _("Opacity of Glass Text"), 1.0)
     description (_("Opacity slider of Glass Text"))
-    value_range (0.3, 0.999)
-    ui_range    (0.3, 0.999)
-  ui_steps      (0.3, 0.999)
+    value_range (0.3, 1.0)
+    ui_range    (0.3, 1.0)
+  ui_steps      (0.3, 1.0)
   ui_meta ("visible", "guichange {glasstextpartner}")
 /* End of Glass Text*/
 
