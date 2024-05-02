@@ -442,6 +442,7 @@ property_double (radius, _("Shadow/Glow Blur intensity"), 12.0)
 property_boolean (clippolicy, _("Disable Shadow Clipping (delayed color bug trade off)"), FALSE)
   description    (_("This checkbox removes the shadow clip bug for compliance with Gimp 3's non-destructive text editing. If enabled this will triger another bug only seen after using GEGL Effects heavily, said bug appears usually after a few minutes of usage and will cause GEGL Effects to delay a selected color update until another slider is moved. It is suggested to enable this once one applies the filter. But keep it disabled while editing GEGL Effects unless you can tolerate a delayed color update."))
   ui_meta ("visible", "guichange {strokeshadow}")
+    ui_meta     ("role", "output-extent")
 
 
 /* End of Color Overlay, Outline and Shadow GUI options*/
@@ -2167,7 +2168,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. March 11th 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. May 2 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
