@@ -376,8 +376,9 @@ update_graph (GeglOperation *operation)
 
   GeglNode *multiplyge;
   GeglNode *crop;
+/*
   GeglNode *atop;
-  GeglNode *cubismglow;
+  GeglNode *cubismglow; */
   if (!state) return;
 
   if (o->clipbugpolicy) crop = state->newnop;
@@ -393,8 +394,9 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_DISABLEBEVELGE: multiplyge = state->disablebevel; break;
 
  /* This is a really complex if else scenario Beaver did all by themselves. Beaver wishes in the future that this will become more simple.  */
- }
 
+
+/*
   if (o->enableaura) cubismglow = state->cubismglow;
   if (!o->enableaura) cubismglow = state->nothingcubism;
 
@@ -407,22 +409,42 @@ update_graph (GeglOperation *operation)
   if (!o->specialoutline) multiplyge = state->invisibleblend2;
   if (o->specialoutline) multiplyge = state->multiplyge;
 
-{
-  if (o->enableoutline)
+*/
+
+}
+ if (o->enableoutline)
+ if (o->specialoutline)
+ if (o->enableaura)
   {
-  gegl_node_link_many (state->input, state->median, cubismglow, state->gaussian, state->move,  state->ontop, atop, state->nop2, multiplyge, crop, state->output, NULL);
+  gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, state->atop, state->nop2, multiplyge, crop, state->output, NULL);
   gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL);
   gegl_node_link_many (state->nop2, state->bevel, state->opacitybevel,  NULL);
-  gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
-  gegl_node_connect (atop, "aux", state->huelight, "output");
+  gegl_node_connect (state->multiplyge, "aux", state->opacitybevel, "output");
+  gegl_node_connect (state->atop, "aux", state->huelight, "output");
   gegl_node_link_many (state->color,  state->opacity, NULL);
   gegl_node_connect (state->ontop, "aux", state->opacity, "output");
- }
+  }
+else
+  {
+  gegl_node_link_many (state->input, state->median,  state->gaussian, state->move,  state->ontop, state->atop, state->nop2, state->multiplyge, crop, state->output, NULL);
+  gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL);
+  gegl_node_link_many (state->nop2, state->bevel, state->opacitybevel,  NULL);
+  gegl_node_connect (state->multiplyge, "aux", state->opacitybevel, "output");
+  gegl_node_connect (state->atop, "aux", state->huelight, "output");
+  gegl_node_link_many (state->color,  state->opacity, NULL);
+  gegl_node_connect (state->ontop, "aux", state->opacity, "output");
+  }
+else
+  {
+  gegl_node_link_many (state->input, state->median,  state->gaussian, state->move,  state->ontop, state->nop2,  crop, state->output, NULL);
+  gegl_node_link_many (state->color,  state->opacity, NULL);
+  gegl_node_connect (state->ontop, "aux", state->opacity, "output");
+  }
 else
   {
     gegl_node_link_many (state->input, state->graph, state->output, NULL);
   }
-}
+
 
   gegl_operation_meta_redirect (operation, "radius1", state->bevel, "radius1");
   gegl_operation_meta_redirect (operation, "bevel1", state->bevel, "bevel1");
@@ -461,7 +483,7 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:zzstrokebevelimage",
     "title",       _("Hidden Operation to outline, shadow, glow in GE"),
-    "categories",  "zhidden",
+    "categories",  "hidden",
     "reference-hash", "33234v25str2ac",
     "description", _("Hidden Operation for GEGL Effects - This is a rough reimagination of Gimp's drop shadow filter with many new things and technical options that drop shadow was not capable of doing. GEGL Effects no longer calls Gimp's GEGL drop shadow filter. It uses this under the hood."
                      ""),
