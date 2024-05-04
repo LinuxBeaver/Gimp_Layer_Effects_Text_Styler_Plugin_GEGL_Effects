@@ -38,7 +38,7 @@ enum_start (inner_glow_list)
    enum_value (INVERT_TRANSPARENCY_IG,  "invert",  N_("Invert Transparency"))
    enum_value (DEFAULT_IG_IMAGE_UPLOAD, "defaultimage", N_("Image Upload"))
    enum_value (INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD,  "invertimage",  N_("Image Upload with Inverted Transparency"))
-   enum_value (FEB_2024_IG,  "feb2024",  N_("Feb 2024 Inner Glow"))
+   enum_value (FEB_2024_IG,  "feb2024",  N_("Feb 2024 Inner Glow (adjustment layer group compatible) "))
    enum_value (GRAINY_IG,  "grainy",  N_("Grainy Inner Glow"))
    enum_value (BEVEL_IG,  "beveled",  N_("Beveled Inner Glow"))
 enum_end (innerglowlist)
@@ -162,6 +162,7 @@ ui_meta ("visible", "!mode {default, invert, grainy, beveled, feb2024  }" )
 
 property_boolean (clippolicy, _("Clip setting (bug trade off)"), TRUE)
   description    (_("Enable or disable the inner glow's clip. When disabled it will create a border bug when blur radius is high. When enabled it will clip Gimp's layers to image size setting."))
+
 
 
 #else
@@ -399,6 +400,8 @@ static void update_graph (GeglOperation *operation)
   if (o->clippolicy) crop = state->crop;
   if (!o->clippolicy) crop = state->nothing;
 
+
+
   switch (o->bevelblendmode) {
     case GEGL_BLEND_MODE_TYPE_MULTIPLY: usethis = state->multiplybevel; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGE: usethis = state->grainmergebevel; break;
@@ -412,7 +415,6 @@ switch (o->mode) {
     case DEFAULT_IG:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
- gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
   gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
