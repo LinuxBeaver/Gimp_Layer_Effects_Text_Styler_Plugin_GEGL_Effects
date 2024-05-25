@@ -27,7 +27,7 @@ GEGL Graph Below
 /*
 color-overlay  value=#ffffff
 gaussian-blur std-dev-x=1 std-dev-y=1
-emboss azimuth=44 depth=29 
+emboss azimuth=44 depth=29
 id=1
 gimp:layer-mode layer-mode=erase composite-mode=auto aux=[ ref=1 dst-over aux=[ color value=#000000  ]  crop  color-to-alpha opacity-threshold=0.14 color-overlay value=#000000 ]  ]
 color-overlay value=#ffffff
@@ -35,7 +35,7 @@ gaussian-blur std-dev-x=0 std-dev-y=0
  */
 
 
-/*GEGL Graph here. NOTE FOR DEVS replacing"gimp:layer-mode layer-mode=erase with gegl:xor does not work proper. I tried and you can try it too and watch it fail. GEGL blend modes are not as good as 
+/*GEGL Graph here. NOTE FOR DEVS replacing"gimp:layer-mode layer-mode=erase with gegl:xor does not work proper. I tried and you can try it too and watch it fail. GEGL blend modes are not as good as
 Gimp blend modes  */
 
 #include "config.h"
@@ -178,10 +178,10 @@ else
 }
 
 
-static void attach (GeglOperation *operation) 
+static void attach (GeglOperation *operation)
 {
 GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *gegl = operation->node; 
+  GeglNode *gegl = operation->node;
   GeglNode *input, *output, *emboss, *color, *glassover,  *glassgrainmerge, *glasslinearlight, *glasssubtract, *glassoverlay, *white, *retract, *gaussian, *hyperopacity, *string;
   GeglColor *white_color = gegl_color_new ("rgb(1.1,1.1,1.1)");
 
@@ -245,7 +245,6 @@ glassoverlay = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "std_dev", retract, "std-dev-y");
   gegl_operation_meta_redirect (operation, "blur", gaussian, "std-dev-x");
   gegl_operation_meta_redirect (operation, "blur", gaussian, "std-dev-y");
-  gegl_operation_meta_redirect (operation, "string", string, "string");
   gegl_operation_meta_redirect (operation, "azimuth", emboss, "azimuth");
   gegl_operation_meta_redirect (operation, "elevation", emboss, "elevation");
   gegl_operation_meta_redirect (operation, "depth", emboss, "depth");

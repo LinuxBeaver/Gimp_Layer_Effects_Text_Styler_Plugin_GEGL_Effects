@@ -14,14 +14,14 @@
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
- * 2022 Beaver (GEGL Bevel) 
+ * 2022 Beaver (GEGL Bevel)
  */
 
 /*GEGL Bevel is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
 
 
 /*
-Graph here to test without installing. 
+Graph here to test without installing.
 
 "normal bevel"
 id=1 gimp:layer-mode layer-mode=normal composite-mode=clip-to-backdrop aux=[color value=#ffffff  opacity value=0.1 ]
@@ -281,7 +281,7 @@ typedef struct
   GeglNode *median2;
   GeglNode *bilateral;
   GeglNode *output;
-} State; 
+} State;
 
 
 static void attach (GeglOperation *operation)
@@ -327,7 +327,7 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
  embcovefix   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:emboss", "depth", 20, "elevation", 90.0, 
+                                  "operation", "gegl:emboss", "depth", 20, "elevation", 90.0,
                                   NULL);
 
  emgsb   = gegl_node_new_child (gegl,
@@ -404,7 +404,7 @@ normallayer2 = gegl_node_new_child (gegl,
 replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
 
  levels   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:levels", "in-high", 1.3, "in-low", 0.33, 
+                                  "operation", "gegl:levels", "in-high", 1.3, "in-low", 0.33,
                                   NULL);
 
  dt   = gegl_node_new_child (gegl,
@@ -453,7 +453,6 @@ replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
   gegl_operation_meta_redirect (operation, "radius2cove", boxblurcove, "radius");
   gegl_operation_meta_redirect (operation, "th", th, "value");
   gegl_operation_meta_redirect (operation, "slideupblack", slideupblack, "value");
-  gegl_operation_meta_redirect (operation, "invert", normallayer2, "opacity");
   gegl_operation_meta_redirect (operation, "smooth", bilateral, "blur-radius");
   gegl_operation_meta_redirect (operation, "metric", dt, "metric");
   gegl_operation_meta_redirect (operation, "hyperopacity", hyperopacity, "value");
@@ -527,7 +526,7 @@ switch (o->type) {
     case GEGL_BEVEL_SHARP:
     gegl_node_link_many (state->input, state->normallayer, state->median, state->nop, state->replace, state->levels, state->bilateral, state->lowersharpopacity, state->output, NULL);
     gegl_node_link_many (state->nop, state->median2,  state->dt, state->c2a, state->emb,  NULL);
-    gegl_node_connect (state->replace, "aux", state->emb, "output"); 
+    gegl_node_connect (state->replace, "aux", state->emb, "output");
     gegl_node_link_many (state->input, state->whitecolor, state->slideupblack,  NULL);
     gegl_node_connect (state->normallayer, "aux", state->slideupblack, "output");
         break;

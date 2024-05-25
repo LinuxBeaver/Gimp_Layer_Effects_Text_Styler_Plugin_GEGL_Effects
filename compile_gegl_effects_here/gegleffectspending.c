@@ -794,9 +794,10 @@ property_double (y_scaleshine, _("Vertical Scale of Gloss Shine"), 56.0)
     ui_meta     ("axis", "y")
 ui_meta ("visible", "guichange {miscoptions}")
 
-property_double (complexity, _("Complexity of Gloss Shine"), 0.8)
+property_double (complexity, _("Complexity of Gloss Shine"), 0.800)
     description (_("Complexity factor"))
-    value_range (0.1, 0.8)
+    ui_range (0.100, 0.800)
+    value_range (0.100, 0.800)
 ui_meta ("visible", "guichange {miscoptions}")
 
 property_double (blend_power, _("Dark to light intensity"), -0.600)
@@ -1913,12 +1914,10 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "bevel1", mbd, "bevel1");
   gegl_operation_meta_redirect (operation, "slideupblack", mbd, "slideupblack");
   gegl_operation_meta_redirect (operation, "bevelopacity", mbdopacity, "value");
-  gegl_operation_meta_redirect (operation, "th", mbd, "th");
   gegl_operation_meta_redirect (operation, "typebevel", mbd, "type");
   /*End of Bevel's GUI asociations*/
 
   /*Beginning of Image file Overlay's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "string", image, "string");
   gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
   gegl_operation_meta_redirect (operation, "hue", saturation, "hue");
   gegl_operation_meta_redirect (operation, "chroma", saturation, "chroma");
