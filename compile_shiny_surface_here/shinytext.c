@@ -47,9 +47,9 @@ property_double (y_scale, _("Y Scale of Gloss Shine"), 56.0)
     ui_meta     ("unit", "pixel-distance")
     ui_meta     ("axis", "y")
 
-property_double (complexity, _("Complexity of Gloss Shine"), 0.800)
+property_double (complexity, _("Complexity of Gloss Shine"), 0.8)
     description (_("Complexity factor"))
-    value_range (0.100, 0.800)
+    value_range (0.1, 1.0)
 
 property_seed (seed, _("Random seed"), rand)
 
