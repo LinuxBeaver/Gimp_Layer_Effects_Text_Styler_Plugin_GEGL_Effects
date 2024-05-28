@@ -14,8 +14,8 @@
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
  * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
- *2022 Beaver GEGL Effects 
- * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox) 
+ *2022 Beaver GEGL Effects
+ * 2022 BarefootLiam (for helping give Inner Glow a disable checkbox)
  */
 
 #include "config.h"
@@ -152,15 +152,6 @@ property_double (radius1, _("Radius of Bevel"), 7.0)
   ui_range (1.0, 12)
   ui_gamma (1.5)
   ui_meta ("visible", "guichange {innerglowbevel}")
-
-property_double (th, _("Bevel's unmodified edge pixel fix"), 0.100)
-  value_range (0.0, 0.1)
-  ui_range (0.0, 0.1)
-  ui_meta ("visible", "guichange {innerglowbevel}")
-    ui_meta     ("role", "output-extent")
-
-
-
 
 property_double (opacitystroke, _("Outline's Opacity --ENABLE OUTLINE"), 0.0)
   value_range   (0.0, 1.0)
@@ -384,9 +375,9 @@ ui_meta ("visible", "guichange {imagegradient}")
 property_color  (end_color, _("Gradient End Color"), "#fe18f2")
     description (_("The color at (x2, y2)"))
 ui_meta ("visible", "guichange {imagegradient}")
- 
 
- 
+
+
 
 #else
 
@@ -481,8 +472,8 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_OVERLAYIG: over = state->overlayig; break;
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTIG: over = state->linearlightig; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTIG: over = state->hardlightig; break;
-    case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break; 
-    case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break; 
+    case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break;
+    case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break;
 
   }
 
@@ -503,7 +494,7 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_LCHCOLORG: atopg = state->lchcolorg; break;
 
   }
- 
+
 
   if (o->innerglow)
   {
@@ -622,10 +613,8 @@ static void attach (GeglOperation *operation)
 
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel",
+                                  "operation", "lb:bevel", "th", 0.100,
                                   NULL);
-
-
 
   mcol = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
@@ -770,11 +759,6 @@ lchcolorig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
 
 
-
-
-
-
-
   gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
   gegl_node_link_many (nopimage, image, NULL);
  gegl_node_link_many (nopig, innerglow, NULL);
@@ -786,7 +770,7 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_node_connect (atopi, "aux", image, "output");
   gegl_node_connect (atopg, "aux", gradient, "output");
 
-  gegl_operation_meta_redirect (operation, "string", image, "string");
+
   gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
   gegl_operation_meta_redirect (operation, "hue", saturation, "hue");
   gegl_operation_meta_redirect (operation, "chroma", saturation, "chroma");
@@ -820,7 +804,6 @@ lchcolorig = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "end_y", gradient, "end-y");
   gegl_operation_meta_redirect (operation, "start_color", gradient, "start-color");
   gegl_operation_meta_redirect (operation, "end_color", gradient, "end-color");
-  gegl_operation_meta_redirect (operation, "th", mbd, "th");
 
 
   /* Now save points to the various gegl nodes so we can rewire them in
@@ -866,7 +849,7 @@ lchcolorig = gegl_node_new_child (gegl,
   state->screeng = screeng;
   state->multiplyg = multiplyg;
   state->softlightg = softlightg;
-  state->hslcolorg = hslcolorg; 
+  state->hslcolorg = hslcolorg;
   state->hsvhueg = hsvhueg;
   state->additiong = additiong;
   state->saturation = saturation;
@@ -896,7 +879,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("GEGL Effects Classic"),
     "categories",  "Generic",
     "reference-hash", "45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and speciality image outlining filter. Text recoloring only works if the color is white "
+    "description", _("GEGL text styling and speciality image outlining filter from early 2023 before major overhauls. Text recoloring only works if the color is white.  "
                      ""),
     NULL);
 }
