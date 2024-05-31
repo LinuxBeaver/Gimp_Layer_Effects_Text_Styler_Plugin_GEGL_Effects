@@ -1,4 +1,4 @@
-### Changes made since last release 
+# Changes made since last release 
 
 **1.** Bevel has a new sharp bevel mode that is in both stand alone bevel and GEGL Effects.
 Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
