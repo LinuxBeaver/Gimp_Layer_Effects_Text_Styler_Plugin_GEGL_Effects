@@ -90,28 +90,9 @@ meson setup --buildtype=release build
 ninja -C build
 ```
 
-## Quick Guide for GIMP 2.10 users, GIMP 2.99.19/GIMP 3 users can just edit text apply the filter and get non-destructive re-editing!
-**0.** This is meant to be applied on text layers or raster text/image. It does live previews but does NOT actively apply when typing text.  Lots of people are let down by this but that is just the way it is. Though in CMYK Student's build of Gimp it does live preview edit non-destructively. 
+## Notes about using GEGL Effects on 2.10 vs GIMP 2.99/3
 
-**1.** Please right click a text layer and select "layer to image size" before applying this filter. This way it prevents clipping as discussed here. Consider making a back up text layer before applying "layer to image size".  
-https://github.com/LinuxBeaver/LinuxBeaver/issues/8
-
-**2.** In default color change will only work correctly if the text is white. This is because it uses a color overlay operation on the 'multiply' blend mode. The multiply blend mode changes colors that are white - but will NOT correctly change any other color. During the Summer of 2023 GEGL Effects got an update that gave it the ability to change blend modes to "Solid Color" to override any color regardless if it is white.
-
-**3.** You must enable the checkbox to use the outline but it also has an opacity slider that hides it when it reaches 0%.
-
-**3b.** You must slide opacity of Shadow/Glow up to use Shadow and Glow option. Sliding it down again to 0% opacity hides it as if it were never present.
-
-**3c.** To use Bevel enable it from the "select blend or enable/disable bevel" from the drop down list.
-
-**4.** Making X and Y 0.0 on Shadow can make a glow or extra stroke depending on the blur radius. This is the same as Gimp's drop shadow filter. Glow, Shadow and Stroke in Adobe are technically the same thing and my plugins make that even more obvious.
-
-**5.** Bevel has many blend modes that do many different things, so try them out. It also has a black/image bevel mode that allows a bevel even if the text color is dark or text has an image file overlay. The Black bevel slider is meant for dark colored text and image uploads over text.
-
-**6.** Inner Glow, Gradient Overlay, Bevel on outline and other things have checkboxes to enable them because if I just made them invisible they would make GEGL Effects more resource intensive.
-
-**7.** You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas. Though beware the shadow might clip.
-
+Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects and edit text live.
 
 ### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
 
@@ -129,19 +110,18 @@ https://github.com/LinuxBeaver/LinuxBeaver/issues/8
 
 ![image preview](/Image_previews/flatpak2.png    )
 
-![image preview](/Image_previews/example_preset.png    )
 
+# Inner Glow Bevel and Glass Over text, the stand alones
 
-
-### Inner Glow Bevel and Glass Over text, the stand alones
+### Inner Glow
 ![image preview](/Image_previews/inner_glow.png    )
 
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/ee3949f1-382e-4a28-8da4-e31bb82d5f77)
 
-
+### Bevel
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/b8db02a5-8e4c-4c5e-8068-1c4be09f9209)
 
-
+### Glass on Text
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
 ## What is Help_Documents_for_GEGL_Effects_here folder all about? 
