@@ -12,22 +12,21 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/r
 
 ## GEGL Effects CE by Beaver
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
+GEGL effects CE is a GEGL Gimp plugin that does layer effects/text styling in Gimp. Allowing users to make all their favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
 
 ## Instructions 
 
-If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffects and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
+If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffectscontinual and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
 
 
-## About CE
+## About GEGL Effects CE
 
-This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
-
+In the early days this was the experimental version of GEGL Effects before becoming the default. Now this is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people discard). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
 In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
 
-This plugin will work alongside a special legacy version of GEGL Effects as seen here.
+Example of plugin working alongside a special legacy version of GEGL Effects as seen here.
 
 ![image preview](coexisting_plugins.jpg  )
 
@@ -87,7 +86,7 @@ meson setup --buildtype=release build
 ninja -C build
 ```
 
-## Quick Guide 
+## Quick Guide for GIMP 2.10 users, GIMP 2.99.19/GIMP 3 users can just edit text apply the filter and get non-destructive re-editing!
 **0.** This is meant to be applied on text layers or raster text/image. It does live previews but does NOT actively apply when typing text.  Lots of people are let down by this but that is just the way it is. Though in CMYK Student's build of Gimp it does live preview edit non-destructively. 
 
 **1.** Please right click a text layer and select "layer to image size" before applying this filter. This way it prevents clipping as discussed here. Consider making a back up text layer before applying "layer to image size".  
@@ -108,8 +107,6 @@ https://github.com/LinuxBeaver/LinuxBeaver/issues/8
 **6.** Inner Glow, Gradient Overlay, Bevel on outline and other things have checkboxes to enable them because if I just made them invisible they would make GEGL Effects more resource intensive.
 
 **7.** You can use Gimp's rectangle select around the text to speed things up. That way the filter only applies on part of the canvas instead of the entire canvas. Though beware the shadow might clip.
-
-
 
 
 ### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
