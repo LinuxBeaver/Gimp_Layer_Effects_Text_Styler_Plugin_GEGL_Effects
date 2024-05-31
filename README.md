@@ -1,3 +1,7 @@
+# NEWS 
+
+It is extremely important users update to the latest GEGL Effects from late May 2024 as it is compatible with both GIMP 2.10 and GIMP 2.99.19+ without text clipping. If you keep using an old version it will work on 2.99.19 but create problems like crashing on close and text clipping. 
+
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
 
@@ -139,6 +143,10 @@ https://github.com/LinuxBeaver/LinuxBeaver/issues/8
 
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
+
+## What is Help_Documents_for_GEGL_Effects_here folder all about? 
+
+Its for people who want to downgrade to older versions of GEGL Effects or study how to make GEGL filters. 99.9% of users can avoid this and I might reorganize this folder soon.
 
 ## Downgrading to older versions of my plugins
 
