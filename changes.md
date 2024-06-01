@@ -28,4 +28,4 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 
 **11** May 4th 2024 GEGL Effects updated again to solve the delayed color update bug and clipping problem once and for all (hopefully) It no longer needs a checkbox to do this either. The bug was solved by modifying code in zzstrokebevelimage.c; the advance dropshadow like operation. 
 
-**12** May 21th-May 28th 2024 - 31 plugins were updated so they no longer crash when closing on GIMP 2.99.19. This includes GEGL Effects. No changes were made to GEGL Effects though.
+**12** May 21th-May 28th 2024 - 33 plugins were updated so they no longer crash when closing on GIMP 2.99.19. This includes GEGL Effects. No changes were made to GEGL Effects though.
