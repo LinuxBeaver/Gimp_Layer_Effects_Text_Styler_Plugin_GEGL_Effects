@@ -9,6 +9,7 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 ## Tiny changes and emergency fixes made in the July 22 2023 series that do not qualify as a new checkpoint release because there are no new features, only internal modifications that most will not notice.
 
 **3.** August 1st 2023 minor update allows Glass on Text to be on top of Bevel. This was a simple node rearrangement and does not qualify as a new release.
+
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/3e54daac-8d56-41c5-a168-eddc750af25b)
 
 **4**  August 1st 2024 renaming of blend modes.  Normal blend modes are now called "Normal" instead of  "over".
