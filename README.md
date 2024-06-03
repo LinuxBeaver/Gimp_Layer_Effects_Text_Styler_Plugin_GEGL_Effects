@@ -1,6 +1,6 @@
-**THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE it cannot co-exist with default GEGL Effects CE.** 
+## THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE THAT DOES ADVANCE TEXT STYLING
 
-It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text. This version of GEGL Effects needs to overwrite normal GEGL Effects CE, they cannot co-exist. This branch is assumed stable. 
+It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text.
 
 To example things simple. GEGL Effects got an update that allows it to use most of my other individual text styling plugins. You can run plugins of mine like "Glossy Balloon" "Custom Bevel" and "Sharp Bevel " inside GEGL Effects.  After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. If you use Gimp 2.99 you will find it in the main menu under filters>text styling.
 
@@ -50,8 +50,6 @@ This is a stable yet continual updating version of GEGL Effects that can co-exis
 
 
 You are expected to also download all 19 binaries in the zip folder for this plugin to work.
-
-This plugin will work alongside a special legacy version of GEGL Effects as seen here, but it will **NOT** co-exist with normal continual edition
 
 ![image preview](coexisting_plugins.jpg  )
 
@@ -134,21 +132,11 @@ ninja -C build
 
 7. Inner Glow, Outline and Shadow can do a triple stroke effect if set to the right option but it is smarter to just use a designated filter like my custom gegl:color-trail which allows up to 5 strokes. To do something like that. (WE NOW HAVE AN EXTRA OUTLINE TO DO FOUR OUTLINES)
 
-## Special Builds with Bash calling AI (these builds cannot co-exist)
+## Special Builds with Bash calling AI 
 
-Corresponds to this thread
-http://gimpchat.com/viewtopic.php?f=9&t=20652&start=60
+This build was discontinued because it does't make sense in GIMP 2.99.19 but the stand alone AI plugin that calls bash is here
 
-![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/d081fe2e-82aa-4c25-b599-99911cad9056)
-
-**For Normal Linux**
-
-https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/raw/GEGL-Effects-Continual-Experimental-update/AI_BASH_GEGL_EFFECTS_Linux_only_binaries_code.zip
-
-**For Flatpak Linux (requires compiling)**
-
-https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/raw/GEGL-Effects-Continual-Experimental-update/AI_BASH_GEGL_EFFECTS_Flatpak_Linux_only_binaries_code.zip
-http://gimpchat.com/viewtopic.php?f=9&t=20652&p=286240#p286240
+https://github.com/LinuxBeaver/AI_in_Gimp_by_GEGL_calling_bash/
 
 --
 
