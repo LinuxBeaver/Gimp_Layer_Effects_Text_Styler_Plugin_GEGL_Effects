@@ -1,12 +1,10 @@
 ### News
 
-As of June 3rd 2024 this plugin is GIMP 2.99.19 ready and can co-exist with GEGL Effects continual and GEGL Effects classic
+As of June 2th 2024 this plugin is GIMP 2.99.19 ready and can co-exist with GEGL Effects continual and GEGL Effects classic
 
 ## GEGL Effects Experimental - A MODIFIED BRANCH OF GEGL EFFECTS CE THAT DOES SUPER ADVANCE TEXT STYLING
 
-It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text.
-
-To example things simple. GEGL Effects got an update that allows it to use most of my other individual text styling plugins. You can run plugins of mine like "Glossy Balloon" "Custom Bevel" and "Sharp Bevel " inside GEGL Effects.  After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. If you use Gimp 2.99 you will find it in the main menu under filters>text styling.
+It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text. To example things simple. GEGL Effects got an update that allows it to use most of my other individual text styling plugins. You can run plugins of mine like "Glossy Balloon" "Custom Bevel" and "Sharp Bevel " inside GEGL Effects.  After putting the binaries in the instructed place restart Gimp and go to GEGL Operations and select the plugins from the list. If you use Gimp 2.99 you will find it in the main menu under filters>text styling.
 
 If you already have any or most of these binaries overide all of them with the latest version.
 
@@ -14,7 +12,7 @@ If you already have any or most of these binaries overide all of them with the l
 
 Where it says "Windows_Binaries" and "Linux_Binaries" is where GEGL Effects Experimental binaries are found. They are not in the release section 
 
-**Building From Source is easy** 
+### Building From Source is easy 
 
 Just click the build_everything for your OS. On Windows you will need MySys2. If correctly done a folder called "LinuxBinaries" or "WindowsBinaries" will be generated with all 19 binaries needed for this special branch of GEGL Effects.
 
