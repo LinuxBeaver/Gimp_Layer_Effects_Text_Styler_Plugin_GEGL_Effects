@@ -1,4 +1,8 @@
-## THIS IS A MODIFIED BRANCH OF GEGL EFFECTS CE THAT DOES ADVANCE TEXT STYLING
+### News
+
+As of June 3rd 2024 this plugin is GIMP 2.99.19 ready and can co-exist with GEGL Effects continual and GEGL Effects classic
+
+## GEGL Effects Experimental - A MODIFIED BRANCH OF GEGL EFFECTS CE THAT DOES SUPER ADVANCE TEXT STYLING
 
 It is the same as normal GEGL Effects CE with the exception of an 8th tab in its menu drop down list that includes a list of all major text styling plugins of mine that can be used inside GEGL Effects. So it requires a lot more plugins then just bevel, inner glow and glass over text.
 
@@ -6,22 +10,18 @@ To example things simple. GEGL Effects got an update that allows it to use most 
 
 If you already have any or most of these binaries overide all of them with the latest version.
 
-**Preconfigured Windows Binaries can be found here** (over write anything that you already have)
+### Pre-configured binaries are only avalible in this repo
 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_26_2023_Windows_Binaries.zip
-
-
-**Preconfigured Linux Binaries can be found here** (over write anything that you already have)
-
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/raw/GEGL-Effects-Continual-Experimental-update/GEGL_Effects_aug_26_2023_Linux_Binaries.zip
+Where it says "Windows_Binaries" and "Linux_Binaries" is where GEGL Effects Experimental binaries are found. They are not in the release section 
 
 **Building From Source is easy** 
 
-Just click the build_everything for your OS. On Windows you will need MySys2. If correctly done a folder called "LinuxBinaries" or "WindowsBinaries" will be generated with all 19 binaries needed for this special branch of GEGL Effects CE.
+Just click the build_everything for your OS. On Windows you will need MySys2. If correctly done a folder called "LinuxBinaries" or "WindowsBinaries" will be generated with all 19 binaries needed for this special branch of GEGL Effects.
 
 ## Image previews of this special branch of GEGL Effects using my major text stylers.
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ad8df18b-a116-4984-b18c-9c0124328e44)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/45a13adb-d4b7-4af8-9d8f-5c334db37453)
+![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/227603bd-2cbb-4495-9103-7c8b006b3fdc)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/8fbde507-b0c7-4d8b-b79f-0adb6b721f77)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/9a28c803-459a-4ef5-b999-c90b6745d7b9)
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/fbe71ca3-536e-46bb-a4da-af65c105a1d3)
@@ -31,8 +31,6 @@ Just click the build_everything for your OS. On Windows you will need MySys2. If
 
 
 ## EVERYTHING BELOW IS WHAT YOU WOULD FIND ON THE PAGE OF GEGL EFFECTS CE AND IS STILL RELEVANT.
-
-![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
 ## GEGL Effects CE by Beaver
 
