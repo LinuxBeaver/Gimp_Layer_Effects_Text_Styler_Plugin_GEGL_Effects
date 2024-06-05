@@ -124,9 +124,9 @@ Gimp 2.10 users are expected to first layer to image size then open GEGL Operati
 ### Glass on Text
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
-## What is Help_Documents_for_GEGL_Effects_here folder all about? 
+## Is there a guide for GEGL Effects 
 
-Its for people who want to downgrade to older versions of GEGL Effects or study how to make GEGL filters. 99.9% of users can avoid this and I might reorganize this folder soon.
+Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - this tutorial contains everything you need.
 
 ## Downgrading to older versions of my plugins
 
