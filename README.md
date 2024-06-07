@@ -96,7 +96,11 @@ Gimp 2.10 users are expected to first layer to image size then open GEGL Operati
 
 ## Is there a guide for GEGL Effects? 
 
-Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - this tutorial contains everything you need.
+Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - (linked below) This tutorial contains everything you need.
+
+https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/blob/ContinualEdition/Help_Documents_for_GEGL_Effects_here/GEGL_Effects_guide_final.pdf 
+
+
 
 ## Picture gallery of GEGL Effects 
 
@@ -113,7 +117,7 @@ Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - thi
 ![image preview](/Image_previews/flatpak2.png    )
 
 
-# Inner Glow Bevel and Glass Over text, the stand alones
+## Inner Glow Bevel and Glass Over text, the stand alones
 
 ### Inner Glow
 ![image preview](/Image_previews/inner_glow.png    )
