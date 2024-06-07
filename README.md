@@ -5,7 +5,7 @@ It is extremely important users update to the latest GEGL Effects from late May 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
 
-### Image Previews
+## Preview of GEGL Effects
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
 
 
@@ -98,9 +98,7 @@ Gimp 2.10 users are expected to first layer to image size then open GEGL Operati
 
 Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - this tutorial contains everything you need.
 
-### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
-
-![image preview](/Image_previews/generated_text_style.png  )
+## Picture gallery of GEGL Effects 
 
 ![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
 
