@@ -8,9 +8,6 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/r
 ## Preview of GEGL Effects
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
 
-
-![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
-
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c6874a65-d761-4994-96a4-2e46b996b07a)
 
 
@@ -94,25 +91,23 @@ ninja -C build
 
 Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects and edit text live.
 
-## Is there a guide for GEGL Effects? 
+## Guide on how to use GEGL Effects
 
-Yes, look for Help_Documents_for_GEGL_Effects/GEGL_Effects_guide_final.pdf - (linked below) This tutorial contains everything you need.
+This tutorial contains everything you need.
 
 https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/blob/ContinualEdition/Help_Documents_for_GEGL_Effects_here/GEGL_Effects_guide_final.pdf 
 
-
-
 ## Picture gallery of GEGL Effects 
+
+![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
 
 ![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/095a8919-05e7-4453-95ed-647e885a1997)
 
-
 ![image preview](/Image_previews/continual_pink.png    )
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/69cacb6a-04e5-4539-b245-1b99857a4403)
-
 
 ![image preview](/Image_previews/flatpak2.png    )
 
