@@ -89,7 +89,7 @@ ninja -C build
 
 ## Notes about using GEGL Effects on 2.10 vs GIMP 2.99/3
 
-Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects and edit text live.
+Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects or go to filters>text styling and edit text live.
 
 ## Guide on how to use GEGL Effects
 
