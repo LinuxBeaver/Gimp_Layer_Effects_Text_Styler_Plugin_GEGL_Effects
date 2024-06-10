@@ -1,6 +1,6 @@
 # NEWS 
 
-It is extremely important users update to the latest GEGL Effects from late May 2024 as it is compatible with both GIMP 2.10 and GIMP 2.99.19+ without text clipping. If you keep using an old version it will work on 2.99.19 but create problems like crashing when GIMP is closed and text clipping. 
+It is extremely important GIMP 2.99/GIMP 3 users update to the latest GEGL Effects from late May 2024 as it is compatible with both GIMP 2.10 and GIMP 2.99.19+ without text clipping. If you keep using an old version it will work on GIMP 2.99.19 but create problems like crashing when GIMP is closed and text clipping. 
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
