@@ -2407,7 +2407,7 @@ gegl_op_class_init (GeglOpClass *klass)
   operation_meta_class->update = update_graph;
  /*btw, if GEGL Effects (or any of my plugins) ever breaks try changing the name space from gegl: or lb: to something else.*/
   gegl_operation_class_set_keys (operation_class,
-    "name",        "gegl:layereffectsexp",
+    "name",        "lb:layereffectsexp",
     "title",       _("GEGL Effects Experimental Edition"),
     "reference-hash", "experimental45ed565h8500fca01b2ac",
     "description", _("GEGL text styling and specialty image outlining filter.  Experimental Build"
