@@ -40,13 +40,13 @@ id=2  gegl:dst-atop aux=[  ref=2 median-blur radius=2 alpha-percentile=-1 gaussi
 /*It is mid 2023 and I still don't know how to hide these from the GEGL Graph. Everything else is easy to hide though*/
 
 
-property_double  (alpha_percentile2, _("Median edges"), 73)
+property_double  (alpha_percentile2, _("Median edge"), 73)
   value_range (0, 100)
   description (_("Apply a median blur only on the edges"))
 
 
-property_double (gaus, _("Blur Edge"), 1)
-   description (_("Apply a Gaussian Blur only on the edges of an image"))
+property_double (gaus, _("Blur edge"), 1)
+   description (_("Apply a gaussian blur only on the edges of an image"))
    value_range (0.0, 3.0)
    ui_range    (0.24, 3.0)
    ui_gamma    (3.0)
@@ -54,10 +54,19 @@ property_double (gaus, _("Blur Edge"), 1)
    ui_meta     ("axis", "x")
 
 
-property_double (value, _("Increase Opacity around edges"), 1.2)
+property_double (value, _("Increase opacity"), 1.2)
     description (_("Increase the opacity only around the edges"))
     value_range (1, 6.0)
     ui_range    (1, 3.0)
+
+enum_start (gegl_median_blur_abyss_policy_es)
+   enum_value (GEGL_MEDIAN_BLUR_ABYSS_NONE,  "none",  N_("None"))
+   enum_value (GEGL_MEDIAN_BLUR_ABYSS_CLAMP, "clamp", N_("Clamp"))
+enum_end (GeglMedianBlurAbyssPolicyes)
+
+property_enum (abyss_policy, _("Abyss Policy"), GeglMedianBlurAbyssPolicyes,
+               gegl_median_blur_abyss_policy_es, GEGL_MEDIAN_BLUR_ABYSS_NONE)
+  description (_("How image edges are handled. In default they don't clip but when applying this filter on subjects it makes sense for it to clip"))
 
 
 
@@ -123,6 +132,9 @@ gegl_node_connect (behind, "aux", median2, "output");
   gegl_operation_meta_redirect (operation, "gaus", gaussian, "std-dev-y");
   gegl_operation_meta_redirect (operation, "alpha_percentile2", median2, "alpha-percentile");
   gegl_operation_meta_redirect (operation, "value", opacity, "value");
+  gegl_operation_meta_redirect (operation, "abyss_policy", median, "abyss-policy");
+  gegl_operation_meta_redirect (operation, "abyss_policy", median2, "abyss-policy");
+  gegl_operation_meta_redirect (operation, "abyss_policy", fixgraph, "abyss-policy");
 }
 
 static void
@@ -137,10 +149,11 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:edgesmooth",
     "title",       _("Rough Edge Smoother"),
-    "categories",  "EdgeSmoother",
     "reference-hash", "45ed5656a11bgxxdt27730vaefe2g4f1b2ac",
-    "description", _("GEGL will apply a median blur and a few other things around a transparent images edges to repair them. "
+    "description", _("GEGL will apply a median blur and a few other things around a transparent images edges to smooth edges "
                      ""),
+    "gimp:menu-path", "<Image>/Filters/Blur",
+    "gimp:menu-label", _("Smooth edges (blur on edges only)..."),
     NULL);
 }
 
