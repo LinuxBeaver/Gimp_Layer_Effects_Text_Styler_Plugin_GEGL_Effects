@@ -187,9 +187,9 @@ ui_meta ("visible", "type {stackedembossbevel}" )
 
 property_double (slideupblack, _("Black Bevel/Image Bevel mode."), 0.00)
     description (_("This slider allows GEGL bevel to works on black Bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an image's details."))
-  value_range   (0.00, 0.999)
+  value_range   (0.00, 1.0)
   ui_steps      (0.1, 0.50)
-  ui_steps      (0.01, 0.50)
+
 
 
 property_enum (metric, _("Distance Map Setting"),
