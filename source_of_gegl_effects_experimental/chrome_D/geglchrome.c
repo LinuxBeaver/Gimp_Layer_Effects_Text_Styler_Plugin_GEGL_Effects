@@ -121,8 +121,7 @@ ui_meta ("visible", "guichange {advancechrometext}")
 
 property_double (th, _("Threshold Alpha of Bevel"), 0.210)
     description(_("Bevel's threshold Alpha"))
-  value_range (0.195, 0.230)
-  ui_range (0.195, 0.230)
+  ui_range (0.195, 0.231)
 ui_meta ("visible", "guichange {advancechrometext}")
 
 
