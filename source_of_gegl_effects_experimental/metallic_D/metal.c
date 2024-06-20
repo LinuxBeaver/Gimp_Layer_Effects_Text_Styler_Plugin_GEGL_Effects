@@ -162,9 +162,9 @@ property_color (color2, _("Color Overlay of Metal"), "#f3d758")
                  ui_meta ("visible", "guichange {oct2023metalcolor}")
 
 
-property_double (coloropacity, _("Opacity of Color"), 0.90)
+property_double (coloropacity, _("Opacity of Color"), 1.00)
    description  (_("Opacity of Color"))
-   value_range  (0.00, 0.90)
+   value_range  (0.00, 1.00)
                  ui_meta ("visible", "guichange {colormetal, oct2023metalcolor}")
 
 
