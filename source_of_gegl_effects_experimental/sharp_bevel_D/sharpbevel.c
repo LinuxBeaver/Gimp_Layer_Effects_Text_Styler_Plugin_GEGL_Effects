@@ -186,7 +186,7 @@ property_double (ollight, _("Levels - Low output (lighting control)"), 0.0)
 
 property_double (transvalue, _("Black artifact fix via transparency threshold"), 0.05)
     description(_("On non color priority mode this filter currently has a bug where its internal settings generates a black artifact. This helps fix that problem. On color priority mode this is still useful as it decreases the size of the bevel by shrinking its borders."))
-    value_range (0.0, 0.3)
+    ui_range (0.0, 0.3)
 
 #else
 
