@@ -172,7 +172,8 @@ property_file_path(src, _("Image file Overlay - Desaturate and lighten for best 
 
 property_double (slideupblack, _("Dark Text mode"), 0.0)
    description  (_("For dark bevels and bevels with images under them. Use 1. Slide up if text color is dark or black and this will allow the bevel to significantly better on dark and black text. Dark bevels seem to work best on the multiply blend mode."))
-   value_range  (0.0, 0.050)
+   ui_range  (0.00, 0.050)
+
 
 property_double (desat, _("Desaturate for image file and color overlay"), 1.0)
     description(_("Desaturates the bevel to prepare it for a image file overlay"))
