@@ -1,6 +1,6 @@
 # NEWS 
 
-This is a special build of GEGL Effects intended for GIMP 2.99.19 that does not crash GIMP 2.99.19 on closing tabs or Windows unlike continual. This build of GEGL Effects can co-exist with all other branches of GEGL Effects. 
+This is a special build of GEGL Effects intended for GIMP 2.99.19 that does not crash GIMP 2.99.19 on closing tabs or GIMP's main windows unlike the continual branch. This build of GEGL Effects can co-exist with all other branches of GEGL Effects. 
 
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/f9c790b7-ca67-4387-ab25-4d56cc54d987)
 
