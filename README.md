@@ -1,8 +1,9 @@
 # NEWS 
 
-A special build of GEGL effects for GIMP 3/.299.19 is here that prevents a bug with crash on close.
+A special build of GEGL effects for GIMP 3/.299.19 and many other plugins is here that prevents a bug with crash on close.
 
 https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/tree/Continual_299_19_crash_proof
+https://github.com/LinuxBeaver/GIMP_3_GEGL_PLUGIN_BUNKER/releases/
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
