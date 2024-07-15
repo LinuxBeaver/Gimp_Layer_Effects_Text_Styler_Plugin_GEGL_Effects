@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
- * 
+ * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
  * 2022 Beaver (GEGL Bevel)
  */
 
@@ -102,8 +102,8 @@ ui_meta ("visible", "type {covebevel}" )
 
 property_int (radius2, _("Radius Box Bevel"), 0)
     description (_("Make a box bevel bump map using Box Blur - this bevel is sharper looking but it is not the same as 'sharp bevel mode'. Box Blur 0 is the default setting which disables this effect by default. Both normal bevel and box bevel sliders can be used together to hybridize the bevel. "))
-   value_range (0, 10)
-   ui_range    (0, 9)
+   value_range (0, 10.0)
+   ui_range    (0, 9.0)
    ui_gamma   (1.5)
 ui_meta ("visible", "!type {sharpbevel, stackedembossbevel, covebevel}" )
 
@@ -111,8 +111,8 @@ ui_meta ("visible", "!type {sharpbevel, stackedembossbevel, covebevel}" )
 
 property_int (radius2cove, _("Radius Box Bevel"), 11)
     description (_("Make a box bevel bump map using Box Blur - this bevel is sharper but it is not the same as --sharp bevel mode--. Box Blur 0 is the default setting which disables this effect by default. Both normal bevel and sharp bevel sliders can be used together to hybridiz the bevel. "))
-   value_range (10, 16)
-   ui_range    (10, 16)
+   value_range (10.0, 16.0)
+   ui_range    (10.0, 16.0)
    ui_gamma   (1.5)
 ui_meta ("visible", "type {covebevel, stackedembossbevel}" )
 
@@ -148,14 +148,24 @@ ui_meta ("visible", "type {stackedembossbevel}" )
 property_int (bevel2special, _("Depth"), 7)
     description (_("Emboss depth -Brings out depth and detail of the bevel"))
     value_range (1, 20)
+  ui_steps      (0.1, 0.50)
+  ui_steps      (0.1, 0.50)
 ui_meta ("visible", "type {covebevel}" )
 
+
+property_double (th, _("Bevel's coverage threshold."), 0.100)
+    description (_("Internal Threshold Alpha. Lower covers more and higher covers less."))
+  value_range (0.0, 1.0)
+  ui_range (0.0, 0.5)
+  ui_steps      (0.1, 0.50)
+ui_meta ("visible", "type {normalbevel}" )
 
 
 property_double (azimuth, _("Rotate Lighting"), 40.0)
     description (_("Light angle (degrees)"))
     value_range (0, 350)
     ui_meta ("unit", "degree")
+    ui_meta ("direction", "ccw")
   ui_steps      (0.1, 0.50)
 ui_meta ("visible", "!type {covebevel, stackedembossbevel}" )
 
@@ -326,7 +336,7 @@ static void attach (GeglOperation *operation)
 
 
   th = gegl_node_new_child (gegl,
-                                  "operation", "gimp:threshold-alpha", "value", 0.100,
+                                  "operation", "gimp:threshold-alpha",
                                   NULL);
 
 
@@ -441,6 +451,7 @@ replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
   gegl_operation_meta_redirect (operation, "bevel1special2", emgsb, "elevation");
   gegl_operation_meta_redirect (operation, "radius2", boxblur, "radius");
   gegl_operation_meta_redirect (operation, "radius2cove", boxblurcove, "radius");
+  gegl_operation_meta_redirect (operation, "th", th, "value");
   gegl_operation_meta_redirect (operation, "slideupblack", slideupblack, "value");
   gegl_operation_meta_redirect (operation, "smooth", bilateral, "blur-radius");
   gegl_operation_meta_redirect (operation, "metric", dt, "metric");
