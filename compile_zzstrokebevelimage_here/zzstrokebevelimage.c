@@ -374,8 +374,8 @@ update_graph (GeglOperation *operation)
 
   State *state = o->user_data;
 
-  GeglNode *multiplyge;
-  GeglNode *crop;
+  GeglNode *multiplyge = state->multiplyge;
+  GeglNode *crop = state->crop;
 /*
   GeglNode *atop;
   GeglNode *cubismglow; */

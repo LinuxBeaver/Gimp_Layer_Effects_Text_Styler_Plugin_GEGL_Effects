@@ -1167,11 +1167,11 @@ update_graph (GeglOperation *operation)
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
-  GeglNode *bevelmode;
-  GeglNode *over;
-  GeglNode *atopg;
-  GeglNode *atopi;
-  GeglNode *multiply;
+  GeglNode *bevelmode = state->beveloff;
+  GeglNode *over = state->over;
+  GeglNode *atopg = state->atopg;
+  GeglNode *atopi = state->atopi;
+  GeglNode *multiply = state->multiply;
 
 /* These are the blend mode switchers
 BevelMode is Bevel, Over is Inner Glow, atopG is Gradient, atopI is inner glow and multiply is color overlay.

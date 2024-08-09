@@ -157,7 +157,7 @@ update_graph (GeglOperation *operation)
   State *state = o->user_data;
   if (!state) return;
 
-  GeglNode *blendglass = state->glassover; /* the default */
+  GeglNode *blendglass = NULL;  /* the default */
   switch (o->glassover) {
     case GEGL_BLEND_MODE_TYPE_GLASSOVER: blendglass = state->glassover; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGEGLASS: blendglass = state->glassgrainmerge; break;
@@ -277,15 +277,29 @@ glassoverlay = gegl_node_new_child (gegl,
 
 }
 
+
+static void
+dispose (GObject *object)
+{
+   GeglProperties  *o = GEGL_PROPERTIES (object);
+   g_clear_pointer (&o->user_data, g_free);
+   G_OBJECT_CLASS (gegl_op_parent_class)->dispose (object);
+}
+
 static void
 gegl_op_class_init (GeglOpClass *klass)
 {
+  GObjectClass           *object_class;
   GeglOperationClass *operation_class;
-GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
+
   operation_class = GEGL_OPERATION_CLASS (klass);
+  GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
 
   operation_class->attach = attach;
   operation_meta_class->update = update_graph;
+
+  object_class               = G_OBJECT_CLASS (klass);
+  object_class->dispose      = dispose;
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:glassovertext",

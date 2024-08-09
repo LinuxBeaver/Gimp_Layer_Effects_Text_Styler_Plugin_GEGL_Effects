@@ -507,7 +507,7 @@ update_graph (GeglOperation *operation)
   if (!state) return;
 
 
-  GeglNode *embosschoice = state->fiveembosses; /* the default */
+  GeglNode *embosschoice  = NULL;  /* the default */
   switch (o->embossamount) {
     case THREE_EMBOSSES: embosschoice = state->threeembosses; break;
     case FOUR_EMBOSSES: embosschoice = state->fourembosses; break;
@@ -551,14 +551,27 @@ switch (o->type) {
 
 
 static void
+dispose (GObject *object)
+{
+   GeglProperties  *o = GEGL_PROPERTIES (object);
+   g_clear_pointer (&o->user_data, g_free);
+   G_OBJECT_CLASS (gegl_op_parent_class)->dispose (object);
+}
+
+static void
 gegl_op_class_init (GeglOpClass *klass)
 {
+  GObjectClass           *object_class;
   GeglOperationClass *operation_class;
-GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
+
   operation_class = GEGL_OPERATION_CLASS (klass);
+  GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
 
   operation_class->attach = attach;
   operation_meta_class->update = update_graph;
+
+  object_class               = G_OBJECT_CLASS (klass);
+  object_class->dispose      = dispose;
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:bevel",

@@ -157,7 +157,7 @@ update_graph (GeglOperation *operation)
   State *state = o->user_data;
   if (!state) return;
 
-  GeglNode *blendchoice = state->replace; /* the default */
+  GeglNode *blendchoice = NULL;  /* the default */
   switch (o->blendmode) {
     case GEGL_BLEND_MODE_TYPE_GRAINMERGEALT: blendchoice = state->grainmergealt; break;
     case GEGL_BLEND_MODE_TYPE_GRAINMERGE: blendchoice = state->grainmerge; break;
@@ -231,9 +231,6 @@ grainmerge = gegl_node_new_child (gegl,
 grainmergealt = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 47, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
 
-
-
-
   blend    = gegl_node_new_child (gegl,
                                   "operation", "gegl:plus",
                                   NULL);
@@ -272,15 +269,29 @@ grainmergealt = gegl_node_new_child (gegl,
 }
 
 
+
+static void
+dispose (GObject *object)
+{
+   GeglProperties  *o = GEGL_PROPERTIES (object);
+   g_clear_pointer (&o->user_data, g_free);
+   G_OBJECT_CLASS (gegl_op_parent_class)->dispose (object);
+}
+
 static void
 gegl_op_class_init (GeglOpClass *klass)
 {
+  GObjectClass           *object_class;
   GeglOperationClass *operation_class;
-GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
+
   operation_class = GEGL_OPERATION_CLASS (klass);
+  GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
 
   operation_class->attach = attach;
   operation_meta_class->update = update_graph;
+
+  object_class               = G_OBJECT_CLASS (klass);
+  object_class->dispose      = dispose;
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:shinytext",

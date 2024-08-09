@@ -396,7 +396,7 @@ static void update_graph (GeglOperation *operation)
   if (!state) return;
 
   GeglNode *usethis = state->multiplybevel; /* the blend mode switcher for the bevel applying to inner glow*/
-  GeglNode *crop;
+  GeglNode *crop = state->crop;
   if (o->clippolicy) crop = state->crop;
   if (!o->clippolicy) crop = state->nothing;
 
