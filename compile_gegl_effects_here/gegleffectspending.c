@@ -1564,7 +1564,7 @@ additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", "th", 0.100,
+                                  "operation", "lb:bevel", 
                                   NULL);
  /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
@@ -2166,7 +2166,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. May 28th 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. Sept 3 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
