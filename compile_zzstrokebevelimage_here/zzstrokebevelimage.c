@@ -416,7 +416,7 @@ update_graph (GeglOperation *operation)
  if (o->specialoutline)
  if (o->enableaura)
   {
-  gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian, state->move,  state->ontop, state->atop, state->nop2, multiplyge, crop, state->output, NULL);
+  gegl_node_link_many (state->input, state->median, state->cubismglow, state->gaussian,   state->ontop, state->atop, state->nop2, multiplyge, crop,  state->move, state->output, NULL);
   gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL);
   gegl_node_link_many (state->nop2, state->bevel, state->opacitybevel,  NULL);
   gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
@@ -426,7 +426,7 @@ update_graph (GeglOperation *operation)
   }
 else
   {
-  gegl_node_link_many (state->input, state->median,  state->gaussian, state->move,  state->ontop, state->atop, state->nop2, multiplyge, crop, state->output, NULL);
+  gegl_node_link_many (state->input, state->median,  state->gaussian, state->ontop, state->atop, state->nop2, multiplyge, crop, state->move,   state->output, NULL);
   gegl_node_link_many (state->nop, state->layer, state->blurshadowimage, state->huelight,  NULL);
   gegl_node_link_many (state->nop2, state->bevel, state->opacitybevel,  NULL);
   gegl_node_connect (multiplyge, "aux", state->opacitybevel, "output");
@@ -436,7 +436,7 @@ else
   }
 else
   {
-  gegl_node_link_many (state->input, state->median,  state->gaussian, state->move,  state->ontop, state->nop2,  crop, state->output, NULL);
+  gegl_node_link_many (state->input, state->median,  state->gaussian,  state->ontop, state->nop2,  crop, state->move,  state->output, NULL);
   gegl_node_link_many (state->color,  state->opacity, NULL);
   gegl_node_connect (state->ontop, "aux", state->opacity, "output");
   }
