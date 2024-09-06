@@ -593,7 +593,7 @@ ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (chroma, _("Chroma (distorts color fill ignores gradient)"), 0.0)
    description  (_("Chroma adjustment. A color fill and gradient will be ignored by this option."))
-   value_range  (-100.0, 100.0)
+   value_range  (-100.0, 30.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (lightness, _("Lightness (ignores gradient)"), 0.0)
@@ -2166,7 +2166,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. Sept 3 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. Sept 6 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
