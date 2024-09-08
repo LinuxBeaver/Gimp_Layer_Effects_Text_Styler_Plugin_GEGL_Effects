@@ -445,9 +445,9 @@ update_graph (GeglOperation *operation)
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
-  GeglNode *multiplyb;
-  GeglNode *over;
-  GeglNode *atopg;
+  GeglNode *multiplyb = state->multiply;
+  GeglNode *over = state->over;
+  GeglNode *atopg = state->atopg;
 
   if (!state) return;
 
@@ -613,7 +613,7 @@ static void attach (GeglOperation *operation)
 
 
   mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", "th", 0.100,
+                                  "operation", "lb:bevel", 
                                   NULL);
 
   mcol = gegl_node_new_child (gegl,
