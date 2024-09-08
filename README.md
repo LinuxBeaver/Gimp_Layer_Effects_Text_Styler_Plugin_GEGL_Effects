@@ -1,18 +1,10 @@
-# NEWS 
+## This is a special build of GEGL Effects that can co-exist with classical, continual, and experimental GEGL Effects. 
 
-A special build of GEGL effects for GIMP 3/.299.19 and many other plugins is here that prevents a bug with crash on close.
+This build is special  because it works on adjustment layer groups in GIMP 3. Normal GEGL Effects works fine GIMP 3 without any crashing but it can't run on adjustment layer groups. So use this build for said task.
 
-https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/tree/Continual_299_19_crash_proof
+![image](https://github.com/user-attachments/assets/84d4a261-fa30-4ced-b559-0837ce688b19)
 
-https://github.com/LinuxBeaver/GIMP_3_GEGL_PLUGIN_BUNKER/releases/
-
-## Downloadable binaries for Windows and Linux is here 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
-
-## Preview of GEGL Effects
-![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
-
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c6874a65-d761-4994-96a4-2e46b996b07a)
+![image](https://github.com/user-attachments/assets/6ac1058f-9634-4156-a02c-37ee9a264cfc)
 
 
 ## GEGL Effects CE by Beaver
