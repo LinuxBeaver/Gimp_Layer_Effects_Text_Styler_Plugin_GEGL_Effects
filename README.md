@@ -13,7 +13,7 @@ GEGL effects CE is a GEGL Gimp plugin that does layer effects/text styling in Gi
 
 ## Instructions 
 
-If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffectscontinual and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
+Build by clicking `build_os.sh` then restart Gimp and go to Gimp's GEGL operation to find "GEGL Effects Saint GEGL Edition"
 
 
 ## About GEGL Effects CE
