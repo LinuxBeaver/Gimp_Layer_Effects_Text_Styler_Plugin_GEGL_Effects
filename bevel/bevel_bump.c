@@ -36,7 +36,7 @@ emboss azimuth=44 depth=9
 
 
 "alt sharp bevel graph"
-median-blur radius=3 alpha-percentile=100 id=0 src aux=[ ref=0 median-blur radius=0 distance-transform  color-to-alpha opacity-threshold=0.1 color=black emboss depth=4
+median-blur radius=3 alpha-percentile=100 id=0  aux=[ ref=0 median-blur radius=0 distance-transform  color-to-alpha opacity-threshold=0.1 color=black emboss depth=4
 ]
 levels in-high=1.3 in-low=0.33
 bilateral-filter blur-radius=3
@@ -258,12 +258,10 @@ typedef struct
   GeglNode *fix;
   GeglNode *dt;
   GeglNode *c2a;
-  GeglNode *nop;
   GeglNode *levels;
   GeglNode *threeembosses;
   GeglNode *fourembosses;
   GeglNode *fiveembosses;
-  GeglNode *replace;
   GeglNode *invert;
   GeglNode *median;
   GeglNode *lowersharpopacity;
@@ -343,8 +341,8 @@ static void attach (GeglOperation *operation)
                                   NULL);
 
 
-   state->fix   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
+   state->fix  = gegl_node_new_child (gegl,
+                                  "operation", "gegl:median-blur", "radius", 0, "abyss-policy",     GEGL_ABYSS_NONE,
                                   NULL);
 
 #define three \
@@ -368,16 +366,11 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:gegl", "string", five,
                                   NULL);
 
-   state->nop   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
 
    state->invert   = gegl_node_new_child (gegl,
                                   "operation", "gegl:invert",
                                   NULL);
 
-
-state->replace = gegl_node_new_child (gegl, "operation", "gegl:src", NULL);
 
  state->levels   = gegl_node_new_child (gegl,
                                   "operation", "gegl:levels", "in-high", 1.3, "in-low", 0.33,
@@ -456,9 +449,7 @@ switch (o->type) {
             gegl_node_link_many (state->input, state->slideupblack, state->blur, state->boxblur,  state->emb, state->th, state->fix, state->output, NULL);
         break;
     case GEGL_BEVEL_SHARP:
-    gegl_node_link_many (state->input, state->slideupblack, state->median, state->nop, state->replace, state->levels, state->bilateral, state->lowersharpopacity, state->output, NULL);
-    gegl_node_link_many (state->nop, state->median2,  state->dt, state->c2a, state->emb,  NULL);
-    gegl_node_connect (state->replace, "aux", state->emb, "output");
+    gegl_node_link_many (state->input, state->slideupblack, state->median, state->dt, state->c2a, state->emb, state->levels, state->bilateral, state->lowersharpopacity, state->output, NULL);
         break;
     case GEGL_BEVEL_EMBOSS_MODE:
     gegl_node_link_many (state->input, state->slideupblack, state->blur, state->boxblur,  state->emb, state->fix, state->output, NULL);
@@ -467,8 +458,7 @@ switch (o->type) {
     gegl_node_link_many (state->input, state->slideupblack, state->blurcove, state->boxblurcove,  state->embcovefix,  state->embcovemove, state->fix, state->output, NULL);
         break;
     case GEGL_BEVEL_EMBOSS_STACK_MODE:
-    gegl_node_link_many (state->input, state->startmedian, state->slideupblack, state->blursb, state->boxblurcove,  state->emgsb, state->nop, state->invert, embosschoice, state->hyperopacity, state->mcb, state->output, NULL);
-    gegl_node_link_many (state->nop, state->invert,  NULL);
+    gegl_node_link_many (state->input, state->startmedian, state->slideupblack, state->blursb, state->boxblurcove,  state->emgsb,  state->invert, embosschoice, state->hyperopacity, state->mcb, state->output, NULL);
     }
 }
 
@@ -487,7 +477,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:bevel",
     "title",       _("Bevel (to blend)"),
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
-    "description", _("User is expected to use blending options with this plugin. Works best with blend modes multiply, hardlight and grain merge with varying opacities. Emboss mode requires non-GEGL Gimp layer blend modes."
+    "description", _("User should use blending options with this plugin. Works best with blend modes multiply, hardlight and grain merge with varying opacities. Emboss mode requires non-GEGL Gimp layer blend modes."
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Bevel (to blend)..."),
