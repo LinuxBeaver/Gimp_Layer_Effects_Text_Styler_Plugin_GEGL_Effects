@@ -1,6 +1,6 @@
 # NEWS  GIMP 2.10 and GIMP 3 plugins can co-exist again.
 
-GIMP's lead dev Jehan solved a crash on GIMP's side which means GEGL Effects continual no longer crashes on close and the GIMP 3. The gimp 3 bunker repo has been removed.
+GIMP's lead dev Jehan solved a crash on GIMP's side which means GEGL Effects continual no longer crashes on close in GIMP 3. The Gimp 3 bunker repo has been removed, it isn't needed anymore.
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
@@ -22,15 +22,14 @@ If you choose not to use prebuilt binaries. You must compile innerglow, glassove
 
 ## About GEGL Effects CE
 
-In the early days this was the experimental version of GEGL Effects before becoming the default. Now this is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people discard). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
-
-You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
-In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
+In the early days this was the experimental version of GEGL Effects before becoming the default. Now this is a stable version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people ignore). Presets from said old GEGL Effects will not work with this version. You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 Example of plugin working alongside a special legacy version of GEGL Effects as seen here.
 
 ![image preview](coexisting_plugins.jpg  )
 
+
+When you download the plugin or compile the following co-plugins will ship with it as either binaries or .c files, - GEGL InnerGlow, GEGL Bevel, GEGL Glass On Text, GEGL zzstrokebevelimage, and GEGL Shiny Text. The plugin will not work correctly without them and all normal download methods will give you all six binaries. 
 
 ## Directories to put binaries and info
 
@@ -40,18 +39,17 @@ Windows `C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins`
 
 Windows Alt `C:\Users\AppData\Local\gegl-0.4\plug-ins`
 
-Linux `/home/(USERNAME)/.local/share/gegl-0.4/plug-ins`
+Linux `~/.local/share/gegl-0.4/plug-ins`
 
-Linux (Flatpak) `/home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
+Linux (Flatpak) `~/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
-
-*note - Windows users may need to create the plug-ins folder if it doesn't exist.
+*note - Windows users may need to create the plug-ins folder if it doesn't exist. But this may be an indication they are using an old version of GIMP 2.10.
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c1803c39-c55c-4c5c-8084-fcb01f29adf2)
 
-
-
 ## Compiling and Installing
+
+./build_plugin_linux.sh and ./build_plugin_windows.sh with mysys2 should auto compile GEGL Effects and many other plugins of mine but if you want to know what the bash script is doing read below. 
 
 ### Linux
 
@@ -112,7 +110,7 @@ https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effect
 ![image preview](/Image_previews/flatpak2.png    )
 
 
-## Inner Glow Bevel and Glass Over text, the stand alones
+## Inner Glow Bevel and Glass Over text, the stand alone co-plugins
 
 ### Inner Glow
 ![image preview](/Image_previews/inner_glow.png    )
@@ -128,8 +126,8 @@ https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effect
 
 ## Downgrading to older versions of my plugins
 
-If you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enum List (blend mode switchers) to an earlier version, you must go to `/config/GIMP/2.10/filters` and delete the
+I strongly advise against downgrading. But if you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enum List (blend mode switchers) to an earlier version, you must go to `/config/GIMP/2.10/filters` and delete the
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
-presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a build of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing. Downgrading plugins can break .xcf files in 2.99.17+
+presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exception to this is a builds of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing. Downgrading plugins can break .xcf files in 2.99.17+ and bring back crashes from the past.
 
 
