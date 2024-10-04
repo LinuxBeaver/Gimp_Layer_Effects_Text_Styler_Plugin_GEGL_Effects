@@ -43,7 +43,7 @@ Linux `~/.local/share/gegl-0.4/plug-ins`
 
 Linux (Flatpak) `~/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
-*note - Windows users may need to create the plug-ins folder if it doesn't exist. But this may be an indication they are using an old version of GIMP 2.10.
+*note - Windows users may need to create the plug-ins folder if it doesn't exist. But this may be an indication you are using an old version of GIMP 2.10.
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c1803c39-c55c-4c5c-8084-fcb01f29adf2)
 
