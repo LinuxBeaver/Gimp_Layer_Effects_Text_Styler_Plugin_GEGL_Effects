@@ -510,7 +510,7 @@ update_graph (GeglOperation *operation)
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (over, "aux", state->innerglow, "output");
       gegl_node_connect (atopg, "aux", state->gradient, "output");
-      gegl_node_connect (state->atopi, "aux", state->saturation, "output");
+      gegl_node_connect (state->crop, "aux", state->input, "output");
     }
     else
     {
@@ -524,6 +524,8 @@ update_graph (GeglOperation *operation)
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (over, "aux", state->innerglow, "output");
       gegl_node_connect (state->atopi, "aux", state->saturation, "output");
+      /*clip bug fix */
+      gegl_node_connect (state->crop, "aux", state->input, "output");
     }
   }
   else
@@ -539,6 +541,8 @@ update_graph (GeglOperation *operation)
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (atopg, "aux", state->gradient, "output");
       gegl_node_connect (state->atopi, "aux", state->saturation, "output");
+      /*clip bug fix */
+      gegl_node_connect (state->crop, "aux", state->input, "output");
     }
     else
     {
@@ -550,6 +554,8 @@ update_graph (GeglOperation *operation)
       gegl_node_connect (multiplyb, "aux", state->mbd, "output");
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (state->atopi, "aux", state->saturation, "output");
+      /*clip bug fix */
+      gegl_node_connect (state->crop, "aux", state->input, "output");
     }
   }
 }
