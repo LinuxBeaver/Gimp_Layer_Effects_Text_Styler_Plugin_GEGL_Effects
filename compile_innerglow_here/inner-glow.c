@@ -38,7 +38,7 @@ enum_start (inner_glow_list)
    enum_value (INVERT_TRANSPARENCY_IG,  "invert",  N_("Invert Transparency"))
    enum_value (DEFAULT_IG_IMAGE_UPLOAD, "defaultimage", N_("Image Upload"))
    enum_value (INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD,  "invertimage",  N_("Image Upload with Inverted Transparency"))
-   enum_value (FEB_2024_IG,  "feb2024",  N_("Feb 2024 Inner Glow (adjustment layer group compatible) "))
+   enum_value (FEB_2024_IG,  "feb2024",  N_("Revised Inner Glow (adjustment layer group compatible) "))
    enum_value (GRAINY_IG,  "grainy",  N_("Grainy Inner Glow"))
    enum_value (BEVEL_IG,  "beveled",  N_("Beveled Inner Glow"))
 enum_end (innerglowlist)
@@ -144,12 +144,12 @@ ui_meta ("visible", "!mode {defaultimage, invertimage  }" )
 property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 60)
   value_range (50, 100)
   description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
-ui_meta ("visible", "!mode {feb2024, grainy, beveled   }" )
+ui_meta ("visible", "!mode {grainy, beveled   }" )
 
 property_int  (fixoutline2, _("Median to fix non-effected pixels on edges 2"), 1)
   value_range (0, 5)
   description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem."))
-ui_meta ("visible", "mode {grainy, feb2024, beveled  }" )
+ui_meta ("visible", "mode {grainy, beveled  }" )
 
 property_file_path (image, _("Upload image file"), "")
     description (_("Upload image file for inner Glow"))
@@ -205,6 +205,10 @@ typedef struct
  GeglNode *hardlightbevel;
  GeglNode *grainmergebevel;
  GeglNode *nothing;
+ GeglNode *opacityremake;
+ GeglNode *gaussianremake;
+ GeglNode *translateremake;
+ GeglNode *medianremake;
  GeglNode *output;
 }State;
 
@@ -249,9 +253,6 @@ At Nov 20 2023 I learned that two nodes can call the same graph, also this graph
                                   "operation", "gegl:src-in",
                                   NULL);
 
-  state->out    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-out",
-                                  NULL);
 
   state->src    = gegl_node_new_child (gegl,
                                   "operation", "gegl:src",
@@ -370,6 +371,28 @@ but somehow crop fixes it.*/
                                   "operation", "gegl:dst",
                                   NULL);
 
+  state->gaussianremake    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gaussian-blur", "abyss-policy", 0, "clip-extent", FALSE,  
+                                  NULL);
+
+  state->opacityremake    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity", 
+                                  NULL);
+
+  state->translateremake    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:translate",
+                                  NULL);
+
+
+
+  state->medianremake     = gegl_node_new_child (gegl, "operation", "gegl:median-blur",
+                                         "radius",       1,
+                                         "alpha-percentile", 0.0,
+                                         NULL);
+
+  state->out    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-out",
+                                  NULL);
 
 gegl_operation_meta_redirect (operation, "grow_radius",  state->shadow, "grow-radius");
 gegl_operation_meta_redirect (operation, "radius",  state->shadow, "radius");
@@ -386,7 +409,13 @@ gegl_operation_meta_redirect (operation, "imageblur", state->blurimage, "std-dev
 gegl_operation_meta_redirect (operation, "noise", state->pick, "pct-random");
 gegl_operation_meta_redirect (operation, "noiserepeat", state->pick, "repeat");
 gegl_operation_meta_redirect (operation, "seed", state->pick, "seed");
-
+gegl_operation_meta_redirect (operation, "x",  state->translateremake, "x");
+gegl_operation_meta_redirect (operation, "y",  state->translateremake, "y");
+gegl_operation_meta_redirect (operation, "radius", state->gaussianremake, "std-dev-x");
+gegl_operation_meta_redirect (operation, "radius", state->gaussianremake, "std-dev-y");
+gegl_operation_meta_redirect (operation, "opacity",  state->opacityremake, "value");
+gegl_operation_meta_redirect (operation, "grow_radius",  state->medianremake, "radius");
+gegl_operation_meta_redirect (operation, "grow-shape",  state->medianremake, "neighborhood");
 }
 
 static void update_graph (GeglOperation *operation)
@@ -436,10 +465,8 @@ switch (o->mode) {
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case FEB_2024_IG:
- gegl_node_link_many (state->input, state->medianset, state->idref, state->in2, crop, state->output, NULL);
- gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->color2,   NULL);
- gegl_node_connect (state->in2, "aux", state->color2, "output");
- gegl_node_connect (state->crop, "aux", state->input, "output");
+ gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake, state->median2, state->output, NULL);
+ gegl_node_connect (state->out, "aux", state->input, "output");
         break;
     case GRAINY_IG:
 /*This is median blur followed by GEGL's src-in blend mode and a crop*/
