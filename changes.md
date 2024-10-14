@@ -6,7 +6,7 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 
 **2.** Gimp 2.99/3 users will see GEGL Effects in their menu under Filters/Text Styling (2.10 is incapable of this)
 
-## Tiny changes and emergency fixes made in the July 22 2023 series that do not qualify as a new checkpoint release because there are no new features, only internal modifications that most will not notice.
+## Tiny changes and emergency fixes made in the July 22 2023 series that do not qualify as a new checkpoint release because there are no new features. A new release only happens when a new slider is added.
 
 **3.** August 1st 2023 minor update allows Glass on Text to be on top of Bevel. This was a simple node rearrangement and does not qualify as a new release.
 
@@ -33,3 +33,11 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 **13** In late August 2024 Beaver realized the crash on close was a problem related to GIMP's team and the problem was solved due to GIMP's team solving.
 
 **14** In september 2024 a new crash was found and fixed with GEGL Effects zzstrokebevelimage. Also the chroma slider of GEGL Effects is now limited to 30 because it looks horrible on higher values.
+
+**15** In October 15 2024 GEGL Effects uses state->/update_graph only nodes
+
+**16** In October 15 2024 ShinyText.so/dll is no longer needed in default GEGL Effects. Its baked in
+
+**17** In October 13 2024 GEGL Inner glow's alt mode was rewritten
+
+**18** October 13 2024 - GEGL Effects Continual now works on layer groups in GIMP 2.99.19/3 
