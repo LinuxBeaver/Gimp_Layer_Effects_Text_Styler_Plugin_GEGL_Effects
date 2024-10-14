@@ -2,6 +2,8 @@
 
 GIMP's lead dev Jehan solved a crash on GIMP's side which means GEGL Effects continual no longer crashes on close in GIMP 3. The Gimp 3 bunker repo has been removed, it isn't needed anymore.
 
+The latest version of GEGL Effects is October 13 2024 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone since March 2024 and GEGL Effects now works on "layer groups" in Gimp 2.99.19 as of October 13 2024.
+
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
 
@@ -17,7 +19,7 @@ GEGL effects CE is a GEGL Gimp plugin that does layer effects/text styling in Gi
 
 ## Instructions 
 
-If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage, shinytext, bevel and gegleffectscontinual and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
+If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage,  bevel and gegleffectscontinual and put the .so/dll files in gegl-0.4/plug-ins. Then restart Gimp and go to Gimp's GEGL operations. You can effortlessly compile just by clicking on the sh file respectively for Windows (mysys2) or Linux
 
 
 ## About GEGL Effects CE
@@ -29,7 +31,7 @@ Example of plugin working alongside a special legacy version of GEGL Effects as 
 ![image preview](coexisting_plugins.jpg  )
 
 
-When you download the plugin or compile the following co-plugins will ship with it as either binaries or .c files, - GEGL InnerGlow, GEGL Bevel, GEGL Glass On Text, GEGL zzstrokebevelimage, and GEGL Shiny Text. The plugin will not work correctly without them and all normal download methods will give you all six binaries. 
+When you download the plugin or compile the following co-plugins will ship with it as either binaries or .c files, - GEGL InnerGlow, GEGL Bevel, GEGL Glass On Text, and GEGL zzstrokebevelimage. The plugin will not work correctly without them and all normal download methods will give you all five binaries. 
 
 ## Directories to put binaries and info
 
