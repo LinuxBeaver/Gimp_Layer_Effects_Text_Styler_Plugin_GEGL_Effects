@@ -303,6 +303,13 @@ enum_start (gegl_blend_mode_type_glass)
 enum_end (geglblendmodetypeglass)
 
 
+/*This is the enum list for bevel's blend mode switcher*/
+enum_start (gegl_blend_mode_typebeavbeveleffects)
+  enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
+              N_("Normal Bevel"))
+  enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
+              N_("Sharp Bevel"))
+enum_end (GeglBlendModeTypebeavbeveleffects)
 
 
 /*This is the enum list for parts of GEGL Effects to be displayed (part of filter to be displayed)*/
@@ -491,15 +498,6 @@ property_enum (typebevel, _("Type of Bevel"),
     GEGL_BEVEL_NORMAL)
   description (_("Change between normal bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from normal bevel. "))
   ui_meta ("visible", "guichange {innerglowbevel}")
-
-enum_start (gegl_blend_mode_typebeavbeveleffects)
-  enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
-              N_("Normal Bevel"))
-  enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
-              N_("Sharp Bevel"))
-enum_end (GeglBlendModeTypebeavbeveleffects)
-
-
 
 
 property_enum (blendmodebevel2, _("Select blend or Enable/Disable Bevel"),
@@ -1102,8 +1100,25 @@ typedef struct
   GeglNode *opacitygradient;
 /*All nodes relating to gradient end here*/
 
+/*All nodes relating to shiny text start here*/
+  GeglNode *inputshiny;
+  GeglNode *opacityshiny;
+  GeglNode *crop2shiny;
+  GeglNode *nop0shiny;
+  GeglNode *nopshiny;
+  GeglNode *blendshiny;
+  GeglNode *sinusshiny;
+  GeglNode *additionshiny;
+  GeglNode *hardlightshiny;
+  GeglNode *grainmergeshiny;
+  GeglNode *grainmergealtshiny;
+  GeglNode *replaceshiny;
+  GeglNode *nothingshiny1;
+  GeglNode *nothingshiny2;
+  GeglNode *nothingshiny3;
+/*all nodes relating to shiny text end here*/
+
 /*All nodes that have no relationships (shiny text,  microblur, and thin to thick text) start here*/
-  GeglNode *shiny;
   GeglNode *microblur;
   GeglNode *thinbold;
   GeglNode *repairgeglgraph;
@@ -1167,17 +1182,24 @@ update_graph (GeglOperation *operation)
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
+/*nothingshiny2 is a gegl:nop, the rest are dst for invisible blend mode to replace crop*/
   GeglNode *bevelmode = state->beveloff;
   GeglNode *over = state->over;
   GeglNode *atopg = state->atopg;
   GeglNode *atopi = state->atopi;
   GeglNode *multiply = state->multiply;
+  GeglNode *blendchoiceshiny = state->nothingshiny1;
+  GeglNode *sinusshiny = state->nothingshiny2;
+  GeglNode *crop2shiny = state->nothingshiny3;
+
 
 /* These are the blend mode switchers
 BevelMode is Bevel, Over is Inner Glow, atopG is Gradient, atopI is inner glow and multiply is color overlay.
 The two outline bevel mode switchers and shiny text blend mode switcher use their own .c files. As of June 7 2023 they are hidden operations. */
 
 /* Everything below is the literal GEGL Graph instructions. There are technically four GEGL graphs that load depending on the checkboxes.*/
+
+
 
   if (!state) return;
 
@@ -1196,7 +1218,7 @@ The two outline bevel mode switchers and shiny text blend mode switcher use thei
     case GEGL_BLEND_MODE_TYPE_LCHCOLORCOLOR: multiply = state->lchcolorcolor; break;
     case GEGL_BLEND_MODE_TYPE_HSVHUECOLOR: multiply = state->hsvhuecolor; break;
     case GEGL_BLEND_MODE_TYPE_NOCOLOR: multiply = state->nocolor; break;
-
+default: multiply = state->multiply;
  }
 /* atopi was named based on the gegl blend mode "src-atop  combined with image. Letter I hence the name "atopi*/
   atopi = state->atopi; /* Blend mode switchers for Image File Overlay "src_atop" is the default. */
@@ -1213,7 +1235,7 @@ The two outline bevel mode switchers and shiny text blend mode switcher use thei
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTIMAGE: atopi = state->hardlightimage; break;
     case GEGL_BLEND_MODE_TYPE_LCHCOLORIMAGE: atopi = state->lchcolorimage; break;
     case GEGL_BLEND_MODE_TYPE_HSVHUEIMAGE: atopi = state->hsvhueimage; break;
-
+default: atopi = state->atopi;
 
  }
 /* Bevel's blend mode switcher.
@@ -1230,7 +1252,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     case GEGL_BLEND_MODE_TYPE_HARDLIGHT: bevelmode = state->hardlight; break;
     case GEGL_BLEND_MODE_TYPE_SCREEN: bevelmode = state->screen; break;
     case GEGL_BLEND_MODE_TYPE_BEVELOFF: bevelmode = state->beveloff; break;
-
+default: bevelmode = state->beveloff;
  }
 
   over = state->over; /* the default */
@@ -1248,7 +1270,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     case GEGL_BLEND_MODE_TYPE_BURNIG: over = state->burnig; break;
     case GEGL_BLEND_MODE_TYPE_LCHCOLORIG: over = state->lchcolorig; break;
     case GEGL_BLEND_MODE_TYPE_HUEIG: over = state->hueig; break;
-
+default: over = state->over;
   }
 /* atopg was named based on the gegl blend mode "src-atop  combined with gradient G hence the name "atopg*/
   atopg = state->atopg; /* the default */
@@ -1266,8 +1288,34 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTG: atopg = state->hardlightg; break;
     case GEGL_BLEND_MODE_TYPE_BURNG: atopg = state->burng; break;
     case GEGL_BLEND_MODE_TYPE_LCHCOLORG: atopg = state->lchcolorg; break;
-
+default: atopg = state->atopg;
   }
+
+  if (!o->enableshine) gegl_node_disconnect(blendchoiceshiny, "aux");
+  if (o->enableshine)  gegl_node_connect(state->opacityshiny, "output", blendchoiceshiny, "aux");
+
+  if (o->enableshine) sinusshiny  = state->sinusshiny;
+  if (!o->enableshine) sinusshiny  = state->nothingshiny2;
+  if (o->enableshine) crop2shiny  = state->crop2shiny;
+  if (!o->enableshine) crop2shiny  = state->nothingshiny3;
+
+  switch (o->blendmodeshine) {
+    case GEGL_BLEND_MODE_TYPE_GRAINMERGEALTSHINE: blendchoiceshiny = state->grainmergealtshiny; break;
+    case GEGL_BLEND_MODE_TYPE_GRAINMERGESHINE: blendchoiceshiny = state->grainmergeshiny; break;
+    case GEGL_BLEND_MODE_TYPE_HARDLIGHTSHINE: blendchoiceshiny = state->hardlightshiny; break;
+    case GEGL_BLEND_MODE_TYPE_ADDITIONSHINE: blendchoiceshiny = state->additionshiny; break;
+    case GEGL_BLEND_MODE_TYPE_REPLACESHINE: blendchoiceshiny = state->replaceshiny; break;
+default: blendchoiceshiny = state->replaceshiny;
+}
+
+  /*if (o->fixoutline < 50.1) = state->innerglow;*/
+
+
+GValue v = G_VALUE_INIT;
+
+  g_value_init(&v, G_TYPE_INT);
+  g_value_set_int(&v,(o->fixoutline <= 50.0) ? 4 : 0);
+gegl_node_set_property(state->innerglow, "mode", &v);
 
 
        /* Second full Node listing. (contains four GEGL graphs for each checkbox) Nodes must be listed in proper orders. This is the GEGL Graph */
@@ -1276,7 +1324,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->crop,  state->nopg, atopg,  state->cropcolor, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->crop,  state->nopg, atopg,  state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1307,14 +1355,18 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       /* Nodes relating to Glass Over Text start here */
       gegl_node_link_many (state->nopglass, state->glassovertext, NULL);
       gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
-
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
+      gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+/*Nodes relating to shiny text start here*/
+  gegl_node_link_many (sinusshiny, state->opacityshiny,  NULL);
+  gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
     }
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,   blendchoiceshiny,  crop2shiny,  state->nopb, bevelmode, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1344,6 +1396,11 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
+      gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+/*Nodes relating to shiny text start here*/
+  gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
+      gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
+  gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
     }
   }
   else
@@ -1351,7 +1408,7 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->crop,  state->nopg, atopg, state->cropcolor, state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->crop,  state->nopg, atopg, state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1381,11 +1438,16 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
+      gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+/*Nodes relating to shiny text start here*/
+  gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
+  gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
     }
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  state->shiny, state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  blendchoiceshiny, crop2shiny,  state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1412,6 +1474,11 @@ Bevel use to only work Multiply and Grain Merge until beaver solved a bug relate
       gegl_node_connect (state->glassover, "aux", state->glassovertext, "output");
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
+      gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+/*Nodes relating to shiny text start here*/
+  gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
+  gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
     }
   }
 }
@@ -1422,6 +1489,9 @@ static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
   GeglProperties *o = GEGL_PROPERTIES (operation);
+
+  GeglColor *sinuscolor1 = gegl_color_new ("#ffffff");
+  GeglColor *sinuscolor2 = gegl_color_new ("#000000");
 
 State *state = g_malloc0 (sizeof (State));
   o->user_data = state;
@@ -1500,7 +1570,7 @@ state->xor = gegl_node_new_child (gegl,
                                   NULL);
 
 
-  /*gegl:crop's are applied after gegl:color or anything gegl renders to prevent a known bug. */
+  /*gegl:dst's are applied after gegl:color or anything gegl renders to prevent a known bug. */
   state->cropcolor = gegl_node_new_child (gegl,
                                   "operation", "gegl:crop",
                                   NULL);
@@ -1681,7 +1751,7 @@ state->lchcolorig = gegl_node_new_child (gegl,
                                   NULL);
 
 
-  /*To prevent a known bug gegl:crop's are used after anything gegl renders; such as a linear gradient*/
+  /*To prevent a known bug gegl:dst's are used after anything gegl renders; such as a linear gradient*/
   state->crop = gegl_node_new_child (gegl,
                                   "operation", "gegl:crop",
                                   NULL);
@@ -1815,19 +1885,79 @@ state->hsvhueimage = gegl_node_new_child (gegl,
 
 state->additionimage = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
-
-
 /* All nodes for image file overlay end here*/
 
-  /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them go here  */
+/*All nodes for shiny text start here*/
+ /*This is the hidden operation shiny text. Which is literally gegl:sinus on a specific setting, with a blend mode switcher and checkbox. */
+
+  state->inputshiny = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+  state->sinusshiny    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:sinus", "color1", sinuscolor1, "color2", sinuscolor2, "blend-mode", 0, 
+                                  NULL);
+
+
+  state->opacityshiny = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+
+    state->nopshiny    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->crop2shiny    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst",
+                                  NULL);
+
+    state->nop0shiny    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nothingshiny1    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst",
+                                  NULL);
+
+    state->nothingshiny2    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nothingshiny3    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst",
+                                  NULL);
+
+  state->replaceshiny = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
+
+  state->hardlightshiny = gegl_node_new_child (gegl,
+                                  "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "blend-space", 0, NULL);
+
+
+  state->additionshiny = gegl_node_new_child (gegl,
+                                  "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
+
+  state->grainmergeshiny = gegl_node_new_child (gegl,
+                                  "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+
+  state->grainmergealtshiny = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-space", 2, "composite-mode", 0, "blend-space", 2, NULL);
+
+  state->blendshiny    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:plus",
+                                  NULL);
+
+/*All nodes for shiny text end here*/
+
+
+
+  /*Misc nodes ( micro blur and thin to thick text) that have no other nodes to go with them go here  */
   state->thinbold = gegl_node_new_child (gegl,
                                   "operation", "gegl:median-blur", "abyss-policy",     0,
                                   NULL);
 
-  /*This is the hidden operation shiny text. Which is literally gegl:sinus on a specific setting, with a blend mode switcher and checkbox. */
-  state->shiny = gegl_node_new_child (gegl,
-                                  "operation", "lb:shinytext",
-                                  NULL);
+ 
 
   state->microblur = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur", "clip-extent", FALSE,  "abyss-policy", 0,
@@ -1845,7 +1975,7 @@ plugins like clay, glossy balloon and custom bevel glitch out when
 drop shadow is applied in a gegl graph below them.*/
 
 
-  /*Misc nodes (shiny text, micro blur and thin to thick text) that have no other nodes to go with them end here  */
+  /*Misc nodes (micro blur and thin to thick text) that have no other nodes to go with them end here  */
 
   /* All nodes relating to glass on text begin here */
   state->glassovertext = gegl_node_new_child (gegl,
@@ -1949,14 +2079,13 @@ drop shadow is applied in a gegl graph below them.*/
   /*End of Gradient's GUI asociations*/
 
   /*Beginning of Shiny Text's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "blend_power", state->shiny, "blend-power");
-  gegl_operation_meta_redirect (operation, "opacityshine", state->shiny, "opacity");
-  gegl_operation_meta_redirect (operation, "blendmodeshine", state->shiny, "blendmode");
-  gegl_operation_meta_redirect (operation, "seedshine", state->shiny, "seed");
-  gegl_operation_meta_redirect (operation, "complexity", state->shiny, "complexity");
-  gegl_operation_meta_redirect (operation, "x_scaleshine", state->shiny, "x-scale");
-  gegl_operation_meta_redirect (operation, "y_scaleshine", state->shiny, "y-scale");
-  gegl_operation_meta_redirect (operation, "enableshine", state->shiny, "enable");
+  gegl_operation_meta_redirect (operation, "opacityshine", state->opacityshiny, "value");
+  gegl_operation_meta_redirect (operation, "seedshine", state->sinusshiny, "seed");
+  gegl_operation_meta_redirect (operation, "complexity", state->sinusshiny, "complexity");
+  gegl_operation_meta_redirect (operation, "x_scaleshine", state->sinusshiny, "x-scale");
+  gegl_operation_meta_redirect (operation, "y_scaleshine", state->sinusshiny, "y-scale");
+  gegl_operation_meta_redirect (operation, "blend_power", state->sinusshiny, "blend-power");
+
   /*End of Shiny Text's GUI asociations*/
 
   /*Beginning of Micro Blur's GUI asociations*/
@@ -2004,6 +2133,9 @@ drop shadow is applied in a gegl graph below them.*/
   gegl_operation_meta_redirect (operation, "glasscolor", state->glassovertext, "color");
   gegl_operation_meta_redirect (operation, "glassopacity", state->glassovertext, "hyperopacity");
   /*Beginning of End of Glass Over Text's GUI asociations*/
+
+
+
  }
 
 
@@ -2022,7 +2154,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. Oct 11 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. Oct 13 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
