@@ -1,14 +1,51 @@
 #!/bin/bash
 
-for dir in *
-do
-    if test -f "$dir/build_linux.sh"
-    then
-      echo "building in $dir"
-     ( cd "$dir" && bash ./build_linux.sh ) || exit 1
-    fi
-done
+mkdir LinuxBinaries
 
-  mkdir -p LinuxBinaries
-  mv $(find . -name '*.so') LinuxBinaries/
+TOP=$(pwd)  
+
+chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'gegleffectspending.so') $TOP/LinuxBinaries
+
+TOP=$(pwd)  
+
+cd ..
+
+cd bevel && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'bevel.so') $TOP/LinuxBinaries
+
+cd .. 
+
+cd inner_glow && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'inner-glow.so') $TOP/LinuxBinaries
+
+cd .. 
+
+cd glass_over_text && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'glassovertext.so') $TOP/LinuxBinaries
+ 
+
+cd .. 
+
+cd zzstrokebevelimage && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'zzstrokebevelimage.so') $TOP/LinuxBinaries
+ 
+
+cd .. 
+
 

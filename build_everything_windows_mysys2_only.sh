@@ -1,14 +1,52 @@
 #!/bin/bash
 
-for dir in *
-do
-    if test -f "$dir/build_linux.sh"
-    then
-      echo "building in $dir"
-     ( cd "$dir" && bash ./build_linux.sh ) || exit 1
-    fi
-done
+mkdir WindowsBinaries
 
-  mkdir -p WindowsBinaries
-  mv $(find . -name '*.dll') WindowsBinaries/
+TOP=$(pwd)  
 
+chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'gegleffectspending.dll') $TOP/WindowsBinaries
+
+TOP=$(pwd)  
+
+cd ..
+
+cd bevel && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'bevel.dll') $TOP/WindowsBinaries
+
+cd .. 
+
+cd inner_glow && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'inner-glow.dll') $TOP/WindowsBinaries
+
+cd .. 
+
+cd glass_over_text && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'glassovertext.dll') $TOP/WindowsBinaries
+ 
+
+cd .. 
+
+cd zzstrokebevelimage && chmod +x build_linux.sh
+
+./build_linux.sh
+
+cp $(find . -name 'zzstrokebevelimage.dll') $TOP/WindowsBinaries
+ 
+
+cd .. 
+
+
+ 
