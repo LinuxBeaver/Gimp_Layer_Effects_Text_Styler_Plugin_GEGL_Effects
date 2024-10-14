@@ -34,9 +34,9 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 
 **14** In september 2024 a new crash was found and fixed with GEGL Effects zzstrokebevelimage. Also the chroma slider of GEGL Effects is now limited to 30 because it looks horrible on higher values.
 
-**15** In October 15 2024 GEGL Effects uses state->/update_graph only nodes
+**15** In October 12 2024 GEGL Effects uses state->/update_graph only nodes
 
-**16** In October 15 2024 ShinyText.so/dll is no longer needed in default GEGL Effects. Its baked in
+**16** In October 12 2024 ShinyText.so/dll is no longer needed in default GEGL Effects. Its baked in
 
 **17** In October 13 2024 GEGL Inner glow's alt mode was rewritten
 
