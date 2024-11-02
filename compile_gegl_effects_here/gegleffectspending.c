@@ -1360,7 +1360,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
       gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
 /*Nodes relating to shiny text start here*/
-  gegl_node_link_many (sinusshiny, state->opacityshiny,  NULL);
+  gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
   gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
     }
     else
@@ -1475,7 +1475,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
-      gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+      gegl_node_connect (crop2shiny, "aux", state->thinbold, "output");
 /*Nodes relating to shiny text start here*/
   gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
   gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
@@ -1895,9 +1895,8 @@ state->additionimage = gegl_node_new_child (gegl,
                                   NULL);
 
   state->sinusshiny    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:sinus", "color1", sinuscolor1, "color2", sinuscolor2, "blend-mode", 0, 
+                                  "operation", "gegl:sinus", "color1", sinuscolor1, "color2", sinuscolor2, "blend-mode", 0,
                                   NULL);
-
 
   state->opacityshiny = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity",
@@ -1909,7 +1908,7 @@ state->additionimage = gegl_node_new_child (gegl,
                                   NULL);
 
     state->crop2shiny    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dst",
+                                  "operation", "gegl:crop",
                                   NULL);
 
     state->nop0shiny    = gegl_node_new_child (gegl,
@@ -2154,7 +2153,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. Oct 13 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. Nov 2 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
