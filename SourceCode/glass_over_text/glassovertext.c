@@ -55,6 +55,8 @@ enum_start (gegl_blend_mode_type_glasstext)
               N_("Subtract"))
   enum_value (GEGL_BLEND_MODE_TYPE_OVERLAYGLASS, "Overlay",
               N_("Overlay"))
+  enum_value (GEGL_BLEND_MODE_TYPE_NORMALGLASS, "Normal",
+              N_("Normal"))
 enum_end (geglblendmodetypeglasstext)
 
 
@@ -140,6 +142,7 @@ typedef struct
   GeglNode *gaussian;
   GeglNode *hyperopacity;
   GeglNode *string;
+  GeglNode *normal;
   GeglNode *glassover;
   GeglNode *glassgrainmerge;
   GeglNode *glasslinearlight;
@@ -164,6 +167,7 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_LINEARLIGHTGLASS: blendglass = state->glasslinearlight; break;
     case GEGL_BLEND_MODE_TYPE_SUBTRACTGLASS: blendglass = state->glasssubtract; break;
     case GEGL_BLEND_MODE_TYPE_OVERLAYGLASS: blendglass = state->glassoverlay; break;
+    case GEGL_BLEND_MODE_TYPE_NORMALGLASS: blendglass = state->normal; break;
 default: blendglass = state->glassover;
 
 }
@@ -182,12 +186,15 @@ static void attach (GeglOperation *operation)
 {
 GeglProperties *o = GEGL_PROPERTIES (operation);
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *emboss, *color, *glassover,  *glassgrainmerge, *glasslinearlight, *glasssubtract, *glassoverlay, *white, *retract, *gaussian, *hyperopacity, *string;
+  GeglNode *input, *output, *emboss, *color, *glassover, *normal,  *glassgrainmerge, *glasslinearlight, *glasssubtract, *glassoverlay, *white, *retract, *gaussian, *hyperopacity, *string;
   GeglColor *white_color = gegl_color_new ("rgb(1.1,1.1,1.1)");
 
 
   input    = gegl_node_get_input_proxy (gegl, "input");
   output   = gegl_node_get_output_proxy (gegl, "output");
+
+  normal = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 28,  NULL);
 
 
   emboss = gegl_node_new_child (gegl,
@@ -261,6 +268,7 @@ glassoverlay = gegl_node_new_child (gegl,
   state->retract = retract;
   state->emboss = emboss;
   state->string = string;
+  state->normal = normal;
   state->color = color;
   state->hyperopacity = hyperopacity;
   state->gaussian = gaussian;
