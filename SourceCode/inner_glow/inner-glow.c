@@ -444,6 +444,7 @@ switch (o->mode) {
     case DEFAULT_IG:
  gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
   gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
@@ -465,8 +466,9 @@ switch (o->mode) {
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case FEB_2024_IG:
- gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake, state->median2, state->output, NULL);
+ gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake, state->median2, state->crop, state->output, NULL);
  gegl_node_connect (state->out, "aux", state->input, "output");
+ gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case GRAINY_IG:
 /*This is median blur followed by GEGL's src-in blend mode and a crop*/
