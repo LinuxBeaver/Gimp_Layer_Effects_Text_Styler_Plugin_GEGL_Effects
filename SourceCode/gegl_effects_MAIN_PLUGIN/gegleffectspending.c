@@ -1140,6 +1140,7 @@ typedef struct
 /*All nodes relating to image file upload start here*/
   GeglNode *atopi;
   GeglNode *image;
+  GeglNode *imageopacity;
   GeglNode *nopimage;
   GeglNode *saturation;
   GeglNode *grainmergeimage;
@@ -1341,8 +1342,8 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
       gegl_node_connect (atopg, "aux", state->opacitygradient, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturation, state->imageopacity, NULL);
+      gegl_node_connect (atopi, "aux", state->imageopacity, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1380,8 +1381,8 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_connect (over, "aux", state->innerglow, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturation, state->imageopacity, NULL);
+      gegl_node_connect (atopi, "aux", state->imageopacity, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1422,8 +1423,8 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (atopg, "aux", state->opacitygradient, "output");
       gegl_node_link_many (state->gradient, state->opacitygradient, NULL);
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturation, state->imageopacity, NULL);
+      gegl_node_connect (atopi, "aux", state->imageopacity, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg, NULL);
       gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1458,8 +1459,8 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
       gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to image file overlay */
-      gegl_node_link_many ( state->image, state->saturation, NULL);
-      gegl_node_connect (atopi, "aux", state->saturation, "output");
+      gegl_node_link_many ( state->image, state->saturation, state->imageopacity, NULL);
+      gegl_node_connect (atopi, "aux", state->imageopacity, "output");
       /* Nodes relating to extra outline shadow glow */
       gegl_node_link_many (state->nopextrassg, state->extrassg,  NULL);
       gegl_node_connect (state->behindextrassg, "aux", state->extrassg, "output");
@@ -1853,6 +1854,12 @@ state->behindextrassg = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-atop",
                                   NULL);
 
+  state->imageopacity = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+ 
+
 state->grainmergeimage = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
 
@@ -2044,7 +2051,7 @@ drop shadow is applied in a gegl graph below them.*/
   /*End of Bevel's GUI asociations*/
 
   /*Beginning of Image file Overlay's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "layeropacity", state->image, "opacity");
+  gegl_operation_meta_redirect (operation, "layeropacity", state->imageopacity, "value");
   gegl_operation_meta_redirect (operation, "hue", state->saturation, "hue");
   gegl_operation_meta_redirect (operation, "chroma", state->saturation, "chroma");
   gegl_operation_meta_redirect (operation, "lightness", state->saturation, "lightness");
@@ -2153,7 +2160,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. Dec 3 2024 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. Dec 5 2024 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
