@@ -136,6 +136,8 @@ property_double (opacity, _("Opacity"), 1.2)
   ui_steps      (0.01, 0.10)
 
 
+
+
 property_color (value2, _("Color"), "#fbff00")
     description (_("The color to paint over the input"))
     ui_meta     ("role", "color-primary")
@@ -181,6 +183,7 @@ typedef struct
  GeglNode *src;
  GeglNode *pick;
  GeglNode *shadow;
+ GeglNode *opacityhere;
  GeglNode *shadowopacitymax;
  GeglNode *color;
  GeglNode *color2;
@@ -298,7 +301,11 @@ but somehow crop fixes it.*/
 
 
   state->shadow    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dropshadow",
+                                  "operation", "gegl:dropshadow", "opacity", 1.0,
+                                  NULL);
+
+  state->opacityhere    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
                                   NULL);
 
 
@@ -396,7 +403,7 @@ but somehow crop fixes it.*/
 
 gegl_operation_meta_redirect (operation, "grow_radius",  state->shadow, "grow-radius");
 gegl_operation_meta_redirect (operation, "radius",  state->shadow, "radius");
-gegl_operation_meta_redirect (operation, "opacity",  state->shadow, "opacity");
+gegl_operation_meta_redirect (operation, "opacity",  state->opacityhere, "value");
 gegl_operation_meta_redirect (operation, "grow-shape",  state->shadow, "grow-shape");
 gegl_operation_meta_redirect (operation, "value2",  state->color2, "value");
 gegl_operation_meta_redirect (operation, "x",  state->shadow, "x");
@@ -442,31 +449,31 @@ default: usethis = state->multiplybevel;
 switch (o->mode) {
         break;
     case DEFAULT_IG:
- gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
+ gegl_node_link_many (state->input, state->it,  state->shadow, state->opacityhere, state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG:
-  gegl_node_link_many (state->input, state->it,  state->shadow,  state->it2,  state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
+  gegl_node_link_many (state->input, state->it,  state->shadow, state->opacityhere, state->it2,  state->color, state->in, state->median2, state->color2, crop, state->output, NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case DEFAULT_IG_IMAGE_UPLOAD:
- gegl_node_link_many (state->input, state->it,  state->shadow, state->color, state->in, state->median2, state->color2, state->idref, state->atop, crop, state->output, NULL);
+ gegl_node_link_many (state->input, state->it,  state->shadow, state->opacityhere, state->color, state->in, state->median2, state->color2, state->idref, state->atop, crop, state->output, NULL);
  gegl_node_link_many (state->image, state->blurimage,  NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->atop, "aux", state->blurimage, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case INVERT_TRANSPARENCY_IG_IMAGE_UPLOAD:
- gegl_node_link_many (state->input, state->it,  state->shadow, state->it2,  state->color, state->in, state->median2, state->color2,  state->idref, state->atop, crop, state->output, NULL);
+ gegl_node_link_many (state->input, state->it,  state->shadow, state->opacityhere, state->it2,  state->color, state->in, state->median2, state->color2,  state->idref, state->atop, crop, state->output, NULL);
  gegl_node_link_many (state->image, state->blurimage,  NULL);
  gegl_node_connect (state->in, "aux", state->input, "output");
  gegl_node_connect (state->atop, "aux", state->blurimage, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case FEB_2024_IG:
- gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake, state->median2, state->crop, state->output, NULL);
+ gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake,  state->median2, state->crop, state->output, NULL);
  gegl_node_connect (state->out, "aux", state->input, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
@@ -475,7 +482,7 @@ switch (o->mode) {
  gegl_node_link_many (state->input, state->medianset, state->idref3, state->in3, crop, state->output, NULL);
 /*Inside the src in blend mode we have a gegl graph, drop shadow, color overlay and another src-in blend mode*/
 gegl_node_connect (state->in3, "aux", state->ingrainy, "output");
-gegl_node_link_many  (state->idref3, state->it2,  state->shadow,  state->color2, state->idref2, state->ingrainy,  NULL);
+gegl_node_link_many  (state->idref3, state->it2,  state->shadow, state->opacityhere, state->color2, state->idref2, state->ingrainy,  NULL);
 /*Inside the second src in blend mode with have the pick filter.*/
  gegl_node_connect (state->ingrainy, "aux", state->pick, "output");
  gegl_node_link_many (state->idref2, state->pick, NULL);
@@ -483,7 +490,7 @@ gegl_node_link_many  (state->idref3, state->it2,  state->shadow,  state->color2,
         break;
     case BEVEL_IG:
  gegl_node_link_many (state->input, state->medianset, state->idref, state->in4, crop, state->output, NULL);
- gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->color2, usethis,  NULL);
+ gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->opacityhere, state->color2, usethis,  NULL);
  gegl_node_connect (state->in4, "aux", usethis, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
     }
