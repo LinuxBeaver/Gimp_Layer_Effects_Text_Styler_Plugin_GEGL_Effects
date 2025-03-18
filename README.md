@@ -1,8 +1,6 @@
-# NEWS  GIMP 2.10 and GIMP 3 plugins can co-exist again.
+# NEWS 
 
-GIMP's lead dev Jehan solved a crash on GIMP's side which means GEGL Effects continual no longer crashes on close in GIMP 3. The Gimp 3 bunker repo has been removed, it isn't needed anymore.
-
-The latest version of GEGL Effects is October 13 2024 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone since March 2024 and GEGL Effects now works on "layer groups" in Gimp 2.99.19 as of October 13 2024.
+GIMP 3 is released and GEGL Effects is working better then ever on both 3.0 and 2.10. The latest version of GEGL Effects is March 8 2025 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone since March 2024 and GEGL Effects now works on "layer groups" as of October 13 2024 in GIMP 3.
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
