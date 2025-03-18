@@ -41,3 +41,5 @@ Sharp Bevel mode uses a unique algorithm that makes an awesome new bevel effect.
 **17** In October 13 2024 GEGL Inner glow's alt mode was rewritten
 
 **18** October 13 2024 - GEGL Effects Continual now works on layer groups in GIMP 2.99.19/3 
+
+**19** March 8 2025 - GEGL Effects inner glow updated because of a change GIMP's team made to GEGL Dropshadow
