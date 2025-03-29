@@ -373,7 +373,7 @@ property_double (gaus, _("Radius of Bevel"), 2.0)
 
 
 property_double (slideupblack, _("Black Bevel mode. "), 0.0)
-    description (_("When in use GEGL Bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
+    description (_("When in use bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
   value_range   (0.00, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -388,12 +388,12 @@ property_double (bevelopacity, _("Bevel's Opacity"), 1.0)
 property_enum (typebevel, _("Type of Bevel"),
     GeglBlendModeTypebeavbeveleffectscrop299, gegl_blend_mode_typebeavbeveleffectscrop299,
     GEGL_BEVEL_NORMAL)
-  description (_("Change between normal bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from normal bevel. "))
+  description (_("Change between bump bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from bump bevel. "))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 enum_start (gegl_blend_mode_typebeavbeveleffectscrop299)
   enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
-              N_("Normal Bevel"))
+              N_("Bump Bevel"))
   enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
               N_("Sharp Bevel"))
 enum_end (GeglBlendModeTypebeavbeveleffectscrop299)
