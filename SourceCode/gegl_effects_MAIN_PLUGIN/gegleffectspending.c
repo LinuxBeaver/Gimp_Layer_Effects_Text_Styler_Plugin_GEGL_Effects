@@ -306,7 +306,7 @@ enum_end (geglblendmodetypeglass)
 /*This is the enum list for bevel's blend mode switcher*/
 enum_start (gegl_blend_mode_typebeavbeveleffects)
   enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
-              N_("Normal Bevel"))
+              N_("Bump Bevel"))
   enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
               N_("Sharp Bevel"))
 enum_end (GeglBlendModeTypebeavbeveleffects)
@@ -480,7 +480,7 @@ property_double (radius1, _("Radius of Bevel"), 2.0)
 
 
 property_double (slideupblack, _("Black Bevel and Image Bevel mode. "), 0.00)
-    description (_("When in use GEGL Bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
+    description (_("When in use Bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
   value_range   (0.00, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -496,7 +496,7 @@ property_double (bevelopacity, _("Bevel's Opacity"), 1.0)
 property_enum (typebevel, _("Type of Bevel"),
     GeglBlendModeTypebeavbeveleffects, gegl_blend_mode_typebeavbeveleffects,
     GEGL_BEVEL_NORMAL)
-  description (_("Change between normal bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from normal bevel. "))
+  description (_("Change between bump bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from bump bevel. "))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
 
@@ -2160,7 +2160,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. March 8 2025 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. March 28 2025 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
