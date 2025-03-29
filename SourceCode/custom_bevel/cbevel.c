@@ -206,11 +206,11 @@ ui_meta ("visible", "!switchbevel {modernnocolor}")
 
 enum_start (custom_bevel_modes)
   enum_value (CLASSIC, "classic",
-              N_("Classic Custom Bevel"))
+              N_("Classic Bump Bevel"))
   enum_value (NO_COLOR_MODERN, "modernnocolor",
-              N_("Modern Custom Bevel"))
+              N_("Modern Bump Bevel"))
   enum_value (COLOR_MODERN,      "moderncolor",
-              N_("Modern Custom Bevel (recolor mode)"))
+              N_("Modern Bump Bevel (recolor mode)"))
 enum_end (custombevelmodes)
 
 /*In theory one day I could make plugins "bevel", "sharpbevel", "ringbevel" and my unreleased "exotic bevel collection plugin" all part of custom bevel as one super bevel plugin
@@ -581,13 +581,13 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:custom-bevel",
-    "title",       _("Custom Bevel"),
+    "title",       _("Bump Bevel"),
     "categories",  "Artistic",
     "reference-hash", "h3do6akv00vyeefjf25sb2ac",
-    "description", _("A bevel with high customization allowing choice of bevel size, internal blend modes and internal blur types. Different blend modes do different things regarding detail, depth or presence of a shine effect. Options exist to make the bevel box type, thick, or tubular."
+    "description", _("A bump bevel with high customization allowing choice of bevel size, internal blend modes and internal blur types. Different blend modes do different things regarding detail, depth or presence of a shine effect. Options exist to make the bevel box type, thick, or tubular."
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
-    "gimp:menu-label", _("Custom Bevel..."),
+    "gimp:menu-label", _("Custom Bump Bevel..."),
     NULL);
 }
 
