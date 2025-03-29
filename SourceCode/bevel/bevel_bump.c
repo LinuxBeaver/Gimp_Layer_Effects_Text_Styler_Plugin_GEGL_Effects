@@ -74,7 +74,7 @@ mean-curvature-blur iterations=2
 property_enum (type, _("Type of Bevel"),
     GeglBlendModeTypebeavbevel, gegl_blend_mode_typebeavbevel,
     GEGL_BEVEL_NORMAL)
-    description (_("Types of bevels present. Sharp Bevel mode requires the user to change the depth angle to less then 70 or above 115 for it to work proper."))
+    description (_("Types of bevels present. Sharp (Chamfer) Bevel mode requires the user to change the depth angle to less then 70 or above 115 for it to work proper."))
 
 property_double (radius1, _("Radius Normal Bevel"), 7.0)
   value_range (0.5, 40.0)
@@ -84,7 +84,7 @@ property_double (radius1, _("Radius Normal Bevel"), 7.0)
 ui_meta ("visible", "!type {sharpbevel, stackedembossbevel, covebevel}" )
     description (_("Make a normal bevel bump map using Gaussian Blur"))
 
-property_double (radius1special, _("Radius Bevel (cove)"), 2.0)
+property_double (radius1special, _("Radius Bevel (inside)"), 2.0)
   value_range (1.0, 8.0)
   ui_range (1.0, 8.0)
   ui_gamma (1.5)
@@ -93,7 +93,7 @@ ui_meta ("visible", "type {covebevel}" )
     description (_("Make a normal bevel bump map using Gaussian Blur"))
 
 property_int (radius2, _("Radius Box Bevel"), 0)
-    description (_("Make a box bevel bump map using Box Blur - this bevel is sharper looking but it is not the same as 'sharp bevel mode'. Box Blur 0 is the default setting which disables this effect by default. Both normal bevel and box bevel sliders can be used together to hybridize the bevel. "))
+    description (_("Make a bevel bump map using Box Blur "))
    value_range (0, 10.0)
    ui_range    (0, 9.0)
    ui_gamma   (1.5)
@@ -101,8 +101,8 @@ ui_meta ("visible", "!type {sharpbevel, stackedembossbevel, covebevel}" )
 
 
 
-property_int (radius2cove, _("Radius Box Bevel (cove stacked)"), 11)
-    description (_("Make a box bevel bump map using Box Blur - this bevel is sharper but it is not the same as --sharp bevel mode--. Box Blur 0 is the default setting which disables this effect by default. Both normal bevel and sharp bevel sliders can be used together to hybridiz the bevel. "))
+property_int (radius2cove, _("Radius Box Bevel (inside stacked)"), 11)
+    description (_("Make a box bevel bump map using Box Blur "))
    value_range (10.0, 16.0)
    ui_range    (10.0, 16.0)
    ui_gamma   (1.5)
@@ -137,7 +137,7 @@ property_double (bevel1special2, _("Depth Angle (stacked)"), 140.0)
 ui_meta ("visible", "type {stackedembossbevel}" )
 
 
-property_int (bevel2special, _("Depth (cove)"), 7)
+property_int (bevel2special, _("Depth (inside)"), 7)
     description (_("Emboss depth -Brings out depth and detail of the bevel"))
     value_range (1, 20)
   ui_steps      (0.1, 0.50)
@@ -145,7 +145,7 @@ property_int (bevel2special, _("Depth (cove)"), 7)
 ui_meta ("visible", "type {covebevel}" )
 
 
-property_double (th, _("Bevel's coverage threshold."), 0.100)
+property_double (th, _("Coverage"), 0.100)
     description (_("Internal Threshold Alpha. Lower covers more and higher covers less."))
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
@@ -155,15 +155,15 @@ ui_meta ("visible", "type {normalbevel}" )
 
 property_double (azimuth, _("Rotate Lighting"), 40.0)
     description (_("Light angle (degrees)"))
-    value_range (0, 350)
+    value_range (0, 360)
     ui_meta ("unit", "degree")
     ui_meta ("direction", "ccw")
   ui_steps      (0.1, 0.50)
 ui_meta ("visible", "!type {covebevel, stackedembossbevel}" )
 
-property_double (azimuthspecial, _("Rotate Lighting (cove)"), 40.0)
+property_double (azimuthspecial, _("Rotate Lighting (inside)"), 40.0)
     description (_("Light angle (degrees)"))
-    value_range (0, 350)
+    value_range (0, 360)
     ui_meta ("unit", "degree")
     ui_meta ("direction", "ccw")
   ui_steps      (0.1, 2.00)
@@ -186,7 +186,7 @@ property_double (slideupblack, _("Black Bevel/Image Bevel mode."), 0.00)
 
 property_enum (metric, _("Distance Map Setting"),
                GeglDistanceMetric, gegl_distance_metric, GEGL_DISTANCE_METRIC_CHEBYSHEV)
-    description (_("Distance Map has three settings that alter the structure of the sharp bevel. Chebyshev is the default; due to it being the best. But try the other two. "))
+    description (_("Distance Map has three settings that alter the structure of the sharp (chamfer) bevel. Chebyshev is the default; due to it being the best. But try the other two. "))
 ui_meta ("visible", "type {sharpbevel}" )
 
 property_double (smooth, _("Smooth Roughness "), 2.5)
@@ -201,13 +201,13 @@ ui_meta ("visible", "type {sharpbevel}" )
 
 enum_start (gegl_blend_mode_typebeavbevel)
   enum_value (GEGL_BEVEL_NORMAL,      "normalbevel",
-              N_("Normal Bevel"))
+              N_("Bump Bevel"))
   enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
-              N_("Sharp Bevel"))
+              N_("Sharp Chamfer Bevel"))
   enum_value (GEGL_BEVEL_EMBOSS_MODE,      "embossmode",
               N_("Emboss Bevel (requires Gimp Layers)"))
   enum_value (GEGL_BEVEL_COVE_DEEP_MODE,      "covebevel",
-              N_("Cove Bevel"))
+              N_("Inside Bevel"))
   enum_value (GEGL_BEVEL_EMBOSS_STACK_MODE,      "stackedembossbevel",
               N_("Emboss Stack Bevel"))
 enum_end (GeglBlendModeTypebeavbevel)
@@ -477,7 +477,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:bevel",
     "title",       _("Bevel (to blend)"),
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
-    "description", _("User should use blending options with this plugin. Works best with blend modes multiply, hardlight and grain merge with varying opacities. Emboss mode requires non-GEGL Gimp layer blend modes."
+    "description", _("Creates a map of a bevel and blend it using GIMP's blend modes"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Bevel (to blend)..."),
