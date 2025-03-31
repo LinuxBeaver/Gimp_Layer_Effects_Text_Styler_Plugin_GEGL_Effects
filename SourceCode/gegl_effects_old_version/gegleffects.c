@@ -42,8 +42,8 @@ enum_end (GeglBlendModeType)
 
 
 enum_start (gegl_blend_mode_type_effectsig)
-  enum_value (GEGL_BLEND_MODE_TYPE_OVER,      "Normal",
-              N_("Over"))
+  enum_value (GEGL_BLEND_MODE_TYPE_OVER,      "Over",
+              N_("Normal"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEIG,      "GrainMerge",
               N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITION,      "Addition",
@@ -70,7 +70,7 @@ enum_end (GeglBlendModeTypeig)
 
 enum_start (gegl_blend_mode_type_effectsg)
   enum_value (GEGL_BLEND_MODE_TYPE_ATOPG,      "Over",
-              N_("Over"))
+              N_("Normal"))
   enum_value (GEGL_BLEND_MODE_TYPE_GRAINMERGEG,      "GrainMerge",
               N_("GrainMerge"))
   enum_value (GEGL_BLEND_MODE_TYPE_ADDITIONG,      "Addition",
@@ -501,7 +501,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
@@ -515,7 +515,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->atopi,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
@@ -533,7 +533,7 @@ update_graph (GeglOperation *operation)
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input,  state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb, multiplyb, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -547,7 +547,7 @@ update_graph (GeglOperation *operation)
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input,  state->atopi, state->crop, state->nopb, multiplyb, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
+   gegl_node_link_many (state->input, state->nopimage, state->atopi, state->crop, state->nopb, multiplyb, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, NULL);
       gegl_node_link_many (state->nopb, state->mbd, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
@@ -765,7 +765,7 @@ lchcolorig = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
 
 
-  gegl_node_link_many (input,  atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
+  gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
  gegl_node_link_many (nopig, innerglow, NULL);
  gegl_node_link_many (nopb, mbd, NULL);
  gegl_node_link_many (nopm, mcol, NULL);
