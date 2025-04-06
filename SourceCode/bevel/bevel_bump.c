@@ -178,7 +178,7 @@ ui_meta ("visible", "type {stackedembossbevel}" )
 
 
 property_double (slideupblack, _("Black Bevel/Image Bevel mode."), 0.00)
-    description (_("This slider allows GEGL bevel to works on black Bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an image's details."))
+    description (_("This slider allows bevel to works on black colored bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an image's details."))
   value_range   (0.00, 1.0)
   ui_steps      (0.1, 0.50)
 
@@ -189,8 +189,8 @@ property_enum (metric, _("Distance Map Setting"),
     description (_("Distance Map has three settings that alter the structure of the sharp (chamfer) bevel. Chebyshev is the default; due to it being the best. But try the other two. "))
 ui_meta ("visible", "type {sharpbevel}" )
 
-property_double (smooth, _("Smooth Roughness "), 2.5)
-  description(_("Bilateral blur smoothes roughness  of the sharp bevel but is resource intensive at high values."))
+property_double (smooth, _("Smooth Roughness "), 1.5)
+  description(_("Bilateral blur smoothes roughness  of the sharp chamfer bevel but is resource intensive at high values."))
   value_range   (0.0, 10.0)
   ui_range      (0.0, 10.0)
   ui_gamma      (1.5)
@@ -477,7 +477,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:bevel",
     "title",       _("Bevel (to blend)"),
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
-    "description", _("Creates a map of a bevel and blend it using GIMP's blend modes"
+    "description", _("Creates a map of a bevel for the user to blend it with GIMP's blend modes"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Bevel (to blend)..."),
