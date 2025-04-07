@@ -1,6 +1,6 @@
 # NEWS 
 
-GIMP 3 is released and GEGL Effects is working better then ever on both 3.0 and 2.10. The latest version of GEGL Effects is March 28 2025 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone since March 2024 and GEGL Effects now works on layer groups as of October 13 2024 in GIMP 3.
+GIMP 3 is released and GEGL Effects is working better then ever on both 3.0 and 2.10. The latest version of GEGL Effects is April 6 2025 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone since March 2024 and GEGL Effects now works on layer groups as of October 13 2024 in GIMP 3.
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
