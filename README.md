@@ -6,6 +6,8 @@ GEGL Effects (lb:effects) is another revision of GEGL Effects to make it as prof
 
 ![image](https://github.com/user-attachments/assets/ebe7e83b-5d9e-470b-8ba8-7146f55dd3e3)
 
+![image](https://github.com/user-attachments/assets/9a5c2d12-ce4c-46b8-a7f2-3e44d0ec7a4e)
+
 ![image](https://github.com/user-attachments/assets/7bbfbd34-ba38-4f58-9b90-e478d023867d)
 
 ![image](https://github.com/user-attachments/assets/f48ceb4b-43fb-4f93-9abf-764cdf847a17)
