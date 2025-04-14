@@ -1,14 +1,17 @@
-# NEWS 
+This is the final version of GEGL Effects ever, meant to replace GEGL Effects CE. Though it can co-exist with all other versions of GEGL Effects on my Github. 
 
-GIMP 3 is released and GEGL Effects is working better then ever on both 3.0 and 2.10. The latest version of GEGL Effects is April 6 2025 Stable which is based on the July 22 2023 checkpoint. No new features were added but text clipping is gone sin March 2024 and GEGL Effects now works on layer groups as of October 13 2024 in GIMP 3.
-
-## Downloadable binaries for Windows and Linux is here 
-https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
+GEGL Effects (lb:effects) is another revision of GEGL Effects to make it as professional and polished as possible.
 
 ## Preview of GEGL Effects
-![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/034f250e-fda5-4e65-95be-27bf94801a36)
 
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c6874a65-d761-4994-96a4-2e46b996b07a)
+![image](https://github.com/user-attachments/assets/ebe7e83b-5d9e-470b-8ba8-7146f55dd3e3)
+
+![image](https://github.com/user-attachments/assets/7bbfbd34-ba38-4f58-9b90-e478d023867d)
+
+![image](https://github.com/user-attachments/assets/f48ceb4b-43fb-4f93-9abf-764cdf847a17)
+
+![image](https://github.com/user-attachments/assets/de29a91f-822d-4b06-b732-69365ffb4afd)
+
 
 
 ## GEGL Effects  by Beaver
@@ -16,15 +19,9 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/r
 GEGL effects  is a GEGL Gimp plugin that does layer effects/text styling in Gimp. Allowing users to make all their favorite text styles. GEGL Effects  ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
 
 
-
 ## About GEGL Effects
 
-In the early days this was the experimental version of GEGL Effects before becoming the default. Now this is a stable version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people ignore). Presets from said old GEGL Effects will not work with this version. You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
-
-Example of plugin working alongside a special legacy version of GEGL Effects as seen here.
-
-![image preview](coexisting_plugins.jpg  )
-
+This is a text styling/advance image outlining engine for GIMP similar to layer fx in Adobe Photoshop
 
 When you download the plugin or compile the following co-plugins will ship with it as either binaries or .c files, - GEGL InnerGlow, GEGL Bevel, GEGL Glass On Text, and GEGL zzstrokebevelimage. The plugin will not work correctly without them and all normal download methods will give you all five binaries. 
 
@@ -42,6 +39,9 @@ Linux (Flatpak) `~/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
 *note - Windows users may need to create the plug-ins folder if it doesn't exist. But this may be an indication you are using an old version of GIMP 2.10.
 
+## Location of plugin
+filters>text styling>GEGL Effects
+or
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c1803c39-c55c-4c5c-8084-fcb01f29adf2)
 
 ## Compiling and Installing
