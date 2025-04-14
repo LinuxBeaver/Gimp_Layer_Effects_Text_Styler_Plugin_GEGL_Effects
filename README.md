@@ -1,6 +1,6 @@
 This is the final version of GEGL Effects ever, meant to replace GEGL Effects CE. Though it can co-exist with all other versions of GEGL Effects on my Github. 
 
-GEGL Effects (lb:effects) is another revision of GEGL Effects to make it as professional and polished as possible.
+This revision released April 14 2025 is to make GEGL Effects as polished as possible
 
 ## Preview of GEGL Effects
 
