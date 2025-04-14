@@ -50,8 +50,8 @@ property_enum   (grow_shape_stroke, _("Grow shape"),
   description   (_("The shape to expand or contract the stroke in"))
 
 property_double (radius_stroke, _("Outline's Blur radius"), 0.0)
-  value_range   (0.0, 2)
-  ui_range      (0.0, 300.0)
+  value_range   (0.0, 2.0)
+  ui_range      (0.0, 2.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
@@ -140,8 +140,18 @@ static void attach (GeglOperation *operation)
                                   "operation", "gegl:dropshadow",
                                   NULL);
 
+    GeglNode *blur = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gaussian-blur", "std-dev-x", 7.0, "std-dev-y", 7.0, "abyss-policy", 0, "clip-extent", 0,  
+                                  NULL);
+
     GeglNode *mbd = gegl_node_new_child (gegl,
-                                  "operation", "gegl:bevel", "type", 1, "blendmode", 0, "elevation", 90.0, "radius", 7.0,
+                                  "operation", "gegl:emboss", "elevation", 90.0, "azimuth", 40.0, 
+                                  NULL);
+#define bevelopacity \
+" opacity value=1.5 median-blur radius=0 abyss-policy=none "\
+
+    GeglNode *graphopacity = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gegl", "string", bevelopacity, 
                                   NULL);
 
     GeglNode *mcol = gegl_node_new_child (gegl,
@@ -158,8 +168,8 @@ static void attach (GeglOperation *operation)
 
   gegl_node_link_many (input, multiply1, crop, idref, multiply2, stroke, ds, output, NULL);
   gegl_node_connect (multiply1, "aux", mcol, "output");
-  gegl_node_connect (multiply2, "aux", mbd, "output");
-  gegl_node_link_many (idref, mbd, NULL);
+  gegl_node_connect (multiply2, "aux", graphopacity, "output");
+  gegl_node_link_many (idref, blur, mbd, graphopacity, NULL);
   gegl_node_connect (crop, "aux", input, "output");
 
    gegl_operation_meta_redirect (operation, "x_shadow", ds, "x");
