@@ -484,8 +484,8 @@ else
   }
 
   gegl_operation_meta_redirect (operation, "radius", state->bevel, "radius1");
-  gegl_operation_meta_redirect (operation, "depth", state->bevel, "bevel1");
-  gegl_operation_meta_redirect (operation, "elevation", state->bevel, "bevel2");
+  gegl_operation_meta_redirect (operation, "depth", state->bevel, "bevel2");
+  gegl_operation_meta_redirect (operation, "elevation", state->bevel, "bevel1");
   gegl_operation_meta_redirect (operation, "azimuth", state->bevel, "azimuth");
   gegl_operation_meta_redirect (operation, "tile_saturation", state->cubismglow, "tile-saturation");
   gegl_operation_meta_redirect (operation, "tile_size", state->cubismglow, "tile-size");
