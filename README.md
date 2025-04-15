@@ -1,6 +1,6 @@
-This is the final version of GEGL Effects ever, meant to succeed GEGL Effects CE. Though it can co-exist with all other versions of GEGL Effects on my Github. 
+This is a revision of GEGL Effects released April 14 2025 is to make it as polished as possible. It can co-exist with all other versions/branches of GEGL Effects on my Github including the main brain CE.
 
-This revision released April 14 2025 is to make GEGL Effects as polished as possible
+Put simply, this is the personal branch of GEGL Effects I use, which is different from the one that I advertise to the general public on the main Github page.
 
 ## Preview of GEGL Effects
 
