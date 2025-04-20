@@ -37,10 +37,6 @@ median-blur radius=0
 Fun fact, Custom Bevel is the first GEGL filter to take advantage of internal blend mode swapping. No native Gimp filter does this really. I said really because gegl:bloom enables/disables the union composite mode. (but it doesn't change blend modes) and emboss has math that gives it a multiply blend mode like setting. It doesn't call gegl:multiply. Custom Bevel has settings like Gimp's "blending options" list but internally and this radically changes how the bevel appears.
  */
 
-property_enum(guichange, _("Part of filter to be displayed"),
-    guiendcustombevellist, guichangeenumcustombevellist,
-    CUSTOMBEVEL_SHOW_DEFAULT)
-  description(_("Change the GUI option"))
 
 
 enum_start (guichangeenumcustombevellist)
@@ -92,6 +88,11 @@ enum_start (gegl_median_blur_neighborhoodcb)
   enum_value (GEGL_MEDIAN_BLUR_NEIGHBORHOOD_DIAMONDcb, "diamondcb", N_("Diamond"))
 enum_end (GeglMedianBlurNeighborhoodcb)
 
+property_enum (switchbevel, _("Custom Bevel mode/version select"),
+    custombevelmodes, custom_bevel_modes,
+    CLASSIC)
+    description (_("The new version of Custom Bevel that is not default has an easier recolor and does not conform to image file overlays via dark bevel mode. "))
+
 
 property_enum (type, _("Choose Internal Median Shape"),
                GeglMedianBlurNeighborhoodcb, gegl_median_blur_neighborhoodcb,
@@ -109,9 +110,10 @@ ui_meta ("visible", "guichange {advancecustombevel}")
 
 property_double (azimuth, _("Azimuth"), 67.0)
     description (_("Light angle (degrees)"))
-    value_range (30, 90)
+    value_range (0, 360)
     ui_meta ("unit", "degree")
     ui_meta ("direction", "ccw")
+  ui_steps      (0.1, 0.50)
 
 property_double (elevation, _("Elevation"), 25.0)
     description (_("Elevation angle (degrees)"))
@@ -122,7 +124,7 @@ property_int (depth, _("Depth and or detail"), 24)
     description (_("Brings out depth and or detail of the bevel depending on the blend mode"))
     value_range (1, 100)
 
-property_int  (size, _("Internal Median Blur Radius"), 1)
+property_int  (size, _("Thick to Thin"), 1)
   value_range (0, 15)
   ui_range    (0, 15)
   ui_meta     ("unit", "pixel-distance")
@@ -138,15 +140,15 @@ ui_meta ("visible", "guichange {advancecustombevel}")
 property_double  (alphapercentile, _("Internal Median Blur Alpha percentile"), 0.0)
   value_range (0.0, 100.0)
   description (_("Neighborhood alpha percentile"))
-
+ui_meta ("visible", "guichange {advancecustombevel}")
 
 
 property_double (gaus, _("Internal Gaussian Blur for a normal bevel"), 2)
-   description (_("Makes a normal bevel by calling an internal gaussian blur"))
+   description (_("Makes a recommended gaussian style bump bevel by calling an internal gaussian blur"))
    value_range (0.0, 9.0)
 
 property_int (box, _("Internal Box Blur for a box bevel"), 3)
-   description(_("Makes a box bevel by calling an internal box blur"))
+   description(_("Makes a box bump bevel by calling an internal box blur"))
    value_range (0, 10)
    ui_range    (0, 10)
    ui_gamma   (1.5)
@@ -166,12 +168,12 @@ property_double (sharpen, _("Sharpen"), 0.2)
 ui_meta ("visible", "guichange {advancecustombevel}")
 
 
-property_file_path(src, _("Image file Overlay - Desaturate and lighten for best results"), "")
+property_file_path(src, _("Image file Overlay - Use a white/gray bevel for best results"), "")
     description (_("Source image file path (png, jpg, raw, svg, bmp, tif, ...) You can remove an image file overlay by going back to the image file select window, removing all text from --location-- then click open. Image file overlay will then go back to its default (None)"))
 
 
-property_double (slideupblack, _("Dark Text mode"), 0.0)
-   description  (_("For dark bevels and bevels with images under them. Use 1. Slide up if text color is dark or black and this will allow the bevel to significantly better on dark and black text. Dark bevels seem to work best on the multiply blend mode."))
+property_double (slideupblack, _("Dark bevel mode"), 0.0)
+   description  (_("For dark bevels and bevels with images under them. Use if text color is dark or black and this will allow the bevel to show itself significantly better on dark and black text. Dark bevels seem to work best on the multiply blend mode."))
    ui_range  (0.00, 0.050)
 
 
@@ -192,15 +194,16 @@ property_double (hue, _("Hue Rotation -0 resets"),  0.0)
    value_range  (-180.0, 180.0)
 ui_meta ("visible", "guichange {advancecustombevel}")
 
-property_enum (switchbevel, _("Custom Bevel mode/version select"),
-    custombevelmodes, custom_bevel_modes,
-    CLASSIC)
-    description (_("The new version of Custom Bevel that is not default has an easier recolor and does not conform to image file overlays via dark bevel mode. "))
-
 
 property_color (coloroverlay, _("Color Overlay (requires white text/shape on non recolor modes"), "#ffffff")
-    description (_("The color to paint over a white bevel. If the text is white the bevel will become any color. If it is not white it could distort things as it will behave as if you are applying a multiply blend mode color overlay on the bevel. White makes transparent. This is literally a multiply blend mode color overlay. This does not apply to Modern Recolor mode where it will force the color to be anything."))
-ui_meta ("visible", "!switchbevel {modernnocolor}")
+    description (_("Recolor the bevel, if you are using GEGL syntax you can make the bevel any color if the text is white"))
+ui_meta ("visible", "!switchbevel {modernnocolor, classic}")
+
+property_enum(guichange, _("Part of filter to be displayed"),
+    guiendcustombevellist, guichangeenumcustombevellist,
+    CUSTOMBEVEL_SHOW_DEFAULT)
+  description(_("Change the GUI option"))
+
 
 
 
