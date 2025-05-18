@@ -266,7 +266,7 @@ enum_value   (BEAVER_UI_STROKESHADOW, "strokeshadow", N_("Color Fill, Outline an
 enum_value   (BEAVER_UI_INNERGLOWBEVEL, "innerglowbevel", N_("Bevel and Inner Glow"))
 enum_value   (BEAVER_UI_IMAGEGRADIENT, "imagegradient", N_("Fill Image and Gradient"))
 enum_value   (BEAVER_UI_OUTLINESPECIAL, "outlinespecial", N_("Special Options for Outline and Shadow"))
-enum_value   (BEAVER_UI_EXTRAOSG, "extraosg", N_("Secondary Outline and Shadow"))
+enum_value   (BEAVER_UI_EXTRAOSG, "extraosg", N_("Secondary Outline"))
 enum_value   (BEAVER_UI_GLASSTEXTSHINE, "glassshine", N_("Glass Text and Shine"))
   enum_end (guiendzz_sally)
 
