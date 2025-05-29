@@ -28,7 +28,7 @@ In Example, Gimp's Split blend mode is 60
 
 split = gegl_node_new_child (gegl,
 "operation", "gimp:layer-mode", "layer-mode", 60,
-"composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+"composite-mode", 0, "blend-space", 0,  NULL);
 
 If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number.
 
@@ -1543,7 +1543,7 @@ state->dsbehind = gegl_node_new_child (gegl,
   /* All nodes relating to knock out text begin here. */
 
 state->xor = gegl_node_new_child (gegl,
-                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0,  NULL);
 
   /* This nop acts as a ref and id for the placement of translucent text in the gegl graph. */
   state->knockoutidref = gegl_node_new_child (gegl,
@@ -1673,7 +1673,7 @@ state->hardlight = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
 
 state->screen = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, "composite-space", 0, "blend-space", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 31,  "composite-mode", 0,  "blend-space", 0,  NULL);
 
 /* DST doesn't disable bevel it just makes it invisible*/
   state->beveloff = gegl_node_new_child (gegl,
@@ -2160,7 +2160,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. April 6 2025 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. May 29 2025 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
