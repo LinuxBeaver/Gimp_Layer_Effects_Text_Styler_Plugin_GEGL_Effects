@@ -1543,7 +1543,7 @@ state->dsbehind = gegl_node_new_child (gegl,
 
 
 state->xor = gegl_node_new_child (gegl,
-                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0, NULL);
 
   /* This nop acts as a ref and id for the placement of translucent text in the gegl graph. */
   state->knockoutidref = gegl_node_new_child (gegl,
@@ -1651,7 +1651,7 @@ state->hardlight = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
 
 state->screen = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, "composite-space", 0, "blend-space", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0,  "blend-space", 0, NULL);
 
 /* DST doesn't disable bevel it just makes it invisible*/
   state->beveloff = gegl_node_new_child (gegl,
