@@ -29,7 +29,7 @@ In Example, Gimp's Split blend mode is 60
 
 split = gegl_node_new_child (gegl,
 "operation", "gimp:layer-mode", "layer-mode", 60,
-"composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+"composite-mode", 0, "blend-space", 0, NULL);
 
 If Gimp's team adds a new blend mode this will throw off all the gimp exclusive blend modes called by one number.
 
@@ -973,7 +973,7 @@ dsbehind = gegl_node_new_child (gegl,
   /* All nodes relating to knock out text begin here. */
 
 xor = gegl_node_new_child (gegl,
-                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0, "composite-space", 0, NULL);
+                                    "operation", "gimp:layer-mode", "layer-mode", 60,  "composite-mode", 0, "blend-space", 0,  NULL);
 
   /* This nop acts as a ref and id for the placement of translucent text in the gegl graph. */
   knockoutidref = gegl_node_new_child (gegl,
@@ -1055,7 +1055,7 @@ hardlight = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
 
 screen = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, "composite-space", 0, "blend-space", 0, NULL);
+                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0,  "blend-space", 0, NULL);
 
 /* DST doesn't disable bevel it just makes it invisible*/
   beveloff = gegl_node_new_child (gegl,
