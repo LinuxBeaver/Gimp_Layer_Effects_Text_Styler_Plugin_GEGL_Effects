@@ -1121,6 +1121,7 @@ typedef struct
 /*All nodes that have no relationships (shiny text,  microblur, and thin to thick text) start here*/
   GeglNode *microblur;
   GeglNode *thinbold;
+  GeglNode *cropigb;
   GeglNode *repairgeglgraph;
 /*All nodes that have no relationships (shiny text, microblur, and thin to thick text) end here*/
 
@@ -1325,7 +1326,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->crop,  state->nopg, atopg,  state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi,  multiply, state->crop,  state->nopg, atopg,  state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->cropigb, state->nopglass,  state->glassover,   state->nopextrassg, state->knockoutidref,  state->nopig, over, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1360,6 +1361,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
       gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropigb, "aux", state->nopb, "output");
 /*Nodes relating to shiny text start here*/
   gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
   gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
@@ -1367,7 +1369,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,   blendchoiceshiny,  crop2shiny,  state->nopb, bevelmode, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur, state->nopimage, atopi, multiply, state->crop,   blendchoiceshiny,  crop2shiny,  state->nopb, bevelmode, state->cropigb, state->nopglass, state->glassover,  state->nopextrassg, state->knockoutidref, state->nopig, over, state->nopstrokebehind, state->strokebehind,  state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1398,6 +1400,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
 /*gegl crop to prevent new clip bug*/
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
       gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropigb, "aux", state->nopb, "output");
 /*Nodes relating to shiny text start here*/
   gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
@@ -1409,7 +1412,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->crop,  state->nopg, atopg, state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+         gegl_node_link_many (state->input, state->thinbold, state->microblur,  state->nopimage, atopi,   multiply, state->crop,  state->nopg, atopg, state->cropcolor,  blendchoiceshiny, crop2shiny,   state->nopb, bevelmode, state->cropigb, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1441,6 +1444,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
       gegl_node_connect (state->crop2shiny, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropigb, "aux", state->nopb, "output");
 /*Nodes relating to shiny text start here*/
   gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
   gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
@@ -1448,7 +1452,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  blendchoiceshiny, crop2shiny,  state->nopb, bevelmode, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
+   gegl_node_link_many (state->input, state->microblur, state->thinbold, state->nopimage, atopi,  multiply, state->crop,  blendchoiceshiny, crop2shiny,  state->nopb, bevelmode, state->cropigb, state->nopglass,  state->glassover,  state->nopextrassg, state->knockoutidref, state->nopstrokebehind, state->strokebehind, state->behindextrassg, state->nopdsbehind, state->dsbehind, state->xor, state->repairgeglgraph, state->output, NULL);
       /* Nodes relating to color overlay */
       gegl_node_link_many (state->mcol, state->coloropacity, NULL);
       gegl_node_connect (multiply, "aux", state->coloropacity, "output");
@@ -1477,6 +1481,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (state->crop, "aux", state->thinbold, "output");
       gegl_node_connect (state->cropcolor, "aux", state->thinbold, "output");
       gegl_node_connect (crop2shiny, "aux", state->thinbold, "output");
+      gegl_node_connect (state->cropigb, "aux", state->nopb, "output");
 /*Nodes relating to shiny text start here*/
   gegl_node_link_many (sinusshiny, state->opacityshiny,   NULL);
   gegl_node_connect (blendchoiceshiny, "aux", state->opacityshiny, "output");
@@ -1969,6 +1974,12 @@ state->additionimage = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur", "clip-extent", FALSE,  "abyss-policy", 0,
                                   NULL);
 
+  state->cropigb = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop", 
+                                  NULL);
+
+/*makes it where inner glow doesn't clip at the legs due to a bug with bevels DST blend mode*/
+
 
   state->repairgeglgraph      = gegl_node_new_child (gegl, "operation", "gegl:median-blur", "abyss-policy",     0,
                                          "radius",       0,
@@ -2160,7 +2171,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "name",        "lb:layereffectscontinual",
     "title",       _("GEGL Effects Continual Edition"),
     "reference-hash", "continual45ed565h8500fca01b2ac",
-    "description", _("GEGL text styling and specialty image outlining filter. May 29 2025 Stable Build"
+    "description", _("GEGL text styling and specialty image outlining filter. May 31 2025 Stable Build"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("GEGL Effects CE..."),
