@@ -45,13 +45,13 @@ property_enum(guichange, _("Part of filter displayed"),
   description(_("Change the GUI option"))
 
 
-property_double (bvradius, _("Radius of bevel"), 7.0)
+property_double (bvradius, _("Radius of bevel"), 6.0)
     description (_("This setting should be higher for larger text and lower for smaller text"))
   value_range (5.0, 15.0)
   ui_range (5.0, 9)
   ui_gamma (1.5)
 
-property_double (bevelconfig, _("Depth Angle"), 58.0)
+property_double (bevelconfig, _("Depth Angle"), 48.0)
     description (_("Emboss Elevation, Larger text should have lower values and smaller text can benefit from higher values."))
     value_range (45, 80)
     ui_meta ("unit", "degree")
@@ -126,6 +126,8 @@ property_double (th, _("Threshold Alpha of Bevel"), 0.210)
   ui_range (0.195, 0.231)
 ui_meta ("visible", "guichange {advancechrometext}")
 
+property_color  (color, _("Metal Color"), "#ffffff")
+    description (_("Color of the metal. White = no color"))
 
 
 #else
@@ -139,51 +141,69 @@ ui_meta ("visible", "guichange {advancechrometext}")
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *color, *bevel, *metallic, *glow, *sharpen, *softglow, *noisereduction, *smoothedge, *opacity;
+
   GeglColor *hidden_color_chrome_text = gegl_color_new ("#ffb386");
+  GeglColor *white = gegl_color_new ("#ffffff");
 
-  input    = gegl_node_get_input_proxy (gegl, "input");
-  output   = gegl_node_get_output_proxy (gegl, "output");
+  GeglNode*input    = gegl_node_get_input_proxy (gegl, "input");
+  GeglNode*output   = gegl_node_get_output_proxy (gegl, "output");
 
 
-  color    = gegl_node_new_child (gegl,
+  GeglNode*color    = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
                                    "value", hidden_color_chrome_text, NULL);
 
 
-  bevel    = gegl_node_new_child (gegl,
+    GeglNode*bevel    = gegl_node_new_child (gegl,
                                   "operation", "lb:bevel",
                                   NULL);
 
-  metallic    = gegl_node_new_child (gegl,
+    GeglNode*metallic    = gegl_node_new_child (gegl,
                                   "operation", "lb:metallic",
                                   NULL);
 
-  glow    = gegl_node_new_child (gegl,
+    GeglNode*glow    = gegl_node_new_child (gegl,
                                   "operation", "gegl:bloom",
                                   NULL);
 
-  sharpen    = gegl_node_new_child (gegl,
+    GeglNode*sharpen    = gegl_node_new_child (gegl,
                                   "operation", "gegl:unsharp-mask",
                                   NULL);
 
-  softglow    = gegl_node_new_child (gegl,
+    GeglNode*softglow    = gegl_node_new_child (gegl,
                                   "operation", "gegl:softglow",
                                   NULL);
 
-  noisereduction    = gegl_node_new_child (gegl,
+    GeglNode*noisereduction    = gegl_node_new_child (gegl,
                                   "operation", "gegl:noise-reduction",
                                   NULL);
 
-  smoothedge    = gegl_node_new_child (gegl,
+    GeglNode*smoothedge    = gegl_node_new_child (gegl,
                                   "operation", "lb:edgesmooth",
                                   NULL);
 
-  opacity    = gegl_node_new_child (gegl,
+    GeglNode*opacity    = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity",
                                   NULL);
 
-  gegl_node_link_many (input, color, bevel, metallic, glow, sharpen, softglow, noisereduction, smoothedge, opacity, output, NULL);
+    GeglNode*crop    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+   GeglNode*idref = gegl_node_new_child (gegl, "operation", "gegl:nop", NULL);
+
+ GeglNode*lchcolor   = gegl_node_new_child (gegl,
+                                  "operation", "gimp:layer-mode", "layer-mode", 26, "blend-space", 3, "composite-mode", 0, 
+                                  NULL);
+
+    GeglNode*colormetal    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color", "value", white,
+                                  NULL);
+
+
+
+  gegl_node_link_many (input, color, bevel, metallic, glow, sharpen, softglow, noisereduction, smoothedge, opacity, idref, lchcolor, crop, output, NULL);
+   gegl_node_connect (lchcolor, "aux",  colormetal, "output");
+   gegl_node_connect (crop, "aux",  idref, "output");
 
 
   gegl_operation_meta_redirect (operation, "th", bevel, "th");
@@ -200,6 +220,7 @@ static void attach (GeglOperation *operation)
   gegl_operation_meta_redirect (operation, "softglow", softglow, "glow-radius");
   gegl_operation_meta_redirect (operation, "smoothedge", smoothedge, "alpha-percentile2");
   gegl_operation_meta_redirect (operation, "opacity", opacity, "value");
+  gegl_operation_meta_redirect (operation, "color", colormetal, "value");
 
 }
 
@@ -214,11 +235,10 @@ gegl_op_class_init (GeglOpClass *klass)
 
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:chrome",
-    "title",       _("Chrome metal text styler"),
-    "categories",  "artistic",
+    "title",       _("Chrome metal text"),
     "reference-hash", "450056eat8b351dt25700ftevfe2g4fonf1c",
     "description", _(""
-                     "Make metal chrome text styling effects with GEGL. Works best on 100-500p text. Fails on very small text and excessively wide fonts."),
+                     "Make metal chrome text with GEGL. Works best on 100-500p text. Fails on very small text and excessively wide fonts."),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Chrome Text..."),
     NULL);
