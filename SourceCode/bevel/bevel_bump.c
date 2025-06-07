@@ -140,8 +140,6 @@ ui_meta ("visible", "type {stackedembossbevel}" )
 property_int (bevel2special, _("Depth (inside)"), 7)
     description (_("Emboss depth -Brings out depth and detail of the bevel"))
     value_range (1, 20)
-  ui_steps      (0.1, 0.50)
-  ui_steps      (0.1, 0.50)
 ui_meta ("visible", "type {covebevel}" )
 
 
@@ -150,7 +148,9 @@ property_double (th, _("Coverage"), 0.100)
   value_range (0.0, 1.0)
   ui_range (0.0, 0.5)
   ui_steps      (0.1, 0.50)
-ui_meta ("visible", "type {normalbevel}" )
+    ui_meta     ("role", "output-extent")
+/*ui_meta ("visible", "type {normalbevel}" ) */
+
 
 
 property_double (azimuth, _("Rotate Lighting"), 40.0)
