@@ -128,66 +128,67 @@ property_double (opacityssg, _("Opacity"), 2)
 static void attach (GeglOperation *operation)
 {
   GeglNode *gegl = operation->node;
-  GeglNode *input, *output, *median, *blur, *id1, *hopacity, *ssg, *xor, *color, *atop, *image, *blur2, *opacity, *hue;
   GeglColor *ssg_hidden_color = gegl_color_new ("#000000");
 
 
-  input    = gegl_node_get_input_proxy (gegl, "input");
-  output   = gegl_node_get_output_proxy (gegl, "output");
+  GeglNode *input    = gegl_node_get_input_proxy (gegl, "input");
+  GeglNode *output   = gegl_node_get_output_proxy (gegl, "output");
 
 
 
-  image   = gegl_node_new_child (gegl,
+  GeglNode *image   = gegl_node_new_child (gegl,
                                   "operation", "port:load",
                                   NULL);
 
 
-  color   = gegl_node_new_child (gegl,
+  GeglNode *color   = gegl_node_new_child (gegl,
                                   "operation", "gegl:color-overlay",
                                   NULL);
 
 
-  atop   = gegl_node_new_child (gegl,
+  GeglNode *atop   = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-atop",
                                   NULL);
 
-  opacity   = gegl_node_new_child (gegl,
+  GeglNode *opacity   = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity",  "value", 2.0,
                                   NULL);
 
  
-   median   = gegl_node_new_child (gegl,
-                                  "operation", "gegl:median-blur", "alpha-percentile", 0.0,  "abyss-policy",     GEGL_ABYSS_NONE,
+   GeglNode *median   = gegl_node_new_child (gegl,
+                                  "operation", "gegl:median-blur", "alpha-percentile", 0.0,  "abyss-policy",     1, /*was previously zero but changed due to a bug*/
                                   NULL);
 
- ssg    = gegl_node_new_child (gegl,
+ GeglNode *ssg    = gegl_node_new_child (gegl,
                                   "operation", "gegl:dropshadow",
                                    "color", ssg_hidden_color, NULL);
             
 
- blur    = gegl_node_new_child (gegl,
+ GeglNode *blur    = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur", "std-dev-x", 0.5, "std-dev-y", 0.5, "clip-extent", FALSE,   "abyss-policy", 0,                    
                                   NULL);
 
- blur2    = gegl_node_new_child (gegl,
+ GeglNode *blur2    = gegl_node_new_child (gegl,
                                   "operation", "gegl:gaussian-blur", "clip-extent", FALSE,   "abyss-policy", 0,                    
                                   NULL);
 
-  id1    = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
 
-  hue    = gegl_node_new_child (gegl,
+  GeglNode *hue    = gegl_node_new_child (gegl,
                                   "operation", "gegl:hue-chroma",
                                   NULL);
 
-  hopacity    = gegl_node_new_child (gegl,
+ GeglNode *hopacity    = gegl_node_new_child (gegl,
                                   "operation", "gegl:opacity", "value", 1.5,
                                   NULL);
 
+  GeglNode *idref    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
 
-xor = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 60, NULL);
+
+  GeglNode *erase = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst-out",
+                                  NULL);
 
   gegl_operation_meta_redirect (operation, "colorssg", color, "value");
   gegl_operation_meta_redirect (operation, "opacityssg", opacity, "value");
@@ -202,16 +203,10 @@ xor = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "blur2", blur2, "std-dev-y");
   gegl_operation_meta_redirect (operation, "radius", median, "radius");
 
-
-
-  gegl_node_link_many (input, hopacity, median, blur, id1, ssg, xor, color, atop, opacity, output, NULL);
+  gegl_node_link_many (input, hopacity, median, idref, blur, ssg, erase, color, atop, opacity, output, NULL);
   gegl_node_link_many (image, hue, blur2, NULL);
-  gegl_node_connect (xor, "aux", id1, "output");
+  gegl_node_connect (erase, "aux", idref, "output");
   gegl_node_connect (atop, "aux", blur2, "output");
-
-
-
-
 
 }
 
@@ -227,9 +222,8 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:ssg",
     "title",       _("Add a Stroke, Shadow or Glow"),
-    "categories",  "Artistic",
     "reference-hash", "3ado316vg22a00x03vv5sb2ac",
-    "description", _("Make a duplicate layer of image you want to apply SSG to, then apply SSG to the top or bottom duplicate layer. SSG is an enhanced fork of the drop shadow filter that starts as a outline, knocks out the original image and allows image file overlays.  "
+    "description", _("Like dropshadow but knocked out and it starts as a stand alone outline that can be used on GIMP layers or with the blend mode switcher set to normal or behind. Put it on a layer of its own and apply filters on it"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Stroke Shadow Glow (SSG)..."),
