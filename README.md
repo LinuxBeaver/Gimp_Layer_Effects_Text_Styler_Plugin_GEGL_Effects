@@ -1,6 +1,6 @@
 # NEWS 
 
-GIMP 3 is released and GEGL Effects is working better then ever on both 3.0 and 2.10. The latest version of GEGL Effects is May 31st 2025 Stable which is based on the July 22 2023 checkpoint. 
+This filter is like GEGL Styles in GIMP 3 but with far more options. The latest version of GEGL Effects is May 31st 2025 Stable which is based on the July 22 2023 checkpoint. 
 
 ## Downloadable binaries for Windows and Linux is here 
 https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/releases/
