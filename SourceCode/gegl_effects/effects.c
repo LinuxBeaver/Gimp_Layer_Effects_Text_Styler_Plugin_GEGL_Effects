@@ -1625,12 +1625,12 @@ state->additioncolor = gegl_node_new_child (gegl,
 /* All nodes relating to the bevel start here*/
 
   state->mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", 
+                                  "operation", "lb:bevel", "smooth", 1.0,
                                   NULL);
  /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
   state->mbdopacity = gegl_node_new_child (gegl,
-                                  "operation", "gegl:opacity", "value", 0,
+                                  "operation", "gegl:opacity", "value", 0.0,
                                   NULL);
 
   /*The nop functions as a ref and ID for bevel's placement in a GEGL Graph*/
