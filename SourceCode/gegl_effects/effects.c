@@ -758,7 +758,7 @@ property_double (outline_extra_opacity, _("Extra outline/shadow/glow's opacity")
   ui_meta ("visible", "guichange {extraosg}")
   ui_meta     ("sensitive", " enable_outline_extra")
 
-property_double (outline_extra_x, _("Extra outline/shadow/glow horizontal Distance"), 0.0)
+property_double (outline_extra_x, _("Extra outline/shadow/glow horizontal distance"), 0.0)
   description   (_("Horizontal shadow offset"))
   value_range   (-6.0, 6.0)
   ui_range      (-6.0, 6.0)
