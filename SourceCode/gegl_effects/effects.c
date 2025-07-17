@@ -327,14 +327,14 @@ property_double (outline_opacity, _("Outline opacity"), 1.0)
   ui_meta ("visible", "guichange {strokeshadow}")
   ui_meta     ("sensitive", " enable_outline")
 
-property_double (outline_x, _("Outline horizontal position"), 0.0)
+property_double (outline_x, _("Outline horizontal distance"), 0.0)
   description   (_("Horizontal outline fill offset"))
   value_range   (-15.0, 15.0)
   ui_steps      (1, 10)
   ui_meta ("visible", "guichange {strokeshadow}")
   ui_meta     ("sensitive", " enable_outline")
 
-property_double (outline_y, _("Outline vertical position"), 0.0)
+property_double (outline_y, _("Outline vertical distance"), 0.0)
   description   (_("Vertical outline fill offset"))
   value_range   (-15.0, 15.0)
    ui_steps      (1, 10)
@@ -401,7 +401,7 @@ property_double (shadow_x, _("Shadow horizontal distance"), 10.0)
   ui_meta       ("axis", "x")
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (shadow_y, _("Shadow vertical vistance"), 10.0)
+property_double (shadow_y, _("Shadow vertical distance"), 10.0)
   description   (_("Vertical shadow offset"))
   value_range   (-200, 200)
   ui_range      (-40.0, 40.0)
@@ -734,7 +734,7 @@ property_double (os_lightness, _("Lightness of outline's image file overlay"), 0
   ui_meta     ("sensitive", " enable_os")
 
 
-property_boolean (enable_shadow_special, _("Enable/Disable special options for shadow/glow"), FALSE)
+property_boolean (enable_shadow_special, _("Enable special options for shadow/glow"), FALSE)
   description    (_("Turn on special drop shadow glow's special abilities"))
   ui_meta ("visible", "guichange {outlinespecial}")
 
@@ -996,7 +996,7 @@ property_double (glass_opacity, _("Opacity of glass text"), 1.0)
 /* End of Glass Text*/
 
 /*Beginning of shine text*/
-property_boolean (enable_shine, _("Enable/Disable shiny text"), FALSE)
+property_boolean (enable_shine, _("Enable shiny text"), FALSE)
   description    (_("Whether text should be shiny"))
   ui_meta ("visible", "guichange {glassshine}")
 
@@ -2099,6 +2099,32 @@ state->additionimage = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "bevel_elevation", state->mbd, "bevel1");
   gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd, "azimuth");
   gegl_operation_meta_redirect (operation, "bevel_black", state->mbd, "slideupblack");
+
+  gegl_operation_meta_redirect (operation, "bevel_depth", state->mbd2, "bevel2");
+  gegl_operation_meta_redirect (operation, "bevel_radius", state->mbd2, "radius1");
+  gegl_operation_meta_redirect (operation, "bevel_elevation", state->mbd2, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd2, "azimuth");
+  gegl_operation_meta_redirect (operation, "bevel_black", state->mbd2, "slideupblack");
+
+  gegl_operation_meta_redirect (operation, "bevel_depth", state->mbd3, "bevel2");
+  gegl_operation_meta_redirect (operation, "bevel_radius", state->mbd3, "radius1");
+  gegl_operation_meta_redirect (operation, "bevel_elevation", state->mbd3, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd3, "azimuth");
+  gegl_operation_meta_redirect (operation, "bevel_black", state->mbd3, "slideupblack");
+
+  gegl_operation_meta_redirect (operation, "bevel_depth", state->mbd4, "bevel2");
+  gegl_operation_meta_redirect (operation, "bevel_radius", state->mbd4, "radius1");
+  gegl_operation_meta_redirect (operation, "bevel_elevation", state->mbd4, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd4, "azimuth");
+  gegl_operation_meta_redirect (operation, "bevel_black", state->mbd4, "slideupblack");
+
+  gegl_operation_meta_redirect (operation, "bevel_depth", state->mbd5, "bevel2");
+  gegl_operation_meta_redirect (operation, "bevel_radius", state->mbd5, "radius1");
+  gegl_operation_meta_redirect (operation, "bevel_elevation", state->mbd5, "bevel1");
+  gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd5, "azimuth");
+  gegl_operation_meta_redirect (operation, "bevel_black", state->mbd5, "slideupblack");
+
+
   gegl_operation_meta_redirect (operation, "bevel_opacity", state->mbdopacity, "value");
   /*End of Bevel's GUI asociations*/
 
