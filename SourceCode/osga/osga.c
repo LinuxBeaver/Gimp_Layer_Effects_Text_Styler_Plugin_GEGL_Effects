@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with GEGL; if not, see <https://www.gnu.org/licenses/>.
  *
- * Copyright 2006 Øyvind Kolås <pippin@gimp.org>
+ * Credit to Øyvind Kolås (pippin) for major GEGL contributions
  * 2023 Beaver (GEGL ZZStrokeBevelImageOverlay a hidden operation fork of drop shadow to give GEGL Effects outline the ability to add a bevel, image file overlay and more. May 16 23 it now gives GEGL Effects drop shadow a blurred image file overlay. May 17 2023 it now has an aura seed option for shadow glow )
  */
 
@@ -104,6 +104,10 @@ enum_start (gegl_blend_mode_type_effectszzbevoutline_sally)
               N_("ColorDodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "HardLightGE",
               N_("HardLight"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LIGHTENONLYGE,      "LightenOnlyGE",
+              N_("LightenOnly"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACTGE,      "GrainExtractGE",
+              N_("GrainExtract"))
 enum_end (GeglBlendModeTypezzbevoutline_sally)
 
 
@@ -222,6 +226,8 @@ typedef struct
   GeglNode *invisibleblend2;
   GeglNode *invisibleblend;
   GeglNode *bevel;
+  GeglNode *lightenonlyge;
+  GeglNode *grainextractge;
   GeglNode *dstover;
 } State;
 
@@ -353,6 +359,13 @@ static void attach (GeglOperation *operation)
   state->hardlightge = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, "composite-space", 1, "blend-space", 0, NULL);
 
+  state->lightenonlyge = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 36, "composite-mode", 0, NULL);
+
+  state->grainextractge = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 46, "composite-mode", 0, NULL);
+
+
     state->nothingcubism    = gegl_node_new_child (gegl,
                                   "operation", "gegl:nop",
                                   NULL);
@@ -402,8 +415,11 @@ update_graph (GeglOperation *operation)
     case GEGL_BLEND_MODE_TYPE_SHINYGMGE: multiplyge = state->shinygmge; break;
     case GEGL_BLEND_MODE_TYPE_COLORDODGEGE: multiplyge = state->colordodgege; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHTGE: multiplyge = state->hardlightge; break;
+    case GEGL_BLEND_MODE_TYPE_LIGHTENONLYGE: multiplyge = state->lightenonlyge; break;
+    case GEGL_BLEND_MODE_TYPE_GRAINEXTRACTGE: multiplyge = state->grainextractge; break;
 
 }
+
  if (!o->behind)
  if (o->enableoutline)
  if (o->enablespecialoutline)
@@ -522,7 +538,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("Outline Shadow Glow Aura +"),
    "categories",  "hidden", 
     "reference-hash", "33234v25str2acosga",
-    "description", _("This is a rough reimagination of Gimp's drop shadow filter with many new things and technical options that drop shadow was not capable of doing. "
+    "description", _("This is a rough reimagination of Gimp's drop shadow filter with many new things and technical options that drop shadow was not capable of doing - currently this is a hidden operation used to power Beaver's personal version of GEGL Effects "
                      ""),
     NULL);
 }
