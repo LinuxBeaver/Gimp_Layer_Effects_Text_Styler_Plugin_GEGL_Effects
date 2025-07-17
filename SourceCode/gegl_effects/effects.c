@@ -52,6 +52,10 @@ enum_start (gegl_blend_mode_type_effectszzbevoutlinege_sally)
               N_("Color Dodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGE,      "hardlight",
               N_("Hard Light"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LIGHTENONLYGE,      "lightenonly",
+              N_("Lighten Only"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACTGE,      "grainextract",
+              N_("Grain Extract"))
 enum_end (GeglBlendModeTypezzbevoutlinege_sally)
 
 enum_start (gegl_blend_mode_type_effectszzbevoutlinegeextra_sally)
@@ -67,6 +71,10 @@ enum_start (gegl_blend_mode_type_effectszzbevoutlinegeextra_sally)
               N_("Color Dodge"))
   enum_value (GEGL_BLEND_MODE_TYPE_HARDLIGHTGEextra,      "hardlight",
               N_("Hard Light"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LIGHTENONLYGEextra,      "lightenonly",
+              N_("Lighten Only"))
+  enum_value (GEGL_BLEND_MODE_TYPE_GRAINEXTRACTGEextra,      "grainextract",
+              N_("Grain Extract"))
 enum_end (GeglBlendModeTypezzbevoutlinegeextra_sally)
 
 /*This is the enum list of blend modes for bevel.*/
@@ -89,6 +97,8 @@ enum_start (gegl_blend_mode_type_effectszz_sally)
               N_("Hard Light Bevel"))
   enum_value (GEGL_BLEND_MODE_TYPE_SCREEN,      "screen",
               N_("Screen Bevel"))
+  enum_value (GEGL_BLEND_MODE_TYPE_LIGHTENONLY,      "lightenonly",
+              N_("Lighten Only Bevel"))
 enum_end (GeglBlendModeTypezz_sally)
 
 /*This is the enum list of blend modes for Inner Glow.*/
@@ -257,6 +267,12 @@ enum_start (gegl_blend_mode_typebeavbeveleffects_sally)
               N_("Bump Bevel"))
   enum_value (GEGL_BEVEL_SHARP,      "sharpbevel",
               N_("Sharp Bevel"))
+  enum_value (GEGL_BEVEL_SHARPREVISE,      "sharpbevel2",
+              N_("Sharp Bevel Alt"))
+  enum_value (GEGL_BEVEL_SHARPREVISEFLATSURFACE,      "sharpbevelflat",
+              N_("Sharp Bevel Alt Flat Surface"))
+  enum_value (GEGL_BEVEL_SHARPREVISEINSIDE,      "sharpbevelinside",
+              N_("Sharp Bevel Alt Inside"))
 enum_end (GeglBlendModeTypebeavbeveleffects_sally)
 
 
@@ -278,7 +294,7 @@ property_enum(guichange, _("Part of filter to be displayed:"),
   description(_("Change the part of the GUI being displayed"))
 
 /* Beginning of Color Overlay, Outline and Shadow GUI options*/
-property_color  (fill_color, _("Text color change (default only works on white text.)"), "#ffffff")
+property_color  (fill_color, _("Text color change (default only works on white text)"), "#ffffff")
     description (_("Default fuctions like a color overlay on the multiply blend mode. Making the color white will make it transparent. If applied to white text it will become any color you choose. Changing the blend mode to solid will make it a normal color fill, and the other blend modes will do their thing respectively if you are using an image.   "))
   ui_meta ("visible", "guichange {strokeshadow}")
 
@@ -305,15 +321,28 @@ property_boolean (enable_outline, _("Enable outline"), FALSE)
   description    (_("Disable or Enable Outline"))
   ui_meta ("visible", "guichange {strokeshadow}")
 
-property_double (outline_opacity, _("Outline's opacity"), 1.0)
+property_double (outline_opacity, _("Outline opacity"), 1.0)
   value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {strokeshadow}")
   ui_meta     ("sensitive", " enable_outline")
 
+property_double (outline_x, _("Outline horizontal position"), 0.0)
+  description   (_("Horizontal outline fill offset"))
+  value_range   (-15.0, 15.0)
+  ui_steps      (1, 10)
+  ui_meta ("visible", "guichange {strokeshadow}")
+  ui_meta     ("sensitive", " enable_outline")
+
+property_double (outline_y, _("Outline vertical position"), 0.0)
+  description   (_("Vertical outline fill offset"))
+  value_range   (-15.0, 15.0)
+   ui_steps      (1, 10)
+  ui_meta ("visible", "guichange {strokeshadow}")
+  ui_meta     ("sensitive", " enable_outline")
 
 
-property_enum   (outline_grow_shape, _("Outline's base shape"),
+property_enum   (outline_grow_shape, _("Outline base shape"),
                  GeglstrokeGrowShapeszz_sally, gegl_stroke_grow_shapeszz_sally,
                  GEGL_stroke_GROW_SHAPE_CIRCLE)
   description   (_("The shape to expand or contract the outline fill in"))
@@ -341,10 +370,13 @@ property_double (outline_grow_radius, _("Outline's size"), 12.0)
   ui_meta ("visible", "guichange {strokeshadow}")
   ui_meta     ("sensitive", " enable_outline")
 
+
 property_color  (outline_color, _("Outline's color"), "#000000")
   description   (_("The outline's color"))
   ui_meta ("visible", "guichange {strokeshadow}")
   ui_meta     ("sensitive", " enable_outline")
+
+
 
 property_boolean (enable_shadow, _("Enable drop shadow"), TRUE)
   description    (_("Enable Drop Shadow. This option is hidden via output extent."))
@@ -417,6 +449,7 @@ property_double (bevel_elevation, _("Bevel elevation"), 60.0)
     value_range (30, 160)
     ui_meta ("unit", "degree")
   ui_meta ("visible", "guichange {innerglowbevel}")
+  ui_steps      (0.01, 0.50)
 
 property_int (bevel_depth, _("Bevel depth"), 30)
     description (_("Emboss depth of bevel"))
@@ -427,16 +460,16 @@ property_double (bevel_radius, _("Bevel radius"), 4.5)
   value_range (1.0, 30.0)
   ui_range (1.0, 15)
   ui_gamma (1.5)
-  ui_steps      (0.01, 0.20)
+  ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (bevel_black, _("Black bevel and image bevel mode. "), 0.00)
+property_double (bevel_black, _("Black bevel and image bevel mode"), 0.00)
     description (_("When in use Bevel works correctly on black Bevels when using blend modes like Grain Merge and Hardlight. All you have to do is select those blend modes for black text and then move this slider up. This same slider can also be used so bevel can apply to image file overlay's while ignoring their content."))
   value_range   (0.00, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_double (bevel_opacity, _("Bevel's opacity"), 1.0)
+property_double (bevel_opacity, _("Bevel opacity"), 1.0)
   value_range   (0.0, 1.0)
   ui_steps      (0.01, 0.50)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -447,7 +480,7 @@ property_enum (bevel_type, _("Type of bevel"),
   description (_("Change between bump bevel and a sharp bevel style. Sharp bevel style has no radius so that slider will do nothing when sharp bevel is enabled. Black Bevel when used with sharp bevel will work on some blend modes (notably screen) but in a different way, where even its most miniscule value will enable the black bevel effect. The reason for this is because sharp bevels code is different from bump bevel. "))
   ui_meta ("visible", "guichange {innerglowbevel}")
 
-property_enum (enable_bevel_and_blend_mode, _("Select blend or enable/disable Bevel"),
+property_enum (enable_bevel_and_blend_mode, _("Select blend or enable/disable bevel"),
     GeglBlendModeTypezz_sally, gegl_blend_mode_type_effectszz_sally,
     GEGL_BLEND_MODE_TYPE_BEVELOFF)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -469,7 +502,7 @@ property_double (inner_glow_radius, _("Inner glow's blur intensity"), 4.5)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("Making blur intensity very low will make an InnerStroke"))
+  description (_("Making blur intensity very low will make an Inner stroke"))
   ui_meta ("visible", "guichange {innerglowbevel}")
   ui_meta     ("sensitive", " enable_inner_glow")
 
@@ -490,7 +523,7 @@ property_double (inner_glow_opacity, _("Inner glow's opacity"), 1.4)
   ui_meta ("visible", "guichange {innerglowbevel}")
   ui_meta     ("sensitive", " enable_inner_glow")
 
-property_color (inner_glow_color, _("Inner glow's color"), "#ff8f00")
+property_color (inner_glow_color, _("Inner glow color"), "#ff8f00")
     description (_("The color of the Inner Glow"))
   ui_meta ("visible", "guichange {innerglowbevel}")
   ui_meta     ("sensitive", " enable_inner_glow")
@@ -539,17 +572,17 @@ ui_meta ("visible", "guichange {imagegradient}")
 
 
 property_double (hue, _("Hue"),  0.0)
-   description  (_("Hue adjustment. A color fill and gradient will be ignored by this option."))
+   description  (_("Hue adjustment. A color fill and gradient will be ignored by this option"))
    value_range  (-180.0, 180.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (saturation, _("Saturation"), 1.0)
-   description  (_("Saturation adjustment - distorts color fill, ignores gradient."))
+   description  (_("Saturation adjustment. distorts color fill, ignores gradient"))
    value_range  (0.0, 3.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
 property_double (lightness, _("Lightness"), 0.0)
-   description  (_("Lightness adjustment. This works with color overlays but not normal gradients."))
+   description  (_("Lightness adjustment. This works with color overlays but not normal gradients"))
    value_range  (-50.0, 50.0)
 ui_meta ("visible", "guichange {imagegradient}")
 
@@ -616,19 +649,6 @@ ui_meta ("visible", "guichange {imagegradient}")
 /* End of Image File Overlay and Gradient GUI Options*/
 
 /* Beginning of Special Options for Outline and Shadow GUI Options*/
-property_double (outline_x, _("Outline horizontal position"), 0.0)
-  description   (_("Horizontal outline fill offset"))
-  value_range   (-15.0, 15.0)
-  ui_steps      (1, 10)
-  ui_meta ("visible", "guichange {outlinespecial}")
-  ui_meta     ("sensitive", " enable_outline")
-
-property_double (outline_y, _("Outline vertical position"), 0.0)
-  description   (_("Vertical outline fill offset"))
-  value_range   (-15.0, 15.0)
-   ui_steps      (1, 10)
-  ui_meta ("visible", "guichange {outlinespecial}")
-  ui_meta     ("sensitive", " enable_outline")
 
 
 property_boolean (enable_os, _("Enable effects on outline"), FALSE)
@@ -645,18 +665,27 @@ property_enum (enable_os_bevel_and_blend_mode, _("Select blend or enable/disable
   ui_meta     ("sensitive", " enable_os")
 
 
-property_int (os_depth, _("Outline bevel depth"), 12)
-    description (_("Depth of Outline Bevel that works with some but not all blend modes"))
-    value_range (1, 70)
+property_double (os_azimuth, _("Outline bevel azimuth"), 30.0)
+    description (_("Light angle (degrees)"))
+    value_range (0, 360)
+    ui_meta ("unit", "degree")
+    ui_meta ("direction", "ccw")
   ui_meta ("visible", "guichange {outlinespecial}")
+  ui_steps      (0.5, 0.50)
   ui_meta     ("sensitive", " enable_outline")
   ui_meta     ("sensitive", " enable_os")
-
 
 property_double (os_elevation, _("Outline bevel elevation"), 80.0)
     description (_("Elevation angle (degrees)"))
     value_range (55, 125)
     ui_meta ("unit", "degree")
+  ui_meta ("visible", "guichange {outlinespecial}")
+  ui_meta     ("sensitive", " enable_outline")
+  ui_meta     ("sensitive", " enable_os")
+
+property_int (os_depth, _("Outline bevel depth"), 12)
+    description (_("Depth of Outline Bevel that works with some but not all blend modes"))
+    value_range (1, 70)
   ui_meta ("visible", "guichange {outlinespecial}")
   ui_meta     ("sensitive", " enable_outline")
   ui_meta     ("sensitive", " enable_os")
@@ -672,7 +701,7 @@ property_double (os_radius, _("Outline bevel radius"), 3.0)
   ui_meta     ("sensitive", " enable_os")
 
 
-property_double (os_opacity, _("Outline bevel's opacity"), 1.0)
+property_double (os_opacity, _("Outline bevel opacity"), 1.0)
   value_range   (0.15, 1.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {outlinespecial}")
@@ -778,7 +807,7 @@ property_double (outline_extra_y, _("Extra outline/shadow/glow vertical distance
   ui_meta ("visible", "guichange {extraosg}")
   ui_meta     ("sensitive", " enable_outline_extra")
 
-property_enum   (outline_extra_grow_shape, _("Extra outline/shadow/glow's base Shape"),
+property_enum   (outline_extra_grow_shape, _("Extra outline/shadow/glow's base shape"),
                  GeglstrokeGrowShapeszzextra_sally, gegl_stroke_grow_shapeszzextra_sally,
                  GEGL_stroke_GROW_SHAPE_CIRCLEextra)
   description   (_("The shape to expand or contract the outline fill in"))
@@ -822,10 +851,13 @@ property_enum (enable_ose_bevel_and_blend_mode, _("Select blend or enable/disabl
   ui_meta     ("sensitive", " enable_outline_extra")
   ui_meta     ("sensitive", " enable_ose")
 
-property_int (ose_depth, _("Extra outline's bevel depth"), 12)
-    description (_("Depth of Outline Bevel that works with some but not all blend modes"))
-    value_range (1, 70)
+property_double (ose_azimuth, _("Extra outline bevel azimuth"), 30.0)
+    description (_("Light angle (degrees)"))
+    value_range (0, 360)
+    ui_meta ("unit", "degree")
+    ui_meta ("direction", "ccw")
   ui_meta ("visible", "guichange {extraosg}")
+  ui_steps      (0.5, 0.50)
   ui_meta     ("sensitive", " enable_outline_extra")
   ui_meta     ("sensitive", " enable_ose")
 
@@ -837,6 +869,17 @@ property_double (ose_elevation, _("Extra outline bevel elevation"), 80.0)
   ui_meta     ("sensitive", " enable_outline_extra")
   ui_meta     ("sensitive", " enable_ose")
 
+
+property_int (ose_depth, _("Extra outline bevel depth"), 12)
+    description (_("Depth of Outline Bevel that works with some but not all blend modes"))
+    value_range (1, 70)
+  ui_meta ("visible", "guichange {extraosg}")
+  ui_meta     ("sensitive", " enable_outline_extra")
+  ui_meta     ("sensitive", " enable_ose")
+
+
+
+
 property_double (ose_radius, _("Radius of extra outline bevel"), 1.5)
   value_range (1.0, 12.0)
   ui_range (1.0, 12)
@@ -846,7 +889,7 @@ property_double (ose_radius, _("Radius of extra outline bevel"), 1.5)
   ui_meta     ("sensitive", " enable_outline_extra")
   ui_meta     ("sensitive", " enable_ose")
 
-property_double (ose_bevel_opacity, _("Extra outline bevel's opacity"), 1.0)
+property_double (ose_bevel_opacity, _("Extra outline bevel opacity"), 1.0)
   value_range   (0.15, 1.0)
   ui_steps      (0.01, 0.10)
   ui_meta ("visible", "guichange {extraosg}")
@@ -1029,6 +1072,10 @@ typedef struct
 
 /*All nodes relating to bevel start here*/
   GeglNode *mbd;
+  GeglNode *mbd2;
+  GeglNode *mbd3;
+  GeglNode *mbd4;
+  GeglNode *mbd5;
   GeglNode *mbdopacity;
   GeglNode *multiplyb;
   GeglNode *nopb;
@@ -1040,6 +1087,7 @@ typedef struct
   GeglNode *hardlight;
   GeglNode *grainextract;
   GeglNode *grainmerge;
+  GeglNode *lightenonly;
   GeglNode *screen;
   GeglNode *beveloff;
 /*All nodes relating to bevel end here*/
@@ -1196,6 +1244,7 @@ update_graph (GeglOperation *operation)
   GeglNode *blendchoiceshiny = state->nothingshiny1;
   GeglNode *sinusshiny = state->nothingshiny2;
   GeglNode *crop2shiny = state->nothingshiny3;
+  GeglNode *beveltype = state->mbd;
 
 /* These are the blend mode switchers
 BevelMode is Bevel, Over is Inner Glow, atopG is Gradient, atopI is inner glow and multiply is color overlay.
@@ -1223,6 +1272,17 @@ Everything below is the literal GEGL Graph instructions. There are technically f
     case GEGL_BLEND_MODE_TYPE_HSVHUECOLOR: multiply = state->hsvhuecolor; break;
 default: multiply = state->multiply;
  }
+
+beveltype = state->mbd;
+  switch (o->bevel_type) {
+    case GEGL_BEVEL_NORMAL: beveltype = state->mbd; break;
+    case GEGL_BEVEL_SHARP: beveltype = state->mbd2; break;
+    case GEGL_BEVEL_SHARPREVISE: beveltype = state->mbd3; break;
+    case GEGL_BEVEL_SHARPREVISEFLATSURFACE: beveltype = state->mbd4; break;
+    case GEGL_BEVEL_SHARPREVISEINSIDE: beveltype = state->mbd5; break;
+default: beveltype = state->mbd;
+  }
+
 /* atopi was named based on the gegl blend mode "src-atop  combined with image. Letter I hence the name "atopi*/
   atopi = state->atopi; /* Blend mode switchers for Image File Overlay "src_atop" is the default. */
   switch (o->image_blend_mode) {
@@ -1252,6 +1312,7 @@ default: atopi = state->atopi;
     case GEGL_BLEND_MODE_TYPE_COLORDODGE: bevelmode = state->colordodge; break;
     case GEGL_BLEND_MODE_TYPE_HARDLIGHT: bevelmode = state->hardlight; break;
     case GEGL_BLEND_MODE_TYPE_SCREEN: bevelmode = state->screen; break;
+    case GEGL_BLEND_MODE_TYPE_LIGHTENONLY: bevelmode = state->lightenonly; break;
 default: bevelmode = state->beveloff;
  }
 
@@ -1329,7 +1390,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
       gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
-      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
+      gegl_node_link_many (state->nopb, beveltype, state->mbdopacity, NULL);
       /* Nodes relating to inner glow */
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
       gegl_node_connect (over, "aux", state->innerglow, "output");
@@ -1371,7 +1432,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->knockoutidref, state->medianko, state->opacityinput, NULL);
       gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
-      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity,  NULL);
+      gegl_node_link_many (state->nopb, beveltype, state->mbdopacity,  NULL);
       gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to inner glow */
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
@@ -1414,7 +1475,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->knockoutidref, state->medianko, state->opacityinput, NULL);
       gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
-      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
+      gegl_node_link_many (state->nopb, beveltype, state->mbdopacity, NULL);
       gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to gradient */
       gegl_node_connect (atopg, "aux", state->opacitygradient, "output");
@@ -1454,7 +1515,7 @@ gegl_node_set_property(state->innerglow, "mode", &v);
       gegl_node_link_many (state->knockoutidref, state->medianko, state->opacityinput, NULL);
       gegl_node_connect (state->xor, "aux", state->opacityinput, "output");
       /* Nodes relating to bevel of text */
-      gegl_node_link_many (state->nopb, state->mbd, state->mbdopacity, NULL);
+      gegl_node_link_many (state->nopb, beveltype, state->mbdopacity, NULL);
       gegl_node_connect (bevelmode, "aux", state->mbdopacity, "output");
       /* Nodes relating to image file overlay */
       gegl_node_link_many ( state->image, state->huelight, state->saturation, state->imageopacity, NULL);
@@ -1627,6 +1688,23 @@ state->additioncolor = gegl_node_new_child (gegl,
   state->mbd = gegl_node_new_child (gegl,
                                   "operation", "lb:bevel", "smooth", 1.0,
                                   NULL);
+
+  state->mbd2 = gegl_node_new_child (gegl,
+                                  "operation", "lb:bevel", "type", 1, "smooth", 1.0, 
+                                  NULL);
+
+  state->mbd3 = gegl_node_new_child (gegl,
+                                  "operation", "lb:bevel", "type", 5, "metric", 0,  
+                                  NULL);
+
+  state->mbd4 = gegl_node_new_child (gegl,
+                                  "operation", "lb:bevel", "type", 5, "metric", 0,  "flatsurface", 2.0, 
+                                  NULL);
+
+  state->mbd5 = gegl_node_new_child (gegl,
+                                  "operation", "lb:bevel", "type", 5, "metric", 0, "inside", 5.0, 
+                                  NULL);
+
  /*The Threshold Alpha setting of the bevel is being baked in so it isn't present in the GUI.*/
 
   state->mbdopacity = gegl_node_new_child (gegl,
@@ -1665,6 +1743,10 @@ state->hardlight = gegl_node_new_child (gegl,
 
 state->screen = gegl_node_new_child (gegl,
                               "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0,  "blend-space", 0, NULL);
+
+state->lightenonly = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 36, "composite-mode", 0, NULL);
+
 
 /* DST doesn't disable bevel it just makes it invisible*/
   state->beveloff = gegl_node_new_child (gegl,
@@ -2000,6 +2082,7 @@ state->additionimage = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "os_depth", state->stroke, "depth");
   gegl_operation_meta_redirect (operation, "os_radius", state->stroke, "radius");
   gegl_operation_meta_redirect (operation, "os_elevation", state->stroke, "elevation");
+  gegl_operation_meta_redirect (operation, "os_azimuth", state->stroke, "azimuth");
   gegl_operation_meta_redirect (operation, "os_opacity", state->stroke, "opacitybevel");
   gegl_operation_meta_redirect (operation, "os_image", state->stroke, "src");
   gegl_operation_meta_redirect (operation, "enable_os", state->stroke, "enablespecialoutline");
@@ -2017,7 +2100,6 @@ state->additionimage = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "bevel_azimuth", state->mbd, "azimuth");
   gegl_operation_meta_redirect (operation, "bevel_black", state->mbd, "slideupblack");
   gegl_operation_meta_redirect (operation, "bevel_opacity", state->mbdopacity, "value");
-  gegl_operation_meta_redirect (operation, "bevel_type", state->mbd, "type");
   /*End of Bevel's GUI asociations*/
 
   /*Beginning of Image file Overlay's GUI asociations*/
@@ -2082,6 +2164,7 @@ state->additionimage = gegl_node_new_child (gegl,
   gegl_operation_meta_redirect (operation, "ose_depth", state->extrassg, "depth");
   gegl_operation_meta_redirect (operation, "ose_radius", state->extrassg, "radius");
   gegl_operation_meta_redirect (operation, "ose_elevation", state->extrassg, "elevation");
+  gegl_operation_meta_redirect (operation, "ose_azimuth", state->extrassg, "azimuth");
   /*End of Extra Outline Shadow Glow's GUI asociations*/
 
   /*Beginning of Glass Over Text's GUI asociations*/
