@@ -1,6 +1,6 @@
-This is a revision of GEGL Effects released April 14 2025 is to make it as polished as possible. It can co-exist with all other versions/branches of GEGL Effects on my Github including the main brain CE.
+This is the personal version of GEGL Effects that I Beaver uses. Released April 14 2025. It is as polished as possible. It can co-exist with all other versions/branches of GEGL Effects on my Github including the main brain CE.
 
-Put simply, this is the personal branch of GEGL Effects I use, which is different from the one that I advertise to the general public on the main Github page.
+I keep this branch low profile and push GEGL Effects continual on the public.
 
 ## Preview of GEGL Effects
 
@@ -18,14 +18,15 @@ Put simply, this is the personal branch of GEGL Effects I use, which is differen
 
 ## GEGL Effects  by Beaver
 
-GEGL effects  is a GEGL Gimp plugin that does layer effects/text styling in Gimp. Allowing users to make all their favorite text styles. GEGL Effects  ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
+GEGL effects is a GEGL GIMP plugin that does layer styles/text styling in GIMP like Adobe's layer fx. Allowing users to make an infisimal amount of text styling effects in GIMP. GEGL Effects  ships with and requires three bonus filters (Glass on Text, Bevel and Inner Glow) and two hidden operations (Port Load and OSGA). Bevel, Inner Glow and Glass Over Text are more useful on their own as they have more options in stand alone. 
 
 
 ## About GEGL Effects
 
 This is a text styling/advance image outlining engine for GIMP similar to layer fx in Adobe Photoshop
 
-When you download the plugin or compile the following co-plugins will ship with it as either binaries or .c files, - GEGL InnerGlow, GEGL Bevel, GEGL Glass On Text, and GEGL zzstrokebevelimage. The plugin will not work correctly without them and all normal download methods will give you all five binaries. 
+When you download the plugin or compile the following co-plugins will ship with it as either binaries and or .c files, - InnerGlow , Bevel, Glass On Text, GEGL osga and port load. The plugin will not work correctly without them and all normal download methods will give you all six binaries.  You should have - lb:effects, lb:bevel, lb:innerglow lb:glassovertext, lb:osga, port:load
+
 
 ## Directories to put binaries and info
 
@@ -86,12 +87,11 @@ ninja -C build
 
 ## Notes about using GEGL Effects on 2.10 vs GIMP 2.99/3
 
-Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects or go to filters>text styling and edit text live.
+GIMP 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects or go to filters>text styling and edit text live.
 
 ## Inner Glow Bevel and Glass Over text, the stand alone co-plugins
 
 ### Inner Glow
-![image preview](/Image_previews/inner_glow.png    )
 
 ![image](https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/assets/78667207/ee3949f1-382e-4a28-8da4-e31bb82d5f77)
 
@@ -106,6 +106,6 @@ Gimp 2.10 users are expected to first layer to image size then open GEGL Operati
 
 I strongly advise against downgrading. But if you choose to downgrade GEGL Effects or any of my plugins that has a GEGL Enum List (blend mode switchers) to an earlier version, you must go to `/config/GIMP/2.10/filters` and delete the
 saved settings file associate with the plugin. You can find it by searching the plugins name,  If this is not done it will keep reporting that a file is corrupt and not allow you to make
-presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** Gimp will always select the earliest one.  The only exption to this is a builds of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing. Downgrading plugins can break .xcf files in 2.99.17+ and bring back crashes from the past.
+presets.** **MULTIPLE VERSIONS OF ANY OF MY PLUGINS CANNOT CO-EXIST**.** GIMP will always select the earliest one.  The only exption to this is a builds of GEGL Effects I provided where I renamed the ENUM list to make them co-compatible. I recommend you don't downgrade unless you know what you are doing. Downgrading plugins can break .xcf files in 2.99.17+ and bring back crashes from the past.
 
 
