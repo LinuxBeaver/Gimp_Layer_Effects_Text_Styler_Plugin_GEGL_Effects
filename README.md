@@ -28,21 +28,10 @@ Just click the build_everything for your OS. On Windows you will need MySys2. If
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/be1f7993-7594-4728-a68e-9bb9bd2d51e2)
 
 
-## EVERYTHING BELOW IS WHAT YOU WOULD FIND ON THE PAGE OF GEGL EFFECTS CE AND IS STILL RELEVANT.
-
-## GEGL Effects CE by Beaver
-
-GEGL effects CE is a GEGL Gimp plugin that does layer effects in Gimp. It may not be non-destructive yet but you can make presets and get live preview updates of your favorite text styles. The many stand alone filters that GEGL Effects ships with do a lot more on their own then in GEGL Effects.
-
 ## Instructions 
 
 If you choose not to use prebuilt binaries. You must compile everything and this can be easily done by clicking on build_everything_Linux or build_everything_windows using mysys2.
 https://www.msys2.org/
-
-
-## About CE
-
-This is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people avoid). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
 
 
 You are expected to also download all 19 binaries in the zip folder for this plugin to work.
@@ -58,9 +47,9 @@ Windows `C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins`
 
 Windows Alt `C:\Users\AppData\Local\gegl-0.4\plug-ins`
 
-Linux `/home/(USERNAME)/.local/share/gegl-0.4/plug-ins`
+Linux `~/.local/share/gegl-0.4/plug-ins`
 
-Linux (Flatpak) `/home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
+Linux (Flatpak) `~/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
 
 *note - Windows users may need to create the plug-ins folder if it doesn't exist.
