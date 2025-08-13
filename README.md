@@ -1,4 +1,4 @@
-OLD STABLE - GEGL EFFECTS by Beaver. Layer Effects Text Styling Gimp Plugin - this version can co-exist with CE. No other version can. Beaver recommends you use the latest version.
+OLD STABLE - GEGL EFFECTS by Beaver
 =========
 
 ##  GEGL Effects Continual Edition (a branch with more advance features and routine updates) here
@@ -8,7 +8,7 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/t
 GEGL effects is a GEGL plugin for Gimp that does layer effects. It may not be non-destructive but 
 you can make presets and get live preview updates of your favorite text styles. 
 
-GEGL Effects comes with two bonus filters called gegl:bevel and gegl:innerglow 
+GEGL Effects comes with two bonus filters called lb:bevel and lb:innerglow 
 which are more useful on their own as they have more options. NOTE - It will NOT work without bevel.so and inner-glow.so
 
 
