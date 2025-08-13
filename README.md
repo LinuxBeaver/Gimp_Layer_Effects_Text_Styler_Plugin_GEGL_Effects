@@ -84,22 +84,7 @@ This tutorial contains everything you need.
 
 https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effects/blob/ContinualEdition/Help_Documents_for_GEGL_Effects_here/GEGL_Effects_guide_final.pdf 
 
-## Picture gallery of GEGL Effects 
-
-![image preview](/Image_previews/changes_GEGL_Effects_continual.png  )
-
-![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
-
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/095a8919-05e7-4453-95ed-647e885a1997)
-
-![image preview](/Image_previews/continual_pink.png    )
-
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/69cacb6a-04e5-4539-b245-1b99857a4403)
-
-![image preview](/Image_previews/flatpak2.png    )
-
-
-## Inner Glow Bevel and Glass Over text, Custom Bevel and SSG the stand alones
+## Inner Glow Bevel and Glass Over text, Custom Bevel and SSG the stand alones that ship with it
 
 ### Inner Glow
 ![image preview](/Image_previews/inner_glow.png    )
