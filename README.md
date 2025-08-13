@@ -1,6 +1,6 @@
 ### News
 
-As of June 2th 2024 this plugin is GIMP 2.99.19 ready and can co-exist with GEGL Effects continual and GEGL Effects classic
+As of June 2th 2024 this plugin is GIMP 2.99.19 ready and can co-exist with GEGL Effects continual and GEGL Effects classic and others
 
 ## GEGL Effects Experimental - A MODIFIED BRANCH OF GEGL EFFECTS CE THAT DOES SUPER ADVANCE TEXT STYLING
 
@@ -135,28 +135,6 @@ This build was discontinued because it does't make sense in GIMP 2.99.19 but the
 https://github.com/LinuxBeaver/AI_in_Gimp_by_GEGL_calling_bash/
 
 --
-
-### Here are some more pics just to show off various text styles made with the Gimp Plugin GEGL Effects 
-----------------
-  CE can do everything the normal version can do and more.
-
-![image preview](/Image_previews/generated_text_style.png  )
-
-![image preview](/Image_previews/changes_continual_color_dodge_bevel.png   )
-
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/095a8919-05e7-4453-95ed-647e885a1997)
-
-
-![image preview](/Image_previews/continual_pink.png    )
-
-![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/69cacb6a-04e5-4539-b245-1b99857a4403)
-
-
-![image preview](/Image_previews/flatpak2.png    )
-
-![image preview](/Image_previews/example_preset.png    )
-
-
 
 ### Inner Glow Bevel and Glass Over text, the stand alones
 ![image preview](/Image_previews/inner_glow.png    )
