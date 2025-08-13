@@ -1,29 +1,23 @@
-## This is a special build of GEGL Effects that can co-exist with classical, continual, and experimental GEGL Effects. 
-
-This build is special  because it works on adjustment layer groups in GIMP 3. Normal GEGL Effects works fine GIMP 3 without any crashing but it can't run on adjustment layer groups. So use this build for said task.
+## This is a special build of GEGL Effects that can co-exist with classical, continual, and experimental and my personal lb:effects  
 
 ![image](https://github.com/user-attachments/assets/84d4a261-fa30-4ced-b559-0837ce688b19)
 
 ![image](https://github.com/user-attachments/assets/6ac1058f-9634-4156-a02c-37ee9a264cfc)
 
+## GEGL Effects Saint GEGL Edition by Beaver
 
-## GEGL Effects CE by Beaver
+GEGL effects Saint GEGl Edition  is a GEGL GIMP plugin that does layer styles/text styling in GIMP like Adobe's layer fx. Allowing users to make an infisimal amount of text styling effects in GIMP.  Saint GEGL edition is a special branch that ships with and requires five additional filters (Stroke Shadow Glow, Custom Bevel, Glass on Text, Bevel, and Inner Glow) and one hidden operations (Port Load). SSG, Bevel, Inner Glow and Glass Over Text are more useful on their own as they have more options in stand alone. 
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects/text styling in Gimp. Allowing users to make all their favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
+## About GEGL Effects Saint GEGL
 
-## Instructions 
+This is a text styling/advance image outlining engine for GIMP similar to layer fx in Adobe Photoshop
 
-Build by clicking `build_os.sh` then restart Gimp and go to Gimp's GEGL operation to find "GEGL Effects Saint GEGL Edition"
+When you download the plugin or compile the following co-plugins will ship with it as either binaries and or .c files, - InnerGlow , Bevel, Glass On Text, GEGL zzstrokebevelimage and port load. The plugin will not work correctly without them and all normal download methods will give you all seven binaries.  You should have- lb:effects, lb:ssg, lb:custom-bevel, lb:bevel, lb:innerglow lb:glassovertext,  port:load
 
 
-## About GEGL Effects CE
+## About GEGL Effects Saint GEGL Edition
 
-In the early days this was the experimental version of GEGL Effects before becoming the default. Now this is a stable yet continual updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects (that I recommend people discard). Presets from said old stable GEGL Effects will not work with this version .  You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
-
-You are expected to also download GEGL InnerGlow, GEGL Bevel GEGL Glass On Text and  GEGL zzstrokebevelimage GEGL Shiny Text. The plugin will not work correctly without them.
-In total you should have, gegleffectspending, glassovertext, shinytext, zzstrokebevelimage, bevel and innerglow for this filter to work.  
-
-Example of plugin working alongside a special legacy version of GEGL Effects as seen here.
+its literally a special build of GEGL Effects that tries not to depend on the node gegl:crop, that is the theory behind it. It also uses existing plugin SSG and Custom Bevel that's why I don't talk about it much. Back in early 2024 during the early GIMP 2.99.19 days it servced as a version of my layer fx engine that didn't clip on text and disable on layer groups but now after updates my main layer fx engine works fine making Saint GEGL edition a tinker toy. I keep quite about this branch of GEGL Effects as for most users its just additional bloat. Though if you like it cool!
 
 ![image preview](coexisting_plugins.jpg  )
 
@@ -32,20 +26,17 @@ Example of plugin working alongside a special legacy version of GEGL Effects as 
 
 .dll is for Windows and .so is for Linux
 
-Windows `C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins`
+**Windows** `C:\Users\USERNAME\AppData\Local\gegl-0.4\plug-ins`
 
-Windows Alt `C:\Users\AppData\Local\gegl-0.4\plug-ins`
+**Windows Alt** `C:\Users\AppData\Local\gegl-0.4\plug-ins`
 
-Linux `/home/(USERNAME)/.local/share/gegl-0.4/plug-ins`
+**Linux** `/.local/share/gegl-0.4/plug-ins`
 
-Linux (Flatpak) `/home/(USERNAME)/.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
-
+**Linux (Flatpak)** `~.var/app/org.gimp.GIMP/data/gegl-0.4/plug-ins`
 
 *note - Windows users may need to create the plug-ins folder if it doesn't exist.
 
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c1803c39-c55c-4c5c-8084-fcb01f29adf2)
-
-
 
 ## Compiling and Installing
 
@@ -85,7 +76,7 @@ ninja -C build
 
 ## Notes about using GEGL Effects on 2.10 vs GIMP 2.99/3
 
-Gimp 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects or go to filters>text styling and edit text live.
+GIMP 2.10 users are expected to first layer to image size then open GEGL Operations and apply GEGL Effects Continual. GIMP 2.99.19/GIMP3+ users can just type in GEGL Effects or go to filters>text styling and edit text live.
 
 ## Guide on how to use GEGL Effects
 
@@ -108,7 +99,7 @@ https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effect
 ![image preview](/Image_previews/flatpak2.png    )
 
 
-## Inner Glow Bevel and Glass Over text, the stand alones
+## Inner Glow Bevel and Glass Over text, Custom Bevel and SSG the stand alones
 
 ### Inner Glow
 ![image preview](/Image_previews/inner_glow.png    )
@@ -121,6 +112,11 @@ https://github.com/LinuxBeaver/Gimp_Layer_Effects_Text_Styler_Plugin_GEGL_Effect
 ### Glass on Text
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/ddb15664-2e4a-4b3a-a5ff-e27d78899e74)
 
+### SSG and Custom Bevel info here
+
+https://github.com/LinuxBeaver/GEGL-GIMP-PLUGIN_stroke_shadow_glow/
+
+https://github.com/LinuxBeaver/GEGL-GIMP-PLUGIN_custom_bevel/
 
 ## Downgrading to older versions of my plugins
 
