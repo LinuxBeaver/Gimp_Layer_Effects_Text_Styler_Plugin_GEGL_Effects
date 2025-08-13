@@ -11,18 +11,22 @@ https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/r
 ![image](https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/assets/78667207/c6874a65-d761-4994-96a4-2e46b996b07a)
 
 
-## GEGL Effects CE by Beaver
+## GEGL Effects  by Beaver
 
-GEGL effects CE is a GEGL Gimp plugin that does layer effects/text styling in GIMP. Allowing users to make all their favorite text styles. GEGL Effects CE ships with and requires three bonus filters, and two hidden operations. You will find that gegl:bevel, gegl:innerglow and gegl:glassovertext are more useful on their own as they have more options in stand alone. 
+GEGL effects CE  is a GEGL GIMP plugin that does layer styles/text styling in GIMP like Adobe's layer fx. Allowing users to make an infisimal amount of text styling effects in GIMP. GEGL Effects  ships with and requires three bonus filters (Glass on Text, Bevel and Inner Glow) and two hidden operations (Port Load and zzstrokebevelimage). Bevel, Inner Glow and Glass Over Text are more useful on their own as they have more options in stand alone. 
 
-## Instructions 
 
-If you choose not to use prebuilt binaries. You must compile innerglow, glassovertext, zzstrokebevelimage,  bevel and gegleffectscontinual and put the .so/dll files in gegl-0.4/plug-ins. Then restart GIMP and go to GIMP's GEGL operation menu. You can effortlessly compile just by clicking on the ./build_plugin(OSNAME).sh file respectively for Windows (mysys2) or Linux
+## About GEGL Effects
+
+This is a text styling/advance image outlining engine for GIMP similar to layer fx in Adobe Photoshop
+
+When you download the plugin or compile the following co-plugins will ship with it as either binaries and or .c files, - InnerGlow , Bevel, Glass On Text, GEGL zzstrokebevelimage and port load. The plugin will not work correctly without them and all normal download methods will give you all six binaries.  You should have - lb:effects, lb:bevel, lb:innerglow lb:glassovertext, lb:zzstrokebevelimage, port:load
+
 
 
 ## About GEGL Effects CE
 
-In the early days this was the experimental version of GEGL Effects before becoming the default for normals. Now this is a stable non updating version of GEGL Effects that can co-exist with a designated old version of GEGL Effects and other versions Presets from said old GEGL Effects will not work with this version. You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main
+In early 2023 this was the experimental version of GEGL Effects before becoming the public default. Now this is a stable non updating version of GEGL Effects that can co-exist with a designated older and alternative branches of GEGL Effects and other versions. Presets from said other GEGL Effects will not work with this version. You can find old stable here. https://github.com/LinuxBeaver/GEGL-Effects---Layer-Effects-in-Gimp-using-GEGL/tree/main or the version I personally use here 
 
 Example of plugin working alongside a special legacy version of GEGL Effects as seen here.
 
