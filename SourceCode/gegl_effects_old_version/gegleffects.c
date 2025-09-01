@@ -114,7 +114,7 @@ property_enum(guichange, _("Part of filter to be displayed"),
     BEAVER_UI_STROKESHADOW)
   description(_("Change the GUI option"))
 
-property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss'"),
+property_enum (blendmodebevel2, _("Blend Mode of Bevel's emboss"),
     GeglBlendModeType, gegl_blend_mode_type_effects,
     GEGL_BLEND_MODE_TYPE_MULTIPLY)
   ui_meta ("visible", "guichange {innerglowbevel}")
@@ -387,9 +387,11 @@ ui_meta ("visible", "guichange {imagegradient}")
 
 #include "gegl-op.h"
 
+
  /* Typedef Structure for Bevel's blend mode switching '*/
 
 typedef struct
+
 {
   GeglNode *input;
   GeglNode *atopi;
@@ -439,12 +441,278 @@ typedef struct
   GeglNode *lchcolorg;
   GeglNode *lchcolorig;
   GeglNode *removebevel;
-  GeglNode *removebevel2;
+  GeglNode *gobevel;
   GeglNode *opacityimage;
 } State;
 
+
+
+
+static void attach (GeglOperation *operation)
+{
+  GeglNode *gegl = operation->node;
+  GeglProperties *o = GEGL_PROPERTIES (operation);
+
+  State *state = o->user_data = g_malloc0 (sizeof (State));
+
+  state->input    = gegl_node_get_input_proxy (gegl, "input");
+  state->output   = gegl_node_get_output_proxy (gegl, "output");
+
+  state->saturation = gegl_node_new_child (gegl,
+                                  "operation", "gegl:hue-chroma",
+                                  NULL);
+
+
+    state->image = gegl_node_new_child (gegl,
+                                  "operation", "port:load",
+                                  NULL);
+
+    state->opacityimage = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity",
+                                  NULL);
+
+    state->stroke = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dropshadow",
+                                  NULL);
+
+    state->ds = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dropshadow",
+                                  NULL);
+
+    state->innerglow = gegl_node_new_child (gegl,
+                                  "operation", "lb:innerglow",
+                                  NULL);
+
+  /*atopi is the blend mode that will need to be switchable for gegl:layer src=*/
+
+
+    state->atopi = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-atop",
+                                  NULL);
+
+  /*atopg is the blend mode that will need to be switchable for gegl:linear-gradient*/
+
+    state->atopg = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-atop",
+                                  NULL);
+
+/*When we finally get around to adding an enum list so blend modes can change*/
+
+  /*atopg = gegl_node_new_child (gegl,
+                                 "operation", "gimp:layer-mode", "layer-mode", 23,  "composite-mode", 0, NULL);*/
+
+    state->removebevel = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity", "value", 0.0, 
+                                  NULL);
+
+    state->gobevel = gegl_node_new_child (gegl,
+                                  "operation", "gegl:opacity", "value", 1.0, 
+                                  NULL);
+
+
+    state->mbd = gegl_node_new_child (gegl,
+                                  "operation", "lb:bevel", 
+                                  NULL);
+
+    state->mcol = gegl_node_new_child (gegl,
+                                  "operation", "gegl:color-overlay",
+                                  NULL);
+
+
+    state->nopm = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nopimage = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nopb = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nopig = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+    state->nopg = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+
+  /*multiply is the blend mode that will need to be switchable for gegl:color-overlay*/
+
+    state->multiply = gegl_node_new_child (gegl,
+                                  "operation", "gegl:multiply",
+                                  NULL);
+
+  /*multiplyb is the blend mode that will need to be switchable for gegl:blendablebevel*/
+
+  state->multiplyb = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-mode", 0, NULL);
+
+
+    state->gradient = gegl_node_new_child (gegl,
+                                  "operation", "gegl:linear-gradient",
+                                  NULL);
+
+    /* 0 is Gimp blend mode (Normal) */
+    /* 47 is Gimp blend mode (Grain Merge) */
+    /* 23 is Gimp blend mode (Overlay) */
+
+  /*over = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 0, "composite-mode", 0, NULL);*/
+
+  /*over is the blend mode that will need to be switchable for gegl:innergloweffects*/
+
+    state->over = gegl_node_new_child (gegl,
+                                  "operation", "gegl:src-atop",
+                                  NULL);
+    state->crop = gegl_node_new_child (gegl,
+                                  "operation", "gegl:crop",
+                                  NULL);
+
+/* grainextract, grainmerge, and subtract are for bevel and cannot be reused*/
+
+  state->grainextract = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 46, "composite-mode", 0, NULL);
+
+
+  state->grainmerge = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
+
+  state->subtract = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 34, "composite-mode", 0, NULL);
+/* grainextract, grainmerge, and subtract are for bevel and cannot be reused - ends here */
+
+  state->grainmergeig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
+
+  state->addition = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
+
+  state->overlayig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 23, "composite-mode", 0, NULL);
+
+  state->multiplyig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-mode", 0, NULL);
+
+  state->screenig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, NULL);
+
+  state->hslcolorig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, NULL);
+
+  state->softlightig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
+
+  state->linearlightig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
+
+/* Blend modes below are for gradient*/
+
+  state->grainmergeg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
+
+  state->additiong = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
+
+  state->overlayg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 23, "composite-mode", 0, NULL);
+
+  state->multiplyg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-mode", 0, NULL);
+
+  state->screeng = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, NULL);
+
+  state->hslcolorg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, NULL);
+
+  state->softlightg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
+
+  state->hsvhueg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 37, "composite-mode", 0, NULL);
+
+  state->linearlightg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
+
+  state->hardlightig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
+
+  state->hardlightg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
+
+  state->burng = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
+
+  state->burnig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
+
+  state->lchcolorg = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
+
+  state->lchcolorig = gegl_node_new_child (gegl,
+                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
+
+
+
+
+
+/*
+ gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
+ gegl_node_link_many (nopig, innerglow, NULL);
+ gegl_node_link_many (nopb, mbd, NULL);
+ gegl_node_link_many (nopm, mcol, NULL);
+ gegl_node_link_many (image, opacityimage, NULL);
+ gegl_node_connect (multiplyb, "aux", mbd, "output");
+ gegl_node_connect (multiply, "aux", mcol, "output");
+ gegl_node_connect (over, "aux", innerglow, "output");
+ gegl_node_connect (atopi, "aux", opacityimage, "output");
+ gegl_node_connect (atopg, "aux", gradient, "output");
+*/
+
+  gegl_operation_meta_redirect (operation, "layeropacity", state->opacityimage, "value");
+  gegl_operation_meta_redirect (operation, "hue", state->saturation, "hue");
+  gegl_operation_meta_redirect (operation, "chroma", state->saturation, "chroma");
+  gegl_operation_meta_redirect (operation, "lightness", state->saturation, "lightness");
+  gegl_operation_meta_redirect (operation, "x", state->ds, "x");
+  gegl_operation_meta_redirect (operation, "y", state->ds, "y");
+  gegl_operation_meta_redirect (operation, "ystroke", state->stroke, "y");
+  gegl_operation_meta_redirect (operation, "xstroke", state->stroke, "x");
+  gegl_operation_meta_redirect (operation, "opacity", state->ds, "opacity");
+  gegl_operation_meta_redirect (operation, "grow_radius", state->ds, "grow-radius");
+  gegl_operation_meta_redirect (operation, "radius", state->ds, "radius");
+  gegl_operation_meta_redirect (operation, "color", state->ds, "color");
+  gegl_operation_meta_redirect (operation, "grow_shape", state->stroke, "grow-shape");
+  gegl_operation_meta_redirect (operation, "opacitystroke", state->stroke, "opacity");
+  gegl_operation_meta_redirect (operation, "radiusstroke", state->stroke, "radius");
+  gegl_operation_meta_redirect (operation, "grow_radiusstroke", state->stroke, "grow-radius");
+  gegl_operation_meta_redirect (operation, "colorstroke", state->stroke, "color");
+  gegl_operation_meta_redirect (operation, "depth", state->mbd, "bevel2");
+  gegl_operation_meta_redirect (operation, "radius1", state->mbd, "radius1");
+  gegl_operation_meta_redirect (operation, "bevel1", state->mbd, "bevel1");
+  gegl_operation_meta_redirect (operation, "optioncolor", state->mcol, "value");
+  gegl_operation_meta_redirect (operation, "src", state->image, "src");
+  gegl_operation_meta_redirect (operation, "innerggrow_radius", state->innerglow, "grow-radius");
+  gegl_operation_meta_redirect (operation, "innergradius", state->innerglow, "radius");
+  gegl_operation_meta_redirect (operation, "innergopacity", state->innerglow, "opacity");
+  gegl_operation_meta_redirect (operation, "innergvalue", state->innerglow, "value2");
+  gegl_operation_meta_redirect (operation, "fixoutline", state->innerglow, "fixoutline");
+  gegl_operation_meta_redirect (operation, "start_x", state->gradient, "start-x");
+  gegl_operation_meta_redirect (operation, "start_y", state->gradient, "start-y");
+  gegl_operation_meta_redirect (operation, "end_x", state->gradient, "end-x");
+  gegl_operation_meta_redirect (operation, "end_y", state->gradient, "end-y");
+  gegl_operation_meta_redirect (operation, "start_color", state->gradient, "start-color");
+  gegl_operation_meta_redirect (operation, "end_color", state->gradient, "end-color");
+}
+
+
 static void
+
 update_graph (GeglOperation *operation)
+
 {
   GeglProperties *o = GEGL_PROPERTIES (operation);
   State *state = o->user_data;
@@ -452,13 +720,16 @@ update_graph (GeglOperation *operation)
   GeglNode *over = state->over;
   GeglNode *atopg = state->atopg;
   GeglNode *zebevel = state->removebevel;
+
+
   if (!state) return;
 
   if (o->depth < 2)
 zebevel = state->removebevel;
 
+
   if (o->depth > 1)
-zebevel = state->removebevel2;
+zebevel = state->gobevel;
 
 
   multiplyb = state->multiply; /* the default. Bevel looks bad with most blend modes (outside of Multiply and Grain Merge) */
@@ -511,12 +782,12 @@ zebevel = state->removebevel2;
     if (o->gradient)
     {
       /* both innerglow and gradient */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb,  state->removebevel, multiplyb, zebevel, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb,  multiplyb, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, state->opacityimage, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, zebevel, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (multiplyb, "aux", zebevel, "output");
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (over, "aux", state->innerglow, "output");
       gegl_node_connect (atopg, "aux", state->gradient, "output");
@@ -526,12 +797,12 @@ zebevel = state->removebevel2;
     else
     {
       /* innerglow but no gradient */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi,  state->crop, state->nopb, state->removebevel, multiplyb, zebevel, state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi,  state->crop, state->nopb,  multiplyb,  state->nopm, state->multiply,  state->nopig, over, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, state->opacityimage, NULL);
       gegl_node_link_many (state->nopig, state->innerglow, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, zebevel,  NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (multiplyb, "aux", zebevel, "output");
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (over, "aux", state->innerglow, "output");
       gegl_node_connect (state->atopi, "aux", state->opacityimage, "output");
@@ -544,11 +815,11 @@ zebevel = state->removebevel2;
     if (o->gradient)
     {
       /* gradient but no innerglow */
-         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb,  state->removebevel, multiplyb, zebevel, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
+         gegl_node_link_many (state->input, state->nopimage, state->atopi, state->nopg, atopg,  state->crop, state->nopb,   multiplyb,  state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, state->opacityimage, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, zebevel,  NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (multiplyb, "aux", zebevel, "output");
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (atopg, "aux", state->gradient, "output");
       gegl_node_connect (state->atopi, "aux", state->opacityimage, "output");
@@ -558,349 +829,25 @@ zebevel = state->removebevel2;
     else
     {
       /* neither gradient nor innerglow */
-   gegl_node_link_many (state->input, state->nopimage, state->atopi, state->crop, state->nopb,  state->removebevel, multiplyb, zebevel, state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
+   gegl_node_link_many (state->input, state->nopimage, state->atopi, state->crop, state->nopb,  multiplyb,  state->nopm, state->multiply, state->stroke, state->ds, state->output, NULL);
       gegl_node_link_many (state->image, state->saturation, state->opacityimage, NULL);
-      gegl_node_link_many (state->nopb, state->mbd, NULL);
+      gegl_node_link_many (state->nopb, state->mbd, zebevel, NULL);
       gegl_node_link_many (state->nopm, state->mcol, NULL);
-      gegl_node_connect (multiplyb, "aux", state->mbd, "output");
+      gegl_node_connect (multiplyb, "aux", zebevel, "output");
       gegl_node_connect (state->multiply, "aux", state->mcol, "output");
       gegl_node_connect (state->atopi, "aux", state->opacityimage, "output");
       /*clip bug fix */
       gegl_node_connect (state->crop, "aux", state->input, "output");
     }
   }
-}
-
-
- /* End of Typedef Structure for Bevel's blend mode switching '*/
-
-
-
- /*Typedef Structure for InnerGlow and Gradient Checkboxes '*/
-
-
-
-static void attach (GeglOperation *operation)
-{
-  GeglNode *gegl = operation->node;
-  GeglProperties *o = GEGL_PROPERTIES (operation);
-  GeglNode *input, *output, *image, *mbd, *nopig, *opacityimage, *removebevel, *removebevel2,  *multiplyb, *nopm, *over, *multiply, *grainextract, *hslcolorig, *overlayig, *softlightig, *screenig, *linearlightig, *multiplyig, *grainmerge, *grainmergeig, *addition, *subtract,  *nopb, *mcol, *stroke, *innerglow, *gradient, *crop, *ds,  *nopimage, *atopi, *nopg, *atopg,  *hslcolorg, *overlayg, *additiong, *softlightg, *screeng, *multiplyg, *hsvhueg, *linearlightg, *grainmergeg, *saturation, *hardlightg, *hardlightig, *burnig, *lchcolorg, *lchcolorig, *burng;
-
-  input    = gegl_node_get_input_proxy (gegl, "input");
-  output   = gegl_node_get_output_proxy (gegl, "output");
-
-  saturation = gegl_node_new_child (gegl,
-                                  "operation", "gegl:hue-chroma",
-                                  NULL);
-
-
-  image = gegl_node_new_child (gegl,
-                                  "operation", "port:load",
-                                  NULL);
-
-  opacityimage = gegl_node_new_child (gegl,
-                                  "operation", "gegl:opacity",
-                                  NULL);
-
-  stroke = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dropshadow",
-                                  NULL);
-
-  ds = gegl_node_new_child (gegl,
-                                  "operation", "gegl:dropshadow",
-                                  NULL);
-
-  innerglow = gegl_node_new_child (gegl,
-                                  "operation", "lb:innerglow",
-                                  NULL);
-
-  /*atopi is the blend mode that will need to be switchable for gegl:layer src=*/
-
-
-  atopi = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-atop",
-                                  NULL);
-
-  /*atopg is the blend mode that will need to be switchable for gegl:linear-gradient*/
-
-  atopg = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-atop",
-                                  NULL);
-
-/*When we finally get around to adding an enum list so blend modes can change*/
-
-  /*atopg = gegl_node_new_child (gegl,
-                                 "operation", "gimp:layer-mode", "layer-mode", 23,  "composite-mode", 0, NULL);*/
-
-  removebevel = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop", 
-                                  NULL);
-
-  removebevel2 = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop", 
-                                  NULL);
-
-  mbd = gegl_node_new_child (gegl,
-                                  "operation", "lb:bevel", 
-                                  NULL);
-
-  mcol = gegl_node_new_child (gegl,
-                                  "operation", "gegl:color-overlay",
-                                  NULL);
-
-
-  nopm = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-  nopimage = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-  nopb = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-  nopig = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-  nopg = gegl_node_new_child (gegl,
-                                  "operation", "gegl:nop",
-                                  NULL);
-
-
-  /*multiply is the blend mode that will need to be switchable for gegl:color-overlay*/
-
-  multiply = gegl_node_new_child (gegl,
-                                  "operation", "gegl:multiply",
-                                  NULL);
-
-  /*multiplyb is the blend mode that will need to be switchable for gegl:blendablebevel*/
-
-  multiplyb = gegl_node_new_child (gegl,
-                                  "operation", "gegl:multiply",
-                                  NULL);
-
-  gradient = gegl_node_new_child (gegl,
-                                  "operation", "gegl:linear-gradient",
-                                  NULL);
-
-    /* 0 is Gimp blend mode (Normal) */
-    /* 47 is Gimp blend mode (Grain Merge) */
-    /* 23 is Gimp blend mode (Overlay) */
-
-  /*over = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 0, "composite-mode", 0, NULL);*/
-
-  /*over is the blend mode that will need to be switchable for gegl:innergloweffects*/
-
-  over = gegl_node_new_child (gegl,
-                                  "operation", "gegl:src-atop",
-                                  NULL);
-  crop = gegl_node_new_child (gegl,
-                                  "operation", "gegl:crop",
-                                  NULL);
-
-/* grainextract, grainmerge, and subtract are for bevel and cannot be reused*/
-
-grainextract = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 46, "composite-mode", 0, NULL);
-
-
-grainmerge = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, NULL);
-
-subtract = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 34, "composite-mode", 0, NULL);
-/* grainextract, grainmerge, and subtract are for bevel and cannot be reused - ends here */
-
-grainmergeig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
-
-addition = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
-
-overlayig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 23, "composite-mode", 0, NULL);
-
-multiplyig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-mode", 0, NULL);
-
-screenig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, NULL);
-
-hslcolorig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, NULL);
-
-softlightig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
-
-linearlightig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
-
-/* Blend modes below are for gradient*/
-
-grainmergeg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 47, "composite-mode", 0, "blend-space", 3, NULL);
-
-additiong = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 33, "composite-mode", 0, NULL);
-
-overlayg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 23, "composite-mode", 0, NULL);
-
-multiplyg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 30, "composite-mode", 0, NULL);
-
-screeng = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 31, "composite-mode", 0, NULL);
-
-hslcolorg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 39, "composite-mode", 0, NULL);
-
-softlightg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 45, "composite-mode", 0, NULL);
-
-hsvhueg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 37, "composite-mode", 0, NULL);
-
-linearlightg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 50, "composite-mode", 0, "blend-space", 3, NULL);
-
-hardlightig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
-
-hardlightg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 44, "composite-mode", 0, NULL);
-
-burng = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
-
-burnig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 43, "composite-mode", 0, NULL);
-
-lchcolorg = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
-
-lchcolorig = gegl_node_new_child (gegl,
-                              "operation", "gimp:layer-mode", "layer-mode", 26, "composite-mode", 0, NULL);
-
-/*
- gegl_node_link_many (input, nopimage, atopi, nopg, atopg, crop, nopb, multiplyb, nopm, multiply, nopig, over, stroke, ds, output, NULL);
- gegl_node_link_many (nopig, innerglow, NULL);
- gegl_node_link_many (nopb, mbd, NULL);
- gegl_node_link_many (nopm, mcol, NULL);
- gegl_node_link_many (image, opacityimage, NULL);
- gegl_node_connect (multiplyb, "aux", mbd, "output");
- gegl_node_connect (multiply, "aux", mcol, "output");
- gegl_node_connect (over, "aux", innerglow, "output");
- gegl_node_connect (atopi, "aux", opacityimage, "output");
- gegl_node_connect (atopg, "aux", gradient, "output");
-*/
-
-  gegl_operation_meta_redirect (operation, "layeropacity", opacityimage, "value");
-  gegl_operation_meta_redirect (operation, "hue", saturation, "hue");
-  gegl_operation_meta_redirect (operation, "chroma", saturation, "chroma");
-  gegl_operation_meta_redirect (operation, "lightness", saturation, "lightness");
-  gegl_operation_meta_redirect (operation, "x", ds, "x");
-  gegl_operation_meta_redirect (operation, "y", ds, "y");
-  gegl_operation_meta_redirect (operation, "ystroke", stroke, "y");
-  gegl_operation_meta_redirect (operation, "xstroke", stroke, "x");
-  gegl_operation_meta_redirect (operation, "opacity", ds, "opacity");
-  gegl_operation_meta_redirect (operation, "grow_radius", ds, "grow-radius");
-  gegl_operation_meta_redirect (operation, "radius", ds, "radius");
-  gegl_operation_meta_redirect (operation, "color", ds, "color");
-  gegl_operation_meta_redirect (operation, "grow_shape", stroke, "grow-shape");
-  gegl_operation_meta_redirect (operation, "opacitystroke", stroke, "opacity");
-  gegl_operation_meta_redirect (operation, "radiusstroke", stroke, "radius");
-  gegl_operation_meta_redirect (operation, "grow_radiusstroke", stroke, "grow-radius");
-  gegl_operation_meta_redirect (operation, "colorstroke", stroke, "color");
-  gegl_operation_meta_redirect (operation, "depth", mbd, "bevel2");
-  gegl_operation_meta_redirect (operation, "radius1", mbd, "radius1");
-  gegl_operation_meta_redirect (operation, "bevel1", mbd, "bevel1");
-  gegl_operation_meta_redirect (operation, "optioncolor", mcol, "value");
-  gegl_operation_meta_redirect (operation, "src", image, "src");
-  gegl_operation_meta_redirect (operation, "innerggrow_radius", innerglow, "grow-radius");
-  gegl_operation_meta_redirect (operation, "innergradius", innerglow, "radius");
-  gegl_operation_meta_redirect (operation, "innergopacity", innerglow, "opacity");
-  gegl_operation_meta_redirect (operation, "innergvalue", innerglow, "value2");
-  gegl_operation_meta_redirect (operation, "fixoutline", innerglow, "fixoutline");
-  gegl_operation_meta_redirect (operation, "start_x", gradient, "start-x");
-  gegl_operation_meta_redirect (operation, "start_y", gradient, "start-y");
-  gegl_operation_meta_redirect (operation, "end_x", gradient, "end-x");
-  gegl_operation_meta_redirect (operation, "end_y", gradient, "end-y");
-  gegl_operation_meta_redirect (operation, "start_color", gradient, "start-color");
-  gegl_operation_meta_redirect (operation, "end_color", gradient, "end-color");
-
-
-  /* Now save points to the various gegl nodes so we can rewire them in
-   * update_graph() later
-   */
-  State *state = g_malloc0 (sizeof (State));
-  o->user_data = state;
-
-  state->input = input;
-  state->atopi = atopi;
-  state->overlayig = overlayig;
-  state->screenig = screenig;
-  state->multiplyig = multiplyig;
-  state->softlightig = softlightig;
-  state->hslcolorig = hslcolorig;
-  state->atopg = atopg;
-  state->multiply = multiply;
-  state->multiplyb = multiplyb;
-  state->addition = addition;
-  state->subtract = subtract;
-  state->grainmerge = grainmerge;
-  state->grainmergeig = grainmergeig;
-  state->linearlightig = linearlightig;
-  state->grainextract = grainextract;
-  state->nopb = nopb;
-  state->nopg = nopg;
-  state->nopimage = nopimage;
-  state->nopm = nopm;
-  state->nopig = nopig;
-  state->opacityimage = opacityimage;
-  state->over = over;
-  state->crop = crop;
-  state->mbd = mbd;
-  state->mcol = mcol;
-  state->innerglow = innerglow;
-  state->stroke = stroke;
-  state->ds = ds;
-  state->output = output;
-  state->image = image;
-  state->removebevel = removebevel;
-  state->removebevel2 = removebevel2;
-  state->gradient = gradient;
-  state->grainmergeg = grainmergeg;
-  state->linearlightg = linearlightg;
-  state->overlayg = overlayg;
-  state->screeng = screeng;
-  state->multiplyg = multiplyg;
-  state->softlightg = softlightg;
-  state->hslcolorg = hslcolorg;
-  state->hsvhueg = hsvhueg;
-  state->additiong = additiong;
-  state->saturation = saturation;
-  state->hardlightig = hardlightig;
-  state->hardlightg = hardlightg;
-  state->burng = burng;
-  state->burnig = burnig;
-  state->lchcolorg = lchcolorg;
-  state->lchcolorig = lchcolorig;
-}
-
-
+ }
 
 static void
 gegl_op_class_init (GeglOpClass *klass)
 {
   GeglOperationClass *operation_class;
-
+GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
   operation_class = GEGL_OPERATION_CLASS (klass);
-  GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass);
 
   operation_class->attach = attach;
   operation_meta_class->update = update_graph;
@@ -908,7 +855,6 @@ gegl_op_class_init (GeglOpClass *klass)
   gegl_operation_class_set_keys (operation_class,
     "name",        "lb:layereffects",
     "title",       _("GEGL Effects Classic"),
-    "categories",  "Generic",
     "reference-hash", "45ed565h8500fca01b2ac",
     "description", _("GEGL text styling and speciality image outlining filter from early 2023 before major overhauls. Text recoloring only works if the color is white.  "
                      ""),
