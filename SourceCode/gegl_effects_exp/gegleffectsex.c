@@ -2150,7 +2150,6 @@ drop shadow is applied in a gegl graph below them.*/
   /*End of Bevel's GUI asociations*/
 
   /*Beginning of Image file Overlay's GUI asociations*/
-  gegl_operation_meta_redirect (operation, "layeropacity", image, "opacity");
   gegl_operation_meta_redirect (operation, "hue", saturationvalue, "hue");
   gegl_operation_meta_redirect (operation, "chroma", saturationvalue, "chroma");
   gegl_operation_meta_redirect (operation, "lightness", saturationvalue, "lightness");
