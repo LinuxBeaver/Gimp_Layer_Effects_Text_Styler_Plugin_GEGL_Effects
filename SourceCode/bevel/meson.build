@@ -6,9 +6,9 @@ project('bevel_bump', 'c',
 # not the executables that use the library.
 lib_args = ['-DBUILDING_GEGLTESTING']
 
-gegl = dependency('gegl-0.3', required : false)
+gegl = dependency('gegl-0.4', required : false)
 if not gegl.found()
-    gegl = dependency('gegl-0.4')
+    gegl = dependency('gegl-0.5')
 endif
 shlib = shared_library('bevel', 'bevel_bump.c', 'config.h',
   c_args : lib_args,
