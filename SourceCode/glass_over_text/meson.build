@@ -1,16 +1,16 @@
-project('effects', 'c',
+project('glassovertext', 'c',
   version : '0.1',
   license : 'GPL-3.0-or-later')
 
 # These arguments are only used to build the shared library
 # not the executables that use the library.
-lib_args = ['-DBUILDING_EFFECTS']
+lib_args = ['-DBUILDING_GEGLFILTER']
 
 gegl = dependency('gegl-0.4', required : false)
 if not gegl.found()
     gegl = dependency('gegl-0.5')
 endif
-shlib = shared_library('effects', 'effects.c', 'config.h',
+shlib = shared_library('glassovertext', 'glassovertext.c', 'config.h',
   c_args : lib_args,
   dependencies : gegl,
   name_prefix : '',
