@@ -25,6 +25,18 @@ Recreation of Inner Glow's GEGL Graph. May not be 100% accurate but you can test
 id=0 src-in aux=[ ref=0 id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true     aux=[ ref=1 ] color-overlay value=#000000 dropshadow x=0 y=0 grow-radius=5 color-overlay value=#ff0000  ]
 median-blur radius=3 alpha-percentile=94 crop
 
+recreation of inner shade of the 2026 addition
+
+color-overlay value=red
+id=1  dst-out aux=[ ref=1 
+translate x=22 y=0
+ gaussian-blur  std-dev-x=1 std-dev-y=1 
+
+]
+
+
+
+
  */
 
 #include "config.h"
@@ -41,6 +53,7 @@ enum_start (inner_glow_list)
    enum_value (FEB_2024_IG,  "feb2024",  N_("Revised Inner Glow"))
    enum_value (GRAINY_IG,  "grainy",  N_("Grainy Inner Glow"))
    enum_value (BEVEL_IG,  "beveled",  N_("Beveled Inner Glow"))
+   enum_value (IG_SHADE,  "shaded",  N_("Inner Shade"))
 enum_end (innerglowlist)
 
 property_enum (mode, _("Mode:"),
@@ -107,7 +120,7 @@ property_double (radius, _("Blur radius"), 9)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-
+ui_meta ("visible", "!mode {shaded  }" )
 
 property_double (grow_radius, _("Grow radius"), 4.0)
   value_range   (1, 40.0)
@@ -117,6 +130,7 @@ property_double (grow_radius, _("Grow radius"), 4.0)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
   description (_("The distance to expand the shadow before blurring. When using inverted modes this setting needs to be at a reasonable degree for it's effect to be noticable."))
+ui_meta ("visible", "!mode {shaded  }" )
 
 property_double (noise, _("Increase Noise"), 60.0)
     value_range (10.0, 100.0)
@@ -134,17 +148,29 @@ property_double (opacity, _("Opacity"), 1.2)
   ui_steps      (0.01, 0.10)
 
 
+property_double (std_dev_x, _("Horizontal shade"), 3.0)
+  description   (_("Horizontal shadow offset"))
+  ui_range      (0.0, 15.0)
+  ui_steps      (1, 2)
+  ui_meta       ("axis", "x")
+ui_meta ("visible", "mode {shaded  }" )
 
+property_double (std_dev_y, _("Veritcal shade"), 3.0)
+  description   (_("Vertical shadow offset"))
+  ui_range      (0.0, 15.0)
+  ui_steps      (1, 2)
+  ui_meta       ("axis", "y")
+ui_meta ("visible", "mode {shaded  }" )
 
 property_color (value2, _("Color"), "#fbff00")
     description (_("The color to paint over the input"))
     ui_meta     ("role", "color-primary")
 ui_meta ("visible", "!mode {defaultimage, invertimage  }" )
 
-property_double  (fixoutline, _("Median to fix non-effected pixels on edges"), 60)
+property_double  (fixoutline, _("Median to fix non-affected pixels on edges"), 60)
   value_range (50, 100)
   description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
-ui_meta ("visible", "!mode {grainy, beveled   }" )
+ui_meta ("visible", "!mode {grainy, beveled, shaded  }" )
 
 property_int  (fixoutline2, _("Median to fix non-effected pixels on edges 2"), 1)
   value_range (0, 5)
@@ -153,15 +179,16 @@ ui_meta ("visible", "mode {grainy, beveled  }" )
 
 property_file_path (image, _("Upload image file"), "")
     description (_("Upload image file for inner Glow"))
-ui_meta ("visible", "!mode {default, grainy, feb2024, beveled, invert  }" )
+ui_meta ("visible", "!mode {default, grainy, feb2024, beveled, invert, shaded  }" )
 
 property_double  (imageblur, _("Blur image uploaded"), 0.0)
   value_range (0.0, 20.0)
   description (_("Blur image file upload only"))
-ui_meta ("visible", "!mode {default, invert, grainy, beveled, feb2024  }" )
+ui_meta ("visible", "!mode {default, invert, grainy, beveled, feb2024, shaded  }" )
 
 property_boolean (clippolicy, _("Clip setting (bug trade off)"), TRUE)
   description    (_("Enable or disable the inner glow's clip. When disabled it will create a border bug when blur radius is high. When enabled it will clip Gimp's layers to image size setting."))
+ui_meta ("visible", "!mode {shaded  }" )
 
 
 
@@ -208,8 +235,11 @@ typedef struct
  GeglNode *nothing;
  GeglNode *opacityremake;
  GeglNode *gaussianremake;
- GeglNode *translateremake;
+ GeglNode *translation;
  GeglNode *medianremake;
+ GeglNode *dstout;
+ GeglNode *idrefshade;
+ GeglNode *gausshade;
  GeglNode *output;
 }State;
 
@@ -384,7 +414,7 @@ but somehow crop fixes it.*/
                                   "operation", "gegl:opacity", 
                                   NULL);
 
-  state->translateremake    = gegl_node_new_child (gegl,
+  state->translation    = gegl_node_new_child (gegl,
                                   "operation", "gegl:translate",
                                   NULL);
 
@@ -398,6 +428,20 @@ but somehow crop fixes it.*/
   state->out    = gegl_node_new_child (gegl,
                                   "operation", "gegl:src-out",
                                   NULL);
+
+  state->dstout    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:dst-out",
+                                  NULL);
+
+  state->idrefshade    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:nop",
+                                  NULL);
+
+  state->gausshade    = gegl_node_new_child (gegl,
+                                  "operation", "gegl:gaussian-blur", "std-dev-x", 2.0, "std-dev-y", 2.0, 
+                                  NULL);
+
+
 
 gegl_operation_meta_redirect (operation, "grow_radius",  state->shadow, "grow-radius");
 gegl_operation_meta_redirect (operation, "radius",  state->shadow, "radius");
@@ -414,13 +458,15 @@ gegl_operation_meta_redirect (operation, "imageblur", state->blurimage, "std-dev
 gegl_operation_meta_redirect (operation, "noise", state->pick, "pct-random");
 gegl_operation_meta_redirect (operation, "noiserepeat", state->pick, "repeat");
 gegl_operation_meta_redirect (operation, "seed", state->pick, "seed");
-gegl_operation_meta_redirect (operation, "x",  state->translateremake, "x");
-gegl_operation_meta_redirect (operation, "y",  state->translateremake, "y");
+gegl_operation_meta_redirect (operation, "x",  state->translation, "x");
+gegl_operation_meta_redirect (operation, "y",  state->translation, "y");
 gegl_operation_meta_redirect (operation, "radius", state->gaussianremake, "std-dev-x");
 gegl_operation_meta_redirect (operation, "radius", state->gaussianremake, "std-dev-y");
 gegl_operation_meta_redirect (operation, "opacity",  state->opacityremake, "value");
 gegl_operation_meta_redirect (operation, "grow_radius",  state->medianremake, "radius");
 gegl_operation_meta_redirect (operation, "grow-shape",  state->medianremake, "neighborhood");
+gegl_operation_meta_redirect (operation, "std-dev-x",  state->gausshade, "std-dev-x");
+gegl_operation_meta_redirect (operation, "std-dev-y",  state->gausshade, "std-dev-y");
 }
 
 static void update_graph (GeglOperation *operation)
@@ -471,7 +517,7 @@ switch (o->mode) {
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case FEB_2024_IG:
- gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translateremake, state->out,  state->color2, state->opacityremake,  state->median2, state->crop, state->output, NULL);
+ gegl_node_link_many (state->input, state->medianremake, state->gaussianremake, state->translation, state->out,  state->color2, state->opacityremake,  state->median2, state->crop, state->output, NULL);
  gegl_node_connect (state->out, "aux", state->input, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
@@ -491,6 +537,11 @@ gegl_node_link_many  (state->idref3, state->it2,  state->shadow, state->opacityh
  gegl_node_link_many  (state->idref, state->it2,  state->shadow, state->opacityhere, state->color2, usethis,  NULL);
  gegl_node_connect (state->in4, "aux", usethis, "output");
  gegl_node_connect (state->crop, "aux", state->input, "output");
+        break;
+    case IG_SHADE:
+ gegl_node_link_many (state->input, state->idrefshade,  state->color2,  state->dstout, state->opacityremake, state->output, NULL);
+ gegl_node_link_many (state->idrefshade, state->translation, state->gausshade,  NULL);
+ gegl_node_connect (state->dstout, "aux", state->gausshade, "output");
     }
   }
 
