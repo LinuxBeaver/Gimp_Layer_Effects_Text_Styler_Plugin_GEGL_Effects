@@ -20,7 +20,7 @@
 /*GEGL Inner Glow is a stand alone plugin but it is also part of GEGL Effects. The stand alone version does more then the GEGL Effects implementation of it. */
 
 /*
-Recreation of Inner Glow's GEGL Graph. May not be 100% accurate but you can test it without installing this way.
+Recreation of Inner Glowꞌs GEGL Graph. May not be 100% accurate but you can test it without installing this way.
 
 id=0 src-in aux=[ ref=0 id=1 dst-atop   aux=[  ref=1 distance-transform  ] xor srgb=true     aux=[ ref=1 ] color-overlay value=#000000 dropshadow x=0 y=0 grow-radius=5 color-overlay value=#ff0000  ]
 median-blur radius=3 alpha-percentile=94 crop
@@ -129,7 +129,7 @@ property_double (grow_radius, _("Grow radius"), 4.0)
   ui_steps      (1, 5)
   ui_gamma      (1.5)
   ui_meta       ("unit", "pixel-distance")
-  description (_("The distance to expand the shadow before blurring. When using inverted modes this setting needs to be at a reasonable degree for it's effect to be noticable."))
+  description (_("The distance to expand the shadow before blurring. When using inverted modes this setting needs to be at a reasonable degree for itꞌs effect to be noticable."))
 ui_meta ("visible", "!mode {shaded  }" )
 
 property_double (noise, _("Increase Noise"), 60.0)
@@ -169,12 +169,12 @@ ui_meta ("visible", "!mode {defaultimage, invertimage  }" )
 
 property_double  (fixoutline, _("Median to fix non-affected pixels on edges"), 60)
   value_range (50, 100)
-  description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem.'"))
+  description (_("Due to a bug I canꞌt solve, not all pixels will be effected by inner glow. Median blur solves that problem.ꞌ"))
 ui_meta ("visible", "!mode {grainy, beveled, shaded  }" )
 
 property_int  (fixoutline2, _("Median to fix non-effected pixels on edges 2"), 1)
   value_range (0, 5)
-  description (_("Due to a bug I can't solve, not all pixels will be effected by inner glow. Median blur solves that problem."))
+  description (_("Due to a bug I canꞌt solve, not all pixels will be effected by inner glow. Median blur solves that problem."))
 ui_meta ("visible", "mode {grainy, beveled  }" )
 
 property_file_path (image, _("Upload image file"), "")
@@ -187,7 +187,7 @@ property_double  (imageblur, _("Blur image uploaded"), 0.0)
 ui_meta ("visible", "!mode {default, invert, grainy, beveled, feb2024, shaded  }" )
 
 property_boolean (clippolicy, _("Clip setting (bug trade off)"), TRUE)
-  description    (_("Enable or disable the inner glow's clip. When disabled it will create a border bug when blur radius is high. When enabled it will clip Gimp's layers to image size setting."))
+  description    (_("Enable or disable the inner glowꞌs clip. When disabled it will create a border bug when blur radius is high. When enabled it will clip Gimpꞌs layers to image size setting."))
 ui_meta ("visible", "!mode {shaded  }" )
 
 
@@ -522,7 +522,7 @@ switch (o->mode) {
  gegl_node_connect (state->crop, "aux", state->input, "output");
         break;
     case GRAINY_IG:
-/*This is median blur followed by GEGL's src-in blend mode and a crop*/
+/*This is median blur followed by GEGLꞌs src-in blend mode and a crop*/
  gegl_node_link_many (state->input, state->medianset, state->idref3, state->in3, crop, state->output, NULL);
 /*Inside the src in blend mode we have a gegl graph, drop shadow, color overlay and another src-in blend mode*/
 gegl_node_connect (state->in3, "aux", state->ingrainy, "output");
@@ -559,7 +559,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:innerglow",
     "title",       _("Inner Glow (to blend)"),
     "reference-hash", "g3do6aaoo1100g0fjf25sb2ac",
-    "description", _("GEGL does an inner glow/shadow effect. For this filter to work you need to use the 'Normal' or other blending options. Or a duplicate layer on top.  "
+    "description", _("GEGL does an inner glow/shadow effect. For this filter to work you need to use the ꞌNormalꞌ or other blending options. Or a duplicate layer on top.  "
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Inner Glow (to blend)..."),

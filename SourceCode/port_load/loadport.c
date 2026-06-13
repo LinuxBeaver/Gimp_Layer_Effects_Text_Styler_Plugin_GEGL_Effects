@@ -204,7 +204,7 @@ do_setup (GeglOperation *operation, const gchar *path, const gchar *uri)
   else
     {
       /* This should match the logic in glib/gio/glocalfileinfo.c for local
-       * files. Otherwise, our interpretation of the content won't match
+       * files. Otherwise, our interpretation of the content wonꞌt match
        * with those of other components. Contrary to what we might expect,
        * GLib first looks at the filename, and sniffs the content only
        * if it is inconclusive.
@@ -371,7 +371,7 @@ gegl_op_class_init (GeglOpClass *klass)
     "categories" , "meta:input",
     "description",
           _("Multipurpose file loader, that uses other native handlers, and "
-            "fallback conversion using Image Magick's convert."),
+            "fallback conversion using Image Magickꞌs convert."),
     NULL);
 
 }

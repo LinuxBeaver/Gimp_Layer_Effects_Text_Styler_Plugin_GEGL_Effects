@@ -18,7 +18,7 @@
  */
 
 /*zzstrokebevelimage is a hidden operations for GEGL Effects. The goal is to eventually bake it inside GEGL Effects and get rid of this hidden operation.
-This hidden operation is meant to be a better drop shadow. Before it existed GEGL Effects called Gimp's normal drop shadow filter*/
+This hidden operation is meant to be a better drop shadow. Before it existed GEGL Effects called Gimpꞌs normal drop shadow filter*/
 
 
 #include "config.h"
@@ -39,7 +39,7 @@ property_double (tile_saturation, _("Glow Spacing"), 2.5)
 property_seed (seed, _("Seed of Glow Aura"), rand)
 
 
-property_double (blurshadowimage, _("Blur Drop Shadow/Glow's Image file overlay"), 0)
+property_double (blurshadowimage, _("Blur Drop Shadow/Glowꞌs Image file overlay"), 0)
    description (_("Standard deviation for the horizontal axis"))
    value_range (0.0, 40.0)
    ui_range    (0.24, 40.0)
@@ -64,7 +64,7 @@ enum_start (gegl_blend_mode_type_effectszzbevoutline)
 enum_end (GeglBlendModeTypezzbevoutline)
 
 
-property_enum (blendmodebeveloutline, _("Blend Mode of Bevel's emboss'"),
+property_enum (blendmodebeveloutline, _("Blend Mode of Bevelꞌs embossꞌ"),
     GeglBlendModeTypezzbevoutline, gegl_blend_mode_type_effectszzbevoutline,
     GEGL_BLEND_MODE_TYPE_MULTIPLYGE)
 
@@ -80,7 +80,7 @@ property_boolean (enableoutline, _("Enable normal outline switch"), FALSE)
   description    (_("Enable Outline"))
 
 property_boolean (clipbugpolicy, _("Disable Clipping Compromise"), FALSE)
-  description    (_("This checkbox removes the shadow clip bug for compliance with Gimp 3's non-destructive text editing. If enabled this will triger another bug only seen after using GEGL Effects heavily, said bug appears usually after a few minutes of usage and will cause GEGL Effects to delay a selected color update until another slider is moved. It is suggested to enable this once one applies the filter. But keep it disabled while editing GEGL Effects unless you can tolerate a delayed color update."))
+  description    (_("This checkbox removes the shadow clip bug for compliance with Gimp 3ꞌs non-destructive text editing. If enabled this will triger another bug only seen after using GEGL Effects heavily, said bug appears usually after a few minutes of usage and will cause GEGL Effects to delay a selected color update until another slider is moved. It is suggested to enable this once one applies the filter. But keep it disabled while editing GEGL Effects unless you can tolerate a delayed color update."))
 
 
 /*ENUM list of blend modes for Base Outline Shape*/
@@ -485,9 +485,9 @@ gegl_op_class_init (GeglOpClass *klass)
     "title",       _("Hidden Operation to outline, shadow, glow in GE"),
     "categories",  "hidden",
     "reference-hash", "33234v25str2ac",
-    "description", _("Hidden Operation for GEGL Effects - This is a rough reimagination of Gimp's drop shadow filter with many new things and technical options that drop shadow was not capable of doing. GEGL Effects no longer calls Gimp's GEGL drop shadow filter. It uses this under the hood."
+    "description", _("Hidden Operation for GEGL Effects - This is a rough reimagination of Gimpꞌs drop shadow filter with many new things and technical options that drop shadow was not capable of doing. GEGL Effects no longer calls Gimpꞌs GEGL drop shadow filter. It uses this under the hood."
                      ""),
     NULL);
 }
- /* This operation is hidden from Gimp's GUI because the "categories" is set to "hidden".  */
+ /* This operation is hidden from Gimpꞌs GUI because the "categories" is set to "hidden".  */
 #endif

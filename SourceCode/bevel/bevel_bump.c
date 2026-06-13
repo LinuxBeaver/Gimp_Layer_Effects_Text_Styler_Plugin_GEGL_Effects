@@ -74,7 +74,7 @@ mean-curvature-blur iterations=2
 property_enum (type, _("Type of Bevel"),
     GeglBlendModeTypebeavbevel, gegl_blend_mode_typebeavbevel,
     GEGL_BEVEL_NORMAL)
-    description (_("Types of bevel's present. Sharp (Chamfer) Bevel mode requires the user to change the depth angle to less then 70 or above 115 for it to work proper."))
+    description (_("Types of bevelꞌs present. Sharp (Chamfer) Bevel mode requires the user to change the depth angle to less then 70 or above 115 for it to work proper."))
 
 property_double (radius1, _("Radius Normal Bevel"), 7.0)
   value_range (0.5, 40.0)
@@ -178,7 +178,7 @@ ui_meta ("visible", "type {stackedembossbevel}" )
 
 
 property_double (slideupblack, _("Black Bevel/Image Bevel mode."), 0.00)
-    description (_("This slider allows bevel to works on black colored bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an image's details."))
+    description (_("This slider allows bevel to works on black colored bevels; but the user must still manually select blend modes like Grain Merge and Hardlight that are known to work with very dark Bevels. This also allows bevel to be applied on image file overlays without conforming to an imageꞌs details."))
   value_range   (0.00, 1.0)
   ui_steps      (0.1, 0.50)
 
@@ -235,7 +235,7 @@ enum_end (GeglBlendModeTypebeavbevel)
 property_enum (embossamount, _("Amount of Stacked Embosses on the Bevel:"),
     stackemboss, stack_emboss_fun,
     FIVE_EMBOSSES)
-    description (_("The amount of extra embosses present in 'stacked embosses' bevel mode. Five is default, three is minimum."))
+    description (_("The amount of extra embosses present in ꞌstacked embossesꞌ bevel mode. Five is default, three is minimum."))
 ui_meta ("visible", "type {stackedembossbevel}" )
 
 enum_start (stack_emboss_fun)
@@ -526,7 +526,7 @@ GeglOperationMetaClass *operation_meta_class = GEGL_OPERATION_META_CLASS (klass)
     "name",        "lb:bevel",
     "title",       _("Bevel (to blend)"),
     "reference-hash", "45ed5656a28a512570f0f25sb2ac",
-    "description", _("Creates a map of a bevel for the user to blend it with GIMP's blend modes"
+    "description", _("Creates a map of a bevel for the user to blend it with GIMPꞌs blend modes"
                      ""),
     "gimp:menu-path", "<Image>/Filters/Text Styling",
     "gimp:menu-label", _("Bevel (to blend)..."),

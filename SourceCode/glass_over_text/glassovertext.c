@@ -43,7 +43,7 @@ Gimp blend modes  */
 
 #ifdef GEGL_PROPERTIES
 
-/*This is the enum list of glass text's blend mode switcher.*/
+/*This is the enum list of glass textꞌs blend mode switcher.*/
 enum_start (gegl_blend_mode_type_glasstext)
   enum_value (GEGL_BLEND_MODE_TYPE_GLASSOVER,      "Replace",
               N_("Replace"))
